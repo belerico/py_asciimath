@@ -3,12 +3,16 @@
 AsciiMath is an easy-to-write markup language for mathematics: for more information check out the main website at [ASCIIMath]([ASCIIMath](http://asciimath.org/)).  
 The parser utility takes an ASCIIMath string in input and returns the corresponding LaTeX translation, via a syntactic and semantic transformation.
 
+## Install
+
+To install the package run `pip install py-asciimath`
+
 ## Usage
 
 Right now it's only suppported as python module, so:
 ```python
-from parser.const import asciimath_grammar
-from parser.parser import ASCIIMath2Tex
+from py_asciimath.parser.parser import ASCIIMath2Tex
+from py_asciimath.parser.const import *
 
 if __name__ == "__main__":
     parser = ASCIIMath2Tex(
@@ -27,7 +31,7 @@ results in:
 ## Grammar
 
 The grammar used to parse the input is:
-```python
+```
 start: i start* -> exp
 i: s -> exp_interm
     | s "/" s -> exp_frac
