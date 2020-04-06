@@ -17,6 +17,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License"
     ],
-    install_requires=["lark"],
+    dependency_links=['git+https://github.com/lark-parser/lark.git@master'],
     python_requires='>=3.6',
 )
