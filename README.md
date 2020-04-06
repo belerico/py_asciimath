@@ -27,7 +27,7 @@ results in:
 ## Grammar
 
 The grammar used to parse the input is:
-```python
+```
 start: i start* -> exp
 i: s -> exp_interm
     | s "/" s -> exp_frac
