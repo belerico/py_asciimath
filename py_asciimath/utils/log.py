@@ -9,9 +9,8 @@ from __future__ import print_function
 from functools import wraps
 from inspect import getcallargs, getfullargspec
 from collections import OrderedDict
-from collections.abc import Iterable
 from itertools import chain
-from utils import flatten
+from ..utils.utils import flatten
 
 
 class Log(object):

@@ -3,13 +3,13 @@ import re
 import sys
 from functools import wraps
 from itertools import chain, islice
-from parser.const import *
+from .const import *
 
 from lark import Discard, Lark, Token, Transformer, Tree, v_args
 from lark.exceptions import GrammarError, VisitError
 
-from utils.log import Log, flatten
-from utils.utils import UtilsMat, concat
+from ..utils.log import Log, flatten
+from ..utils.utils import UtilsMat, concat
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 """
