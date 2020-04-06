@@ -5,14 +5,14 @@ The parser utility takes an ASCIIMath string in input and returns the correspond
 
 ## Install
 
-To install the package run `pip install py-asciimath`
+To install the package run `pip install py-asciimath` or `pip3 install py-asciimath`
 
 ## Usage
 
 Right now it's only suppported as python module, so:
 ```python
 from py_asciimath.parser.parser import ASCIIMath2Tex
-from py_asciimath.parser.const import *
+from py_asciimath.parser.const import asciimath_grammar
 
 if __name__ == "__main__":
     parser = ASCIIMath2Tex(
