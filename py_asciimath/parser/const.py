@@ -390,7 +390,8 @@ asciimath_grammar = r"""
     s: _l start? _r -> exp_par
         | _u s -> exp_unary
         | _b s s -> exp_binary
-        | _latex -> symbol
+        | _latex1 -> symbol
+        | _latex2 -> symbol
         | _c -> const
         | QS -> q_str
     !_c: /d[A-Za-z]/
@@ -400,12 +401,16 @@ asciimath_grammar = r"""
     !_r: {} // right parenthesis
     !_b: {} // binary functions
     !_u: {} // unary functions
-    !_latex: {}
+    !_latex1: {}
+    !_latex2: {}
     QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 """.format(
     alias_string(left_parenthesis, alias=False),
     alias_string(right_parenthesis, alias=False),
     alias_string(binary_functions, alias=False),
     alias_string(unary_functions, alias=False),
-    alias_string(smb, alias=False),
+    alias_string(dict(islice(smb.items(), len(smb) // 2)), alias=False),
+    alias_string(
+        dict(islice(smb.items(), len(smb) // 2, len(smb))), alias=False
+    ),
 )

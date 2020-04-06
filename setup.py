@@ -12,11 +12,11 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/belerico/py-asciimath",
-    packages=setuptools.find_packages(),
+    packages=["py_asciimath", "tests"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
     ],
-    install_requires=["lark-parser@git+https://github.com/lark-parser/lark.git"],
+    install_requires=["lark-parser"],
     python_requires=">=3.6",
 )

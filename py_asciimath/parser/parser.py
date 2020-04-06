@@ -157,7 +157,6 @@ class ASCIIMath2Tex(object):
         self,
         grammar,
         *args,
-        cache=True,
         inplace=False,
         parser="lalr",
         lexer="contextual",
@@ -170,7 +169,7 @@ class ASCIIMath2Tex(object):
         if inplace:
             kwargs.update({"transformer": transformer})
         self.parser = Lark(
-            grammar, *args, parser=parser, lexer=lexer, cache=cache, **kwargs
+            grammar, *args, parser=parser, lexer=lexer, **kwargs
         )
 
     def asciimath2tex(self, s: str, pprint=False):

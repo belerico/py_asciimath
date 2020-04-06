@@ -8,7 +8,6 @@ class TestUtilsMat(unittest.TestCase):
         self.maxDiff = None
         self.parser = ASCIIMath2Tex(
             asciimath_grammar,
-            cache=True,
             inplace=True,
             parser="lalr",
             lexer="contextual",

@@ -4,7 +4,6 @@ from py_asciimath.parser.const import asciimath_grammar
 if __name__ == "__main__":
     parser = ASCIIMath2Tex(
         asciimath_grammar,
-        cache=True,
         inplace=False,
         parser="lalr",
         lexer="contextual",
