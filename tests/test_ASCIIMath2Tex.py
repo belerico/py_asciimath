@@ -1,6 +1,6 @@
 import unittest
-from parser.const import asciimath_grammar
-from parser.parser import ASCIIMath2Tex, LatexTransformer
+from py_asciimath.parser.const import asciimath_grammar
+from py_asciimath.parser.parser import ASCIIMath2Tex, LatexTransformer
 
 
 class TestUtilsMat(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestUtilsMat(unittest.TestCase):
             inplace=True,
             parser="lalr",
             lexer="contextual",
-            transformer=LatexTransformer(log=False)
+            transformer=LatexTransformer(log=False),
         )
 
     # Returns True if the string contains 4 a.

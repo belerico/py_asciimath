@@ -1,5 +1,5 @@
 from py_asciimath.parser.parser import ASCIIMath2Tex
-from py_asciimath.parser.const import *
+from py_asciimath.parser.const import asciimath_grammar
 
 if __name__ == "__main__":
     parser = ASCIIMath2Tex(

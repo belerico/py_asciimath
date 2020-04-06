@@ -76,43 +76,46 @@ class UtilsMat(object):
         par_stack = []
         transitions = 0
         i, row_par = cls.get_row_par(s)
-        for c in s[i:]:
-            # c is a left par
-            if c == row_par[0]:
-                if transitions != rows:
-                    logging.info("ROW WITHOUT COMMA")
-                    return False, []
-                par_stack.append(c)
-            # c is a right par
-            elif c == row_par[1]:
-                if len(par_stack) == 0:
-                    logging.info("UNMATCHED PARS")
-                    return False, []
-                else:
-                    par_stack.pop()
-                if len(par_stack) == 0:
-                    transitions = transitions + 1
-                    if transitions == 1 and max_cols == 0 and cols > 0:
-                        max_cols = cols
-                    elif max_cols != cols:
-                        logging.info("COLS DIFFER")
-                        return False, []
-                    cols = 0
-            elif c == ",":
-                if len(par_stack) == 1 and par_stack[-1] == row_par[0]:
-                    cols = cols + 1
-                elif len(par_stack) == 0:
-                    rows = rows + 1
+        if i != -1:
+            for c in s[i:]:
+                # c is a left par
+                if c == row_par[0]:
                     if transitions != rows:
-                        logging.info("NO OPEN-CLOSE PAR BETWEEN TWO COMMAS")
+                        logging.info("ROW WITHOUT COMMA")
                         return False, []
-        if len(par_stack) != 0:
-            logging.info("UNMATCHED PARS")
+                    par_stack.append(c)
+                # c is a right par
+                elif c == row_par[1]:
+                    if len(par_stack) == 0:
+                        logging.info("UNMATCHED PARS")
+                        return False, []
+                    else:
+                        par_stack.pop()
+                    if len(par_stack) == 0:
+                        transitions = transitions + 1
+                        if transitions == 1 and max_cols == 0 and cols > 0:
+                            max_cols = cols
+                        elif max_cols != cols:
+                            logging.info("COLS DIFFER")
+                            return False, []
+                        cols = 0
+                elif c == ",":
+                    if len(par_stack) == 1 and par_stack[-1] == row_par[0]:
+                        cols = cols + 1
+                    elif len(par_stack) == 0:
+                        rows = rows + 1
+                        if transitions != rows:
+                            logging.info("NO OPEN-CLOSE PAR BETWEEN TWO COMMAS")
+                            return False, []
+            if len(par_stack) != 0:
+                logging.info("UNMATCHED PARS")
+                return False, []
+            elif rows == 0 or transitions - rows != 1:
+                logging.info("MISSING COMMA OR EMPTY ROW")
+                return False, []
+            return True, row_par
+        else:
             return False, []
-        elif rows == 0 or transitions - rows != 1:
-            logging.info("MISSING COMMA OR EMPTY ROW")
-            return False, []
-        return True, row_par
 
     @classmethod
     def get_mat(cls, s: str, row_par=["[", "]"]):

@@ -1,5 +1,5 @@
 import unittest
-from utils.utils import UtilsMat
+from py_asciimath.utils.utils import UtilsMat
 
 
 class TestUtilsMat(unittest.TestCase):
