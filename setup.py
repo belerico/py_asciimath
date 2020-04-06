@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="py-asciimath", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="Federico Belotti",
     author_email="belo.fede@outlook.com",
     description="A simple converter from ASCIIMath to LaTeX",
