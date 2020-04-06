@@ -1,6 +1,6 @@
 ## ASCIIMATH
 
-AsciiMath is an easy-to-write markup language for mathematics: for more information check out the main website at [ASCIIMath]([ASCIIMath](http://asciimath.org/)).  
+AsciiMath is an easy-to-write markup language for mathematics: for more information check out the main website at [ASCIIMath](http://asciimath.org/).  
 The parser utility takes an ASCIIMath string in input and returns the corresponding LaTeX translation, via a syntactic and semantic transformation.
 
 ## Install
