@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="py-asciimath", # Replace with your own username
-    version="0.0.2",
+    name="py_asciimath",  # Replace with your own username
+    version="0.0.3",
     author="Federico Belotti",
     author_email="belo.fede@outlook.com",
     description="A simple converter from ASCIIMath to LaTeX",
@@ -15,8 +15,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License"
+        "License :: OSI Approved :: MIT License",
     ],
-    dependency_links=['git+https://github.com/lark-parser/lark.git@master'],
-    python_requires='>=3.6',
+    install_requires=["lark @ git+https://git@github.com/lark-parser/lark"],
+    python_requires=">=3.6",
 )
