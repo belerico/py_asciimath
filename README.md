@@ -9,12 +9,13 @@ To install the package run `pip install py-asciimath` or `pip3 install py-asciim
 
 ## Usage
 
-Right now it's only suppported as python module, so:
+### As python module
 ```python
 from py_asciimath.parser.parser import ASCIIMath2Tex
-from py_asciimath.parser.const import asciimath_grammar
+from py_asciimath.transformer.const import asciimath_grammar
 
 if __name__ == "__main__":
+    parser = ASCIIMath2Tex(asciimath_grammar, inplace=False,)
     parser = ASCIIMath2Tex(
         asciimath_grammar,
         inplace=False,
@@ -27,6 +28,135 @@ if __name__ == "__main__":
 ```
 results in:
 `\sum_{i = 1}^{n} i^{3} = \left(\frac{\left(n \left(n + 1\right)\right)}{2}\right)^{2}`
+
+### From the command line
+```
+py_asciimath: a simple ASCIIMath converter.
+
+Usage:
+  py_asciimath.py ASCIIMATH ... (-o OLANG | --output=OLANG) [--log]
+  py_asciimath.py (-h | --help)
+  py_asciimath.py --version
+
+Options:
+  -h --help                     Show this screen.
+  -o OLANG --output=OLANG       Output language.
+  --log                         Log the transformation process.
+  --version                     Show version.
+```
+
+For example, `py_asciimath "sum_(i=1)^n i^3=((n(n+1))/2)^2" -o latex` prints:
+
+```
+Translating ...
+\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
+```
+If the option `--log` is present, then it prints also every transformation of the input, so `py_asciimath "sum_(i=1)^n i^3=((n(n+1))/2)^2" -o latex --log` prints:
+
+```
+Translating ...
+INFO:Calling symbol with args:
+INFO:	items = [Token(SUM, 'sum')]
+INFO:Calling const with args:
+INFO:	items = [Token(LETTER, 'i')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['i']
+INFO:Calling symbol with args:
+INFO:	items = [Token(EQUAL, '=')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['=']
+INFO:Calling const with args:
+INFO:	items = [Token(NUMBER, '1')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['1']
+INFO:Calling exp with args:
+INFO:	items = ['1']
+INFO:Calling exp with args:
+INFO:	items = ['=', '1']
+INFO:Calling exp with args:
+INFO:	items = ['i', '= 1']
+INFO:Calling exp_par with args:
+INFO:	items = [Token(LPAR, '('), 'i = 1', Token(RPAR, ')')]
+INFO:Calling const with args:
+INFO:	items = [Token(LETTER, 'n')]
+INFO:Calling exp_under_super with args:
+INFO:	items = ['\\sum', '\\left(i = 1\\right)', 'n']
+INFO:Calling remove_parenthesis with args:
+INFO:	s = '\\left(i = 1\\right)'
+INFO:Calling remove_parenthesis with args:
+INFO:	s = 'n'
+INFO:Calling const with args:
+INFO:	items = [Token(LETTER, 'i')]
+INFO:Calling const with args:
+INFO:	items = [Token(NUMBER, '3')]
+INFO:Calling exp_super with args:
+INFO:	items = ['i', '3']
+INFO:Calling remove_parenthesis with args:
+INFO:	s = '3'
+INFO:Calling symbol with args:
+INFO:	items = [Token(EQUAL, '=')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['=']
+INFO:Calling const with args:
+INFO:	items = [Token(LETTER, 'n')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['n']
+INFO:Calling const with args:
+INFO:	items = [Token(LETTER, 'n')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['n']
+INFO:Calling symbol with args:
+INFO:	items = [Token(PLUS, '+')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['+']
+INFO:Calling const with args:
+INFO:	items = [Token(NUMBER, '1')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['1']
+INFO:Calling exp with args:
+INFO:	items = ['1']
+INFO:Calling exp with args:
+INFO:	items = ['+', '1']
+INFO:Calling exp with args:
+INFO:	items = ['n', '+ 1']
+INFO:Calling exp_par with args:
+INFO:	items = [Token(LPAR, '('), 'n + 1', Token(RPAR, ')')]
+INFO:Calling exp_interm with args:
+INFO:	items = ['\\left(n + 1\\right)']
+INFO:Calling exp with args:
+INFO:	items = ['\\left(n + 1\\right)']
+INFO:Calling exp with args:
+INFO:	items = ['n', '\\left(n + 1\\right)']
+INFO:Calling exp_par with args:
+INFO:	items = [Token(LPAR, '('), 'n \\left(n + 1\\right)', Token(RPAR, ')')]
+INFO:Calling const with args:
+INFO:	items = [Token(NUMBER, '2')]
+INFO:Calling exp_frac with args:
+INFO:	items = ['\\left(n \\left(n + 1\\right)\\right)', '2']
+INFO:Calling remove_parenthesis with args:
+INFO:	s = '\\left(n \\left(n + 1\\right)\\right)'
+INFO:Calling remove_parenthesis with args:
+INFO:	s = '2'
+INFO:Calling exp with args:
+INFO:	items = ['\\frac{n \\left(n + 1\\right)}{2}']
+INFO:Calling exp_par with args:
+INFO:	items = [Token(LPAR, '('), '\\frac{n \\left(n + 1\\right)}{2}', Token(RPAR, ')')]
+INFO:Calling const with args:
+INFO:	items = [Token(NUMBER, '2')]
+INFO:Calling exp_super with args:
+INFO:	items = ['\\left(\\frac{n \\left(n + 1\\right)}{2}\\right)', '2']
+INFO:Calling remove_parenthesis with args:
+INFO:	s = '2'
+INFO:Calling exp with args:
+INFO:	items = ['\\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+INFO:Calling exp with args:
+INFO:	items = ['=', '\\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+INFO:Calling exp with args:
+INFO:	items = ['i^{3}', '= \\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+INFO:Calling exp with args:
+INFO:	items = ['\\sum_{i = 1}^{n}', 'i^{3} = \\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
+```
 
 ## Grammar
 
