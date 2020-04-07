@@ -27,5 +27,4 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=["lark-parser", "docopt"],
-    python_requires=">=3.6",
 )
