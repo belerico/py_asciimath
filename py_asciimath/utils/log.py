@@ -12,7 +12,6 @@ from __future__ import (
     unicode_literals,
 )
 
-from builtins import filter
 from collections import OrderedDict
 from functools import wraps
 from inspect import getcallargs
