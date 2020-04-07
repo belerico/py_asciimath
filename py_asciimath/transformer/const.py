@@ -1,3 +1,10 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+from builtins import dict
+from future import standard_library
+standard_library.install_aliases()
 from itertools import islice
 
 binary_functions = {
@@ -340,7 +347,7 @@ matrix2par = {
 }
 
 
-def alias_string(mapping: dict, init=False, alias=True, prefix=""):
+def alias_string(mapping, init=False, alias=True, prefix=""):
     mapping = list(mapping.items())
     s = (
         "|"

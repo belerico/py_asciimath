@@ -1,3 +1,9 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
 from lark import Lark, Transformer, Token
 from ..utils.log import Log
 import logging
@@ -8,7 +14,7 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 class Transformer(Transformer):
     log = Log(logger_func=logging.info)
 
-    def get_level(self, l: list, lvl):
+    def get_level(self, l, lvl):
         if lvl > 1:
             return lvl
         for el in l:
@@ -28,7 +34,7 @@ class Transformer(Transformer):
         return items[0]
 
     @log
-    def visit(self, l: list, action="remove"):
+    def visit(self, l, action="remove"):
         expanded_l = []
         for el in l:
             if isinstance(el, list):
@@ -60,7 +66,7 @@ class Transformer(Transformer):
                 + "\\end{bmatrix}"
             )
 
-    def recursive_join(self, l: list):
+    def recursive_join(self, l):
         s = ""
         for el in l:
             if isinstance(el, list):

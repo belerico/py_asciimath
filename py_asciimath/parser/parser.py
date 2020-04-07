@@ -1,3 +1,9 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
 from lark import Lark
 
 from ..transformer.transformer import LatexTransformer
@@ -8,12 +14,16 @@ class ASCIIMath2Tex(object):
         self,
         grammar,
         *args,
-        inplace=False,
-        parser="lalr",
-        lexer="contextual",
-        transformer=LatexTransformer(),
         **kwargs
     ):
+        if 'transformer' in kwargs: transformer = kwargs['transformer']; del kwargs['transformer']
+        else: transformer = LatexTransformer()
+        if 'lexer' in kwargs: lexer = kwargs['lexer']; del kwargs['lexer']
+        else: lexer = "contextual"
+        if 'parser' in kwargs: parser = kwargs['parser']; del kwargs['parser']
+        else: parser = "lalr"
+        if 'inplace' in kwargs: inplace = kwargs['inplace']; del kwargs['inplace']
+        else: inplace = False
         self.inplace = inplace
         self.grammar = grammar
         self.transformer = transformer
@@ -23,7 +33,7 @@ class ASCIIMath2Tex(object):
             grammar, *args, parser=parser, lexer=lexer, **kwargs
         )
 
-    def asciimath2tex(self, s: str, pprint=False):
+    def asciimath2tex(self, s, pprint=False):
         if not self.inplace:
             parsed = self.parser.parse(s)
             if pprint:

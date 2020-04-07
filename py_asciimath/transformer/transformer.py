@@ -1,7 +1,16 @@
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
+
 import logging
 import re
+from builtins import super
 from functools import wraps
 
+from future import standard_library
 from lark import Transformer
 
 from ..utils.log import Log
@@ -14,6 +23,7 @@ from .const import (
     unary_functions,
 )
 
+standard_library.install_aliases()
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
@@ -27,7 +37,7 @@ class LatexTransformer(Transformer):
     """Trasformer class, read `lark.Transformer`."""
 
     def __init__(self, log=True, visit_tokens=False):
-        super(LatexTransformer, self).__init__(visit_tokens=visit_tokens)
+        Transformer.__init__(self, visit_tokens=visit_tokens)
         formatted_left_parenthesis = "|".join(
             ["\\(", "\\(:", "\\[", "\\{", "\\{:"]
         )
@@ -55,7 +65,7 @@ class LatexTransformer(Transformer):
         return decorator
 
     @_log
-    def remove_parenthesis(self, s: str):
+    def remove_parenthesis(self, s):
         return re.sub(self.start_end_par_pattern, r"\2", s)
 
     @_log

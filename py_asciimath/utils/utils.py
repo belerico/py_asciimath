@@ -1,18 +1,33 @@
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
+
+import collections
 import logging
-import re
-from collections.abc import Iterable
+
+from future import standard_library
+
+standard_library.install_aliases()
+
+try:
+    collectionsAbc = collections.abc
+except AttributeError:
+    collectionsAbc = collections
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
-def concat(s: str):
+def concat(s):
     return '"' + s + '"'
 
 
 def flatten(l):
     """Flatten a list (or other iterable) recursively"""
     for el in l:
-        if isinstance(el, Iterable) and not isinstance(el, str):
+        if isinstance(el, collectionsAbc.Iterable) and not isinstance(el, str):
             for sub in flatten(el):
                 yield sub
         else:
@@ -38,7 +53,7 @@ class UtilsMat(object):
     """
 
     @classmethod
-    def get_row_par(cls, s: str):
+    def get_row_par(cls, s):
         """Given a string, it returns the first index i such that the char in
         position i of the string is a left parenthesis, '(' or '[', and the
         open-close parenthesis couple, needed to identify matrix
@@ -57,7 +72,7 @@ class UtilsMat(object):
         return -1, []
 
     @classmethod
-    def check_mat(cls, s: str):
+    def check_mat(cls, s):
         """Given a string, runs a matrix-structure check.
         Return True if the string s has a matrix-structure-like,
         False otherwise. It returns also the row delimiters.
@@ -105,7 +120,9 @@ class UtilsMat(object):
                     elif len(par_stack) == 0:
                         rows = rows + 1
                         if transitions != rows:
-                            logging.info("NO OPEN-CLOSE PAR BETWEEN TWO COMMAS")
+                            logging.info(
+                                "NO OPEN-CLOSE PAR BETWEEN TWO COMMAS"
+                            )
                             return False, []
             if len(par_stack) != 0:
                 logging.info("UNMATCHED PARS")
@@ -118,7 +135,7 @@ class UtilsMat(object):
             return False, []
 
     @classmethod
-    def get_mat(cls, s: str, row_par=["[", "]"]):
+    def get_mat(cls, s, row_par=["[", "]"]):
         """Given a known matrix-structured string, translate it into the
         matrix LaTeX format.
 
@@ -131,7 +148,7 @@ class UtilsMat(object):
         - mat: str
         """
 
-        def is_empty_col(s: str):
+        def is_empty_col(s):
             for c in s[::-1]:
                 if c == "&" or c == "\\":
                     return True
