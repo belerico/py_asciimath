@@ -11,19 +11,22 @@ Options:
   --log                         Log the transformation process.
   --version                     Show version.
 """
+import re
 import sys
 
 from docopt import docopt
-
-from py_asciimath import __version__
 
 from .parser.parser import ASCIIMath2Tex
 from .transformer.const import asciimath_grammar
 from .transformer.transformer import LatexTransformer
 
+version = re.search(
+    r'^__version__\s*=\s*"(.*)"', open("py_asciimath/__init__.py").read()
+).group(1)
+
 
 def main():
-    arguments = docopt(__doc__, version="py_asciimath " + __version__)
+    arguments = docopt(__doc__, version="py_asciimath " + version)
     if arguments["--output"]:
         if arguments["--output"].lower() == "latex":
             print("Translating ...")
