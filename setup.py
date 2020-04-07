@@ -17,7 +17,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/belerico/py-asciimath",
-    packages=["py_asciimath", "tests"],
+    packages=setuptools.find_packages(),
     entry_points={
         "console_scripts": ["py_asciimath=py_asciimath.py_asciimath:main"]
     },
