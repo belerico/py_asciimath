@@ -191,7 +191,7 @@ A parsed ASCIIMath string is rendered as follows:
 * Any text placed between a pair of `"` is rendered in the same font as normal text.
 * `/` stands for a fraction. The `_` and `^` tokens have the same behaviour as in LaTeX but the subscript must be placed before the superscript if they are both present
 
-## Delimiters
+### Delimiters
 
 Left and right delimiters are preceded by the `\left` and `\right` commands to be well-sized. `(:` and `:)` are chevrons (angle parenthesis). `{:` and `:}` are invisible delimiters like LaTeX's {. `|:` is converted to `\lvert` , while `||:` is converted to `\lVert`. The other delimiters are rendered as expected.  
 Useless delimiters are automatically removed in expressions like: 
@@ -202,7 +202,7 @@ Useless delimiters are automatically removed in expressions like:
   
 If you want them to be rendered, you have to double them, for example: `((x+y))/2` or `{: (x+y) :}/2`.
 
-## Matrices and systems of equations
+### Matrices and systems of equations
 
 For a text to be rendered as a matrix must have a structure like 
 
