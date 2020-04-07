@@ -1,13 +1,8 @@
-from lark import (Lark, Transformer, Discard, Tree,
-                  Token, v_args)
-from lark.exceptions import VisitError, GrammarError, UnexpectedToken
-from itertools import chain
-from log import Log, flatten
-import re
+from lark import Lark, Transformer, Token
+from ..utils.log import Log
 import logging
-import copy
 
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
 class Transformer(Transformer):
@@ -51,12 +46,19 @@ class Transformer(Transformer):
         max_lvl = self.get_level(items, 0)
         print("LEVEL", max_lvl)
         if max_lvl > 1:
-            return ['['] + items + [']']
+            return ["["] + items + ["]"]
         else:
             items = self.visit(items, action="remove")[0]
-            return "\\begin{bmatrix}" + " \\\\ ".join([" & ".join(el)
-                                                       if isinstance(el, list) else el
-                                                       for el in items]) + "\\end{bmatrix}"
+            return (
+                "\\begin{bmatrix}"
+                + " \\\\ ".join(
+                    [
+                        " & ".join(el) if isinstance(el, list) else el
+                        for el in items
+                    ]
+                )
+                + "\\end{bmatrix}"
+            )
 
     def recursive_join(self, l: list):
         s = ""
@@ -73,7 +75,8 @@ class Transformer(Transformer):
         return self.recursive_join(items)
 
 
-asciimath_parser = Lark(r"""
+asciimath_parser = Lark(
+    r"""
     stmt: _csl
     exp: list
         | mat
@@ -88,8 +91,12 @@ asciimath_parser = Lark(r"""
     %import common.WS
     %import common.NUMBER
     %ignore WS
-""", start="stmt", parser='lalr', debug=True)
-text = '''[:[1,3,[2,3,[1,[2,7]]]]:]'''
+""",
+    start="stmt",
+    parser="lalr",
+    debug=True,
+)
+text = """[:[1,3,[2,3,[1,[2,7]]]]:]"""
 parsed_text = asciimath_parser.parse(text)
 print(parsed_text.pretty())
 print(Transformer().transform(parsed_text))

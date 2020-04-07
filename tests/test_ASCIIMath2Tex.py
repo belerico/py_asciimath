@@ -1,6 +1,7 @@
 import unittest
-from py_asciimath.parser.const import asciimath_grammar
-from py_asciimath.parser.parser import ASCIIMath2Tex, LatexTransformer
+from py_asciimath.transformer.const import asciimath_grammar
+from py_asciimath.parser.parser import ASCIIMath2Tex
+from py_asciimath.transformer.transformer import LatexTransformer
 
 
 class TestUtilsMat(unittest.TestCase):
