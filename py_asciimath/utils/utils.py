@@ -8,9 +8,9 @@ from __future__ import (
 import collections
 import logging
 
-from future import standard_library
+# # from future import standard_library
 
-standard_library.install_aliases()
+# # standard_library.install_aliases()
 
 try:
     collectionsAbc = collections.abc
@@ -91,7 +91,7 @@ class UtilsMat(object):
         par_stack = []
         transitions = 0
         i, row_par = cls.get_row_par(s)
-        if i != -1:
+        if i != -1 or row_par == []:
             for c in s[i:]:
                 # c is a left par
                 if c == row_par[0]:
@@ -159,34 +159,37 @@ class UtilsMat(object):
         empty_col = True
         stack_par = []
         mat = ""
-        for i, c in enumerate(s):
-            if c == row_par[0]:
-                stack_par.append(c)
-                if len(stack_par) > 1:
-                    mat = mat + c
-            elif c == row_par[1]:
-                stack_par.pop()
-                if len(stack_par) > 0:
-                    mat = mat + c
+        if row_par != []:
+            for i, c in enumerate(s):
+                if c == row_par[0]:
+                    stack_par.append(c)
+                    if len(stack_par) > 1:
+                        mat = mat + c
+                elif c == row_par[1]:
+                    stack_par.pop()
+                    if len(stack_par) > 0:
+                        mat = mat + c
+                    else:
+                        # Remove '\\right' from the last parenthesis
+                        mat = mat[: len(mat) - 6]
+                        # Need to go backward after \\right removal
+                        # and check if col is empty
+                        if is_empty_col(mat):
+                            mat = mat + "\\null"
+                        empty_col = True
+                elif c == "," and len(stack_par) == 1:
+                    mat = mat + (" & " if not empty_col else "\\null & ")
+                elif c == "," and len(stack_par) == 0:
+                    mat = mat + " \\\\ "
                 else:
-                    # Remove '\\right' from the last parenthesis
-                    mat = mat[: len(mat) - 6]
-                    # Need to go backward after \\right removal
-                    # and check if col is empty
-                    if is_empty_col(mat):
-                        mat = mat + "\\null"
-                    empty_col = True
-            elif c == "," and len(stack_par) == 1:
-                mat = mat + (" & " if not empty_col else "\\null & ")
-            elif c == "," and len(stack_par) == 0:
-                mat = mat + " \\\\ "
-            else:
-                # Does not include \\left in the result string
-                if len(stack_par) > 0:
-                    if not c.isspace():
-                        empty_col = False
-                    mat = mat + c
-        return mat
+                    # Does not include \\left in the result string
+                    if len(stack_par) > 0:
+                        if not c.isspace():
+                            empty_col = False
+                        mat = mat + c
+            return mat
+        else:
+            return s
 
 
 if __name__ == "__main__":

@@ -1,29 +1,40 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import unicode_literals
-from future import standard_library
-standard_library.install_aliases()
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
+
+# from future import standard_library
 from lark import Lark
 
 from ..transformer.transformer import LatexTransformer
 
+# standard_library.install_aliases()
+
 
 class ASCIIMath2Tex(object):
-    def __init__(
-        self,
-        grammar,
-        *args,
-        **kwargs
-    ):
-        if 'transformer' in kwargs: transformer = kwargs['transformer']; del kwargs['transformer']
-        else: transformer = LatexTransformer()
-        if 'lexer' in kwargs: lexer = kwargs['lexer']; del kwargs['lexer']
-        else: lexer = "contextual"
-        if 'parser' in kwargs: parser = kwargs['parser']; del kwargs['parser']
-        else: parser = "lalr"
-        if 'inplace' in kwargs: inplace = kwargs['inplace']; del kwargs['inplace']
-        else: inplace = False
+    def __init__(self, grammar, *args, **kwargs):
+        if "transformer" in kwargs:
+            transformer = kwargs["transformer"]
+            del kwargs["transformer"]
+        else:
+            transformer = LatexTransformer()
+        if "lexer" in kwargs:
+            lexer = kwargs["lexer"]
+            del kwargs["lexer"]
+        else:
+            lexer = "contextual"
+        if "parser" in kwargs:
+            parser = kwargs["parser"]
+            del kwargs["parser"]
+        else:
+            parser = "lalr"
+        if "inplace" in kwargs:
+            inplace = kwargs["inplace"]
+            del kwargs["inplace"]
+        else:
+            inplace = False
         self.inplace = inplace
         self.grammar = grammar
         self.transformer = transformer

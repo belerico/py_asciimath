@@ -18,20 +18,20 @@ from functools import wraps
 from inspect import getcallargs
 from itertools import chain
 
-from future import standard_library
+# from future import standard_library
 
 from ..utils.utils import flatten
 
-import inspect
-
 try:
     from inspect import getfullargspec as get_args
+
     fullArg = True
 except ImportError:
     from inspect import getargspec as get_args
+
     fullArg = False
 
-standard_library.install_aliases()
+# standard_library.install_aliases()
 
 
 class Log(object):
@@ -43,9 +43,9 @@ class Log(object):
         self.print_self = print_self
 
     def _getargnames(self, func):
-        """Return an iterator over all arg names, including nested arg names and varargs.
-        Goes in the order of the functions argspec, with varargs and
-        keyword args last if present."""
+        """Return an iterator over all arg names, including nested arg names
+        and varargs. Goes in the order of the functions argspec, with varargs
+        and keyword args last if present."""
         args = get_args(func)
         if fullArg:
             (
@@ -64,11 +64,7 @@ class Log(object):
         return chain(
             flatten(args_names),
             filter(None, [varargs_names, varkws_names]),
-            (
-                flatten(kwonlyargs_names)
-                if fullArg
-                else []
-            ),
+            (flatten(kwonlyargs_names) if fullArg else []),
         )
 
     def _getcallargs_ordered(self, func, *args, **kwargs):

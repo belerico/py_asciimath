@@ -1,12 +1,18 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import unicode_literals
-from future import standard_library
-standard_library.install_aliases()
-from lark import Lark, Transformer, Token
-from ..utils.log import Log
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
+
 import logging
+
+# from future import standard_library
+from lark import Lark, Token, Transformer
+
+from ..utils.log import Log
+
+# standard_library.install_aliases()
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 

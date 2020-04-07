@@ -7,10 +7,9 @@ from __future__ import (
 
 import logging
 import re
-from builtins import super
 from functools import wraps
 
-from future import standard_library
+# from future import standard_library
 from lark import Transformer
 
 from ..utils.log import Log
@@ -23,7 +22,7 @@ from .const import (
     unary_functions,
 )
 
-standard_library.install_aliases()
+# standard_library.install_aliases()
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
