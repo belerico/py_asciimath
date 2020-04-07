@@ -19,7 +19,7 @@ class TestUtilsMat(unittest.TestCase):
         b, _ = UtilsMat.check_mat("[[,[,]],[[,],]], [[[[,],],],[,[,[,]]]]")
         self.assertTrue(b)
 
-    def test_check_mat_ok_3(self):
+    def test_check_mat_ok_4(self):
         b, _ = UtilsMat.check_mat("[,], [,]")
         self.assertTrue(b)
 
