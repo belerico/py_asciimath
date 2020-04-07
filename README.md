@@ -16,12 +16,6 @@ from py_asciimath.transformer.const import asciimath_grammar
 
 if __name__ == "__main__":
     parser = ASCIIMath2Tex(asciimath_grammar, inplace=False,)
-    parser = ASCIIMath2Tex(
-        asciimath_grammar,
-        inplace=False,
-        parser="lalr",
-        lexer="contextual",
-    )
     asciimath = "sum_(i=1)^n i^3=((n(n+1))/2)^2"
     latex = parser.asciimath2tex(asciimath, pprint=True)
     print(latex)
