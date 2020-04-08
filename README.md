@@ -1,7 +1,7 @@
 ## py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=mathml)](https://travis-ci.com/belerico/py_asciimath)
 
 AsciiMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/.  
-The parser utility takes an ASCIIMath string in input and returns the corresponding LaTeX translation, via a syntactic and semantic transformation.
+The parser utility takes an ASCIIMath string in input and returns the corresponding LaTeX or MathML translation, via a syntactic and semantic transformation.
 
 ## Install
 
@@ -11,14 +11,17 @@ To install the package run `pip install py-asciimath` or `pip3 install py-asciim
 
 ### As python module
 ```python
-from py_asciimath.parser.parser import ASCIIMath2Tex
-from py_asciimath.transformer.const import asciimath_grammar
+from py_asciimath.parser.parser import ASCIIMath2MathML, ASCIIMath2Tex
+from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 
 if __name__ == "__main__":
-    parser = ASCIIMath2Tex(asciimath_grammar, inplace=False,)
+    asciimath2tex = ASCIIMath2Tex(asciimath_grammar, inplace=False,)
+    asciimath2mathml = ASCIIMath2MathML(asciimath_grammar, inplace=False,)
     asciimath = "sum_(i=1)^n i^3=((n(n+1))/2)^2"
-    latex = parser.asciimath2tex(asciimath, pprint=True)
+    latex = asciimath2tex.translate(asciimath, pprint=True)
+    mathml = asciimath2tex.translate(asciimath, pprint=True)
     print(latex)
+    print(mathml)
 ```
 results in:
 `\sum_{i = 1}^{n} i^{3} = \left(\frac{\left(n \left(n + 1\right)\right)}{2}\right)^{2}`
