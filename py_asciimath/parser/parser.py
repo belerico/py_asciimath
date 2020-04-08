@@ -5,6 +5,8 @@ from __future__ import (
     unicode_literals,
 )
 
+import lxml.etree
+
 # from future import standard_library
 from lark import Lark
 
@@ -71,3 +73,22 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         super(ASCIIMath2MathML, self).__init__(
             grammar, *args, transformer=MathMLTransformer(), **kwargs
         )
+
+    def translate(self, s, displaystyle=True, xml=False, pprint=False):
+        if displaystyle:
+            dstyle = "<mstyle displaystyle='true'>{}</mstyle>"
+        else:
+            dstyle = "{}"
+        parsed = (
+            '<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 3.0//EN" "http://www.w3.org/Math/DTD/mathml3/mathml3.dtd">'
+            + "<math xmlns='http://www.w3.org/1998/Math/MathML'>"
+            + dstyle
+            + "</math>"
+        ).format(super(ASCIIMath2MathML, self).translate(s, pprint))
+        if xml:
+            return lxml.etree.fromstring(
+                parsed,
+                lxml.etree.XMLParser(dtd_validation=True, no_network=False),
+            )
+        else:
+            return parsed
