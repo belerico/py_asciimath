@@ -14,16 +14,16 @@ class TestUtilsMat(unittest.TestCase):
         ).translate("(a_2^3+b^2) * 2")
         self.assertEqual(
             s,
-            """<mrow><mrow><mo>(</mo><mrow><msubsup><mi>a</mi> <mn>2</mn> <mn>3</mn></msubsup></mrow> <mrow><mo>+</mo></mrow> <mrow><msup><mi>b</mi> <mn>2</mn></msup></mrow><mo>)</mo></mrow></mrow> <mrow><mo>&#x22C5;</mo></mrow> <mrow><mn>2</mn></mrow>""",
+            """<mo>(</mo><msubsup><mrow><mi>a</mi></mrow><mrow><mn>2</mn></mrow><mrow><mn>3</mn></mrow></msubsup><mo>+</mo><msup><mrow><mi>b</mi></mrow><mrow><mn>2</mn></mrow></msup><mo>)</mo><mo>&#x22C5;</mo><mn>2</mn>""",
         )
 
     def test_asciimath2tex_ok_2(self):
         s = ASCIIMath2MathML(
             asciimath_grammar, inplace=True, parser="lalr", lexer="contextual",
-        ).translate("bigcup (a_2^3+b^2) * 2")
+        ).translate("root n x sum_(i=1)^n i^3=(frac (n(n+1)) 2)^2")
         self.assertEqual(
             s,
-            """<mrow><mo>&#x22C3;</mo></mrow> <mrow><mrow><mo>(</mo><mrow><msubsup><mi>a</mi> <mn>2</mn> <mn>3</mn></msubsup></mrow> <mrow><mo>+</mo></mrow> <mrow><msup><mi>b</mi> <mn>2</mn></msup></mrow><mo>)</mo></mrow></mrow> <mrow><mo>&#x22C5;</mo></mrow> <mrow><mn>2</mn></mrow>""",
+            """<mroot><mrow><mi>n</mi></mrow><mrow><mi>x</mi></mrow></mroot><msubsup><mrow><mo>&#x2211;</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msup><mrow><mi>i</mi></mrow><mrow><mn>3</mn></mrow></msup><mo>=</mo><msup><mrow><mo>(</mo><mfrac><mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mrow><mn>2</mn></mrow></mfrac><mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup>""",
         )
 
 

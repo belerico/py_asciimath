@@ -2,14 +2,17 @@ import sys
 
 
 def get_symbols_for(symbol_group, translation):
-    if translation is None:
+    if (
+        translation == "latex"
+        or translation == "mathml"
+        or translation is None
+    ):
         return {
-            k: _
-            for k, _ in getattr(sys.modules[__name__], symbol_group).items()
-        }
-    elif translation == "latex" or translation == "mathml":
-        return {
-            k: v[translation]
+            k: (
+                v[translation]
+                if translation == "latex" or translation == "mathml"
+                else None
+            )
             for k, v in getattr(sys.modules[__name__], symbol_group).items()
         }
     else:
@@ -17,8 +20,8 @@ def get_symbols_for(symbol_group, translation):
 
 
 binary_functions = {
-    '"frac"': {"latex": "\\frac", "mathml": ""},
-    '"root"': {"latex": "\\sqrt", "mathml": ""},
+    '"frac"': {"latex": "\\frac", "mathml": "<mfrac>{}{}</mfrac>"},
+    '"root"': {"latex": "\\sqrt", "mathml": "<mroot>{}{}</mroot>"},
     '"stackrel"': {"latex": "\\stackrel", "mathml": ""},
     '"overset"': {"latex": "\\overset", "mathml": ""},
     '"underset"': {"latex": "\\underset", "mathml": ""},

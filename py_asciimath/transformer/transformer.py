@@ -36,7 +36,7 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
 class ASCIIMathTransformer(Transformer):
-    def __init__(self, log=True, visit_tokens=False):
+    def __init__(self, log=True, start_end_par_pattern="", visit_tokens=False):
         Transformer.__init__(self, visit_tokens=visit_tokens)
         formatted_left_parenthesis = "|".join(
             ["\\(", "\\(:", "\\[", "\\{", "\\{:"]
@@ -45,9 +45,7 @@ class ASCIIMathTransformer(Transformer):
             ["\\)", ":\\)", "\\]", "\\}", ":\\}"]
         )
         self.start_end_par_pattern = re.compile(
-            r"^(?:\\left(?:(?:\\)?({})))"
-            r"(.*?)"
-            r"(?:\\right(?:(?:\\)?({})))$".format(
+            start_end_par_pattern.format(
                 formatted_left_parenthesis, formatted_right_parenthesis,
             )
         )
@@ -70,16 +68,18 @@ class LatexTransformer(ASCIIMathTransformer):
     """Trasformer class, read `lark.Transformer`."""
 
     def __init__(self, log=True, visit_tokens=False):
-        ASCIIMathTransformer.__init__(self, log, visit_tokens)
+        ASCIIMathTransformer.__init__(
+            self,
+            log,
+            r"^(?:\\left(?:(?:\\)?({})))(.*?)(?:\\right(?:(?:\\)?({})))$",
+            visit_tokens,
+        )
 
-    def _log(f):
-        return ASCIIMathTransformer.log(f)
-
-    @_log
+    @ASCIIMathTransformer.log
     def remove_parenthesis(self, s):
         return re.sub(self.start_end_par_pattern, r"\2", s)
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_par(self, items):
         yeah_mat = False
         s = ", ".join(items[1:-1])
@@ -107,41 +107,41 @@ class LatexTransformer(ASCIIMathTransformer):
             + right
         )
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_frac(self, items):
         items[0] = self.remove_parenthesis(items[0])
         items[1] = self.remove_parenthesis(items[1])
         return "\\frac{" + items[0] + "}{" + items[1] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_under(self, items):
         items[1] = self.remove_parenthesis(items[1])
         return items[0] + "_{" + items[1] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
         return items[0] + "^{" + items[1] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_interm(self, items):
         return items[0]
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_under_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
         return items[0] + "_{" + items[1] + "}^{" + items[2] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def symbol(self, items):
         return latex_smb[concat(items[0])]
 
-    @_log
+    @ASCIIMathTransformer.log
     def const(self, items):
         return items[0].value
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_unary(self, items):
         unary = latex_una[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
@@ -156,7 +156,7 @@ class LatexTransformer(ASCIIMathTransformer):
         else:
             return unary + "{" + items[1] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_binary(self, items):
         binary = latex_bin[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
@@ -166,11 +166,11 @@ class LatexTransformer(ASCIIMathTransformer):
         else:
             return binary + "{" + items[1] + "}" + "{" + items[2] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def q_str(self, items):
         return "\\text{" + items[0] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp(self, items):
         return " ".join(items)
 
@@ -179,16 +179,18 @@ class MathMLTransformer(ASCIIMathTransformer):
     """Trasformer class, read `lark.Transformer`."""
 
     def __init__(self, log=True, visit_tokens=False):
-        ASCIIMathTransformer.__init__(self, log, visit_tokens)
+        ASCIIMathTransformer.__init__(
+            self,
+            log,
+            r"^(?:<mo>(?:({}))</mo>)(.*?)(?:<mo>(?:({}))</mo>)$",
+            visit_tokens,
+        )
 
-    def _log(f):
-        return ASCIIMathTransformer.log(f)
-
-    @_log
+    @ASCIIMathTransformer.log
     def remove_parenthesis(self, s):
         return re.sub(self.start_end_par_pattern, r"\2", s)
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_par(self, items):
         # yeah_mat = False
         # s = ", ".join(items[1:-1])
@@ -218,61 +220,79 @@ class MathMLTransformer(ASCIIMathTransformer):
         lpar = mathml_left[concat(items[0])]
         rpar = mathml_right[concat(items[-1])]
         return (
-            "<mrow><mo>"
+            "<mo>"
             + lpar
             + "</mo>"
             + ", ".join(items[1:-1])
             + "<mo>"
             + rpar
-            + "</mo></mrow>"
+            + "</mo>"
         )
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_frac(self, items):
         items[0] = self.remove_parenthesis(items[0])
         items[1] = self.remove_parenthesis(items[1])
-        return "<mrow><mfrac>" + items[0] + " " + items[1] + "</mfrac></mrow>"
+        return (
+            "<mfrac><mrow>"
+            + items[0]
+            + "</mrow><mrow>"
+            + items[1]
+            + "</mrow></mfrac>"
+        )
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_under(self, items):
         items[1] = self.remove_parenthesis(items[1])
-        return "<mrow><msub>" + items[0] + " " + items[1] + "</msub></mrow>"
+        return (
+            "<msub><mrow>"
+            + items[0]
+            + "</mrow><mrow>"
+            + items[1]
+            + "</mrow></msub>"
+        )
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
-        return "<mrow><msup>" + items[0] + " " + items[1] + "</msup></mrow>"
+        return (
+            "<msup><mrow>"
+            + items[0]
+            + "</mrow><mrow>"
+            + items[1]
+            + "</mrow></msup>"
+        )
 
-    @_log
-    def exp_interm(self, items):
-        return "<mrow>" + items[0] + "</mrow>"
-
-    @_log
+    @ASCIIMathTransformer.log
     def exp_under_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
         return (
-            "<mrow><msubsup>"
+            "<msubsup><mrow>"
             + items[0]
-            + " "
+            + "</mrow><mrow>"
             + items[1]
-            + " "
+            + "</mrow><mrow>"
             + items[2]
-            + "</msubsup></mrow>"
+            + "</mrow></msubsup>"
         )
 
-    @_log
+    @ASCIIMathTransformer.log
+    def exp_interm(self, items):
+        return items[0]
+
+    @ASCIIMathTransformer.log
     def symbol(self, items):
         return "<mo>" + mathml_smb[concat(items[0])] + "</mo>"
 
-    @_log
+    @ASCIIMathTransformer.log
     def const(self, items):
         if items[0].isnumeric():
             return "<mn>" + items[0].value + "</mn>"
         else:
             return "<mi>" + items[0].value + "</mi>"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_unary(self, items):
         unary = mathml_una[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
@@ -287,20 +307,19 @@ class MathMLTransformer(ASCIIMathTransformer):
         else:
             return unary + "{" + items[1] + "}"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp_binary(self, items):
         binary = mathml_bin[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
-        if binary == "\\sqrt":
-            return binary + "[" + items[1] + "]" + "{" + items[2] + "}"
-        else:
-            return binary + "{" + items[1] + "}" + "{" + items[2] + "}"
+        return binary.format(
+            "<mrow>" + items[1] + "</mrow>", "<mrow>" + items[2] + "</mrow>",
+        )
 
-    @_log
+    @ASCIIMathTransformer.log
     def q_str(self, items):
-        return "\\text{" + items[0] + "}"
+        return "<mtext>" + items[0] + "</mtext>"
 
-    @_log
+    @ASCIIMathTransformer.log
     def exp(self, items):
-        return " ".join(items)
+        return "".join(items)
