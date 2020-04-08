@@ -1,11 +1,8 @@
-from py_asciimath.parser.parser import ASCIIMath2MathML
-# from py_asciimath.transformer.transformer import MathmlTransformer
+from py_asciimath.parser.parser import ASCIIMath2MathML, ASCIIMath2Tex
 from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 
 if __name__ == "__main__":
-    parser = ASCIIMath2MathML(
-        asciimath_grammar, inplace=False
-    )
+    parser = ASCIIMath2MathML(asciimath_grammar, inplace=False)
     text = ""
     # text = (
     #     text
@@ -58,7 +55,7 @@ if __name__ == "__main__":
     #             [y = dstyle integral_{0}^{x} t dt]
     #         :}"""
     # )
-    text = text + """(a_2^3+b^2) * 2"""
+    text = text + """sum_(i=1)^n i^3=((n(n+1))/2)^2"""
     # text = text + "[(1,2), (2^|: 3 :|, (dstyle int x^{2(x-n)})), (2,4)]"
     # text = text + "[[], []]"
     print(parser.translate(text, pprint=True))

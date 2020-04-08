@@ -83,7 +83,7 @@ operation_symbols = {
     '"otimes"': {"latex": "\\otimes", "mathml": ""},
     '"o."': {"latex": "\\odot", "mathml": ""},
     '"odot"': {"latex": "\\odot", "mathml": ""},
-    '"sum"': {"latex": "\\sum", "mathml": ""},
+    '"sum"': {"latex": "\\sum", "mathml": "&#x2211;"},
     '"prod"': {"latex": "\\prod", "mathml": ""},
     '"^^"': {"latex": "\\wedge", "mathml": ""},
     '"wedge"': {"latex": "\\wedge", "mathml": ""},

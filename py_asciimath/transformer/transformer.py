@@ -231,7 +231,7 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_frac(self, items):
         items[0] = self.remove_parenthesis(items[0])
         items[1] = self.remove_parenthesis(items[1])
-        return "<mrow><mfrac>" + items[0] + " " + items[1] + "</msub></mfrac>"
+        return "<mrow><mfrac>" + items[0] + " " + items[1] + "</mfrac></mrow>"
 
     @_log
     def exp_under(self, items):
