@@ -7,6 +7,14 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+os:
+  - linux
+  - osx
+  - windows
+jobs:
+  allow_failures:
+    - os: osx
+    - os: windows
 install: pip install tox-travis
 script:
   - tox
