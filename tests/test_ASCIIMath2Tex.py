@@ -1,7 +1,6 @@
 import unittest
-from py_asciimath.transformer.const import asciimath_grammar
+from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 from py_asciimath.parser.parser import ASCIIMath2Tex
-from py_asciimath.transformer.transformer import LatexTransformer
 
 
 class TestUtilsMat(unittest.TestCase):
@@ -15,8 +14,7 @@ class TestUtilsMat(unittest.TestCase):
             inplace=True,
             parser="lalr",
             lexer="contextual",
-            transformer=LatexTransformer(log=False),
-        ).asciimath2tex("[[int x dx], [log(x+1)]]")
+        ).translate("[[int x dx], [log(x+1)]]")
         self.assertEqual(
             s,
             r"\left[\begin{matrix}\int x dx \\ \log \left(x + 1\right)\end{matrix}\right]",
@@ -28,8 +26,7 @@ class TestUtilsMat(unittest.TestCase):
             inplace=True,
             parser="lalr",
             lexer="contextual",
-            transformer=LatexTransformer(log=False),
-        ).asciimath2tex("((1,2))int sin{x^2}/4pidxroot(5)(x_1^2+x_2^2)")
+        ).translate("((1,2))int sin{x^2}/4pidxroot(5)(x_1^2+x_2^2)")
         self.assertEqual(
             s,
             r"\left(\left(1 , 2\right)\right) \int \sin \frac{x^{2}}{4} \pi dx \sqrt[5]{x_{1}^{2} + x_{2}^{2}}",
@@ -41,8 +38,7 @@ class TestUtilsMat(unittest.TestCase):
             inplace=True,
             parser="lalr",
             lexer="contextual",
-            transformer=LatexTransformer(log=False),
-        ).asciimath2tex("lim_(N->oo) sum_(i=0)^N int_0^1 f(x)dx")
+        ).translate("lim_(N->oo) sum_(i=0)^N int_0^1 f(x)dx")
         self.assertEqual(
             s,
             r"\lim_{N \to \infty} \sum_{i = 0}^{N} \int_{0}^{1} f \left(x\right) dx",
@@ -54,8 +50,7 @@ class TestUtilsMat(unittest.TestCase):
             inplace=True,
             parser="lalr",
             lexer="contextual",
-            transformer=LatexTransformer(log=False),
-        ).asciimath2tex(
+        ).translate(
             """uuu_{2(x+1)=1)^{n}
             min{
                 2x|x^{y+2} in bbb(N) wedge arccos root(3}(frac{1}{3x}) < i rarr Omega < b, 5=x
@@ -68,7 +63,7 @@ class TestUtilsMat(unittest.TestCase):
 
     def test_asciimath2tex_ok_5(self):
         parser = ASCIIMath2Tex(asciimath_grammar)
-        s = parser.asciimath2tex(
+        s = parser.translate(
             """uuu_{2(x+1)=1)^{n}
             min{
                 2x|x^{y+2} in bbb(N) wedge arccos root(3}(frac{1}{3x}) < i rarr Omega < b, 5=x

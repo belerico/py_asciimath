@@ -20,6 +20,33 @@ except AttributeError:
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
+def alias_string(mapping, init=False, alias=True, prefix=""):
+    mapping = list(mapping.items())
+    s = (
+        "|"
+        if init
+        else ""
+        + mapping[0][0]
+        + (
+            " -> " + (prefix + "_" if prefix != "" else "") + mapping[0][1]
+            if alias
+            else ""
+        )
+    )
+    for k, v in mapping[1:]:
+        s = (
+            s
+            + "\n\t| "
+            + k
+            + (
+                " -> " + (prefix + "_" if prefix != "" else "") + v
+                if alias
+                else ""
+            )
+        )
+    return s
+
+
 def concat(s):
     return '"' + s + '"'
 

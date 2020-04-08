@@ -8,12 +8,12 @@ from __future__ import (
 # from future import standard_library
 from lark import Lark
 
-from ..transformer.transformer import LatexTransformer
+from ..transformer.transformer import LatexTransformer, MathMLTransformer
 
 # standard_library.install_aliases()
 
 
-class ASCIIMath2Tex(object):
+class ASCIIMathTranslator(object):
     def __init__(self, grammar, *args, **kwargs):
         if "transformer" in kwargs:
             transformer = kwargs["transformer"]
@@ -44,7 +44,7 @@ class ASCIIMath2Tex(object):
             grammar, *args, parser=parser, lexer=lexer, **kwargs
         )
 
-    def asciimath2tex(self, s, pprint=False):
+    def translate(self, s, pprint=False):
         if not self.inplace:
             parsed = self.parser.parse(s)
             if pprint:
@@ -52,3 +52,17 @@ class ASCIIMath2Tex(object):
             return self.transformer.transform(parsed)
         else:
             return self.parser.parse(s)
+
+
+class ASCIIMath2Tex(ASCIIMathTranslator):
+    def __init__(self, grammar, *args, **kwargs):
+        super(ASCIIMath2Tex, self).__init__(
+            grammar, *args, transformer=LatexTransformer(), **kwargs
+        )
+
+
+class ASCIIMath2MathML(ASCIIMathTranslator):
+    def __init__(self, grammar, *args, **kwargs):
+        super(ASCIIMath2MathML, self).__init__(
+            grammar, *args, transformer=MathMLTransformer(), **kwargs
+        )
