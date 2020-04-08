@@ -23,7 +23,7 @@ class TestUtilsMat(unittest.TestCase):
         ).translate("root n x sum_(i=1)^n i^3=(frac (n(n+1)) 2)^2")
         self.assertEqual(
             s,
-            """<mroot><mrow><mi>n</mi></mrow><mrow><mi>x</mi></mrow></mroot><msubsup><mrow><mo>&#x2211;</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msup><mrow><mi>i</mi></mrow><mrow><mn>3</mn></mrow></msup><mo>=</mo><msup><mrow><mo>(</mo><mfrac><mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mrow><mn>2</mn></mrow></mfrac><mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup>""",
+            """<mroot><mrow><mi>x</mi></mrow><mrow><mi>n</mi></mrow></mroot><msubsup><mrow><mo>&#x2211;</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msup><mrow><mi>i</mi></mrow><mrow><mn>3</mn></mrow></msup><mo>=</mo><msup><mrow><mo>(</mo><mfrac><mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mrow><mn>2</mn></mrow></mfrac><mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup>""",
         )
 
 

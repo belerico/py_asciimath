@@ -5,10 +5,9 @@ from __future__ import (
     unicode_literals,
 )
 
-from ..const import get_symbols_for
-
 from itertools import islice
 
+from ..const import get_symbols_for
 from ..utils.utils import alias_string
 
 # # from future import standard_library
@@ -21,6 +20,7 @@ left_parenthesis = get_symbols_for("left_parenthesis", None)
 right_parenthesis = get_symbols_for("right_parenthesis", None)
 
 smb = get_symbols_for("misc_symbols", None)
+smb.update(get_symbols_for("colors", None))
 smb.update(get_symbols_for("function_symbols", None))
 smb.update(get_symbols_for("relation_symbols", None))
 smb.update(get_symbols_for("logical_symbols", None))

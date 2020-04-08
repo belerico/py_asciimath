@@ -22,38 +22,104 @@ def get_symbols_for(symbol_group, translation):
 binary_functions = {
     '"frac"': {"latex": "\\frac", "mathml": "<mfrac>{}{}</mfrac>"},
     '"root"': {"latex": "\\sqrt", "mathml": "<mroot>{}{}</mroot>"},
-    '"stackrel"': {"latex": "\\stackrel", "mathml": ""},
-    '"overset"': {"latex": "\\overset", "mathml": ""},
-    '"underset"': {"latex": "\\underset", "mathml": ""},
-    '"color"': {"latex": "\\textcolor", "mathml": ""},
+    '"stackrel"': {"latex": "\\stackrel", "mathml": "<mover>{}{}</mover>"},
+    '"overset"': {"latex": "\\overset", "mathml": "<mover>{}{}</mover>"},
+    '"underset"': {"latex": "\\underset", "mathml": "<munder>{}{}</munder>"},
+    '"color"': {
+        "latex": "\\textcolor",
+        "mathml": "<mstyle mathcolor='{}'><mrow><mi>{}</mi></mrow></mstyle>",
+    },
 }
 
 unary_functions = {
-    '"sqrt"': {"latex": "\\sqrt", "mathml": ""},
-    '"text"': {"latex": "\\textrm", "mathml": ""},
-    '"abs"': {"latex": "abs", "mathml": ""},
-    '"floor"': {"latex": "floor", "mathml": ""},
-    '"ceil"': {"latex": "ceil", "mathml": ""},
-    '"norm"': {"latex": "norm", "mathml": ""},
-    '"ubrace"': {"latex": "\\underbrace", "mathml": ""},
-    '"underbrace"': {"latex": "\\underbrace", "mathml": ""},
-    '"obrace"': {"latex": "\\overbrace", "mathml": ""},
-    '"overbrace"': {"latex": "\\overbrace", "mathml": ""},
-    '"cancel"': {"latex": "\\cancel", "mathml": ""},
-    '"bb"': {"latex": "\\boldsymbol", "mathml": ""},
-    '"bbb"': {"latex": "\\mathbb", "mathml": ""},
-    '"cc"': {"latex": "\\mathcal", "mathml": ""},
-    '"tt"': {"latex": "\\texttt", "mathml": ""},
-    '"fr"': {"latex": "\\mathfrak", "mathml": ""},
-    '"sf"': {"latex": "\\textsf", "mathml": ""},
-    '"ul"': {"latex": "\\underline", "mathml": ""},
-    '"underline"': {"latex": "\\underline", "mathml": ""},
-    '"bar"': {"latex": "\\overline", "mathml": ""},
-    '"overline"': {"latex": "\\overline", "mathml": ""},
-    '"hat"': {"latex": "\\hat", "mathml": ""},
-    '"vec"': {"latex": "\\vec", "mathml": ""},
-    '"dot"': {"latex": "\\dot", "mathml": ""},
-    '"ddot"': {"latex": "\\ddot", "mathml": ""},
+    '"sqrt"': {"latex": "\\sqrt", "mathml": "<mroot>{}<mo>2</mo></mroot>"},
+    '"text"': {"latex": "\\textrm", "mathml": "<mtext>{}</mtext>"},
+    '"abs"': {"latex": "abs", "mathml": "<mo>|</mo>{}<mo>|</mo>"},
+    '"floor"': {
+        "latex": "floor",
+        "mathml": "<mo>&#x230A;</mo>{}<mo>&#x230A;</mo>",
+    },
+    '"ceil"': {
+        "latex": "ceil",
+        "mathml": "<mo>&#x2308;</mo>{}<mo>&#x2308;</mo>",
+    },
+    '"norm"': {
+        "latex": "norm",
+        "mathml": "<mo>&#x2225;</mo>{}<mo>&#x2225;</mo>",
+    },
+    '"ubrace"': {
+        "latex": "\\underbrace",
+        "mathml": "<munder>{}<mo>&#x23DF;</mo></munder>",
+    },
+    '"underbrace"': {
+        "latex": "\\underbrace",
+        "mathml": "<munder>{}<mo>&#x23DF;</mo></munder>",
+    },
+    '"obrace"': {
+        "latex": "\\overbrace",
+        "mathml": "<mover>{}<mo>&#x23DF;</mo></mover>",
+    },
+    '"overbrace"': {
+        "latex": "\\overbrace",
+        "mathml": "<mover>{}<mo>&#x23DF;</mo></mover>",
+    },
+    '"cancel"': {
+        "latex": "\\cancel",
+        "mathml": "<menclose notation='updiagonalstrike'>{}</menclose>",
+    },
+    '"bb"': {
+        "latex": "\\boldsymbol",
+        "mathml": "<mstyle mathvariant='bold'>{}</mstyle>",
+    },
+    '"bbb"': {
+        "latex": "\\mathbb",
+        "mathml": "<mstyle mathvariant='double-struck'>{}</mstyle>",
+    },
+    '"cc"': {
+        "latex": "\\mathcal",
+        "mathml": "<mstyle mathvariant='script'>{}</mstyle>",
+    },
+    '"tt"': {
+        "latex": "\\texttt",
+        "mathml": "<mstyle mathvariant='monospace'>{}</mstyle>",
+    },
+    '"fr"': {
+        "latex": "\\mathfrak",
+        "mathml": "<mstyle mathvariant='fraktur'>{}</mstyle>",
+    },
+    '"sf"': {
+        "latex": "\\textsf",
+        "mathml": "<mstyle mathvariant='sanf-serif'>{}</mstyle>",
+    },
+    '"ul"': {
+        "latex": "\\underline",
+        "mathml": "<munder>{}<mo>&#x332;</mo></munder>",
+    },
+    '"underline"': {
+        "latex": "\\underline",
+        "mathml": "<munder>{}<mo>&#x332;</mo></munder>",
+    },
+    '"bar"': {
+        "latex": "\\overline",
+        "mathml": "<mover>{}<mo>&#x332;</mo></mover>",
+    },
+    '"overline"': {
+        "latex": "\\overline",
+        "mathml": "<mover>{}<mo>&#x332;</mo></mover>",
+    },
+    '"hat"': {"latex": "\\hat", "mathml": "<mover>{}<mo>^</mo></mover>"},
+    '"vec"': {
+        "latex": "\\vec",
+        "mathml": "<mover>{}<mo stretchy='false'>&#x2192;</mo></mover>",
+    },
+    '"dot"': {
+        "latex": "\\dot",
+        "mathml": "<mover>{}<mo stretchy='false'>.</mo></mover>",
+    },
+    '"ddot"': {
+        "latex": "\\ddot",
+        "mathml": "<mover>{}<mo stretchy='false'>..</mo></mover>",
+    },
 }
 
 operation_symbols = {
@@ -297,6 +363,10 @@ arrows = {
     '"Leftarrow"': {"latex": "\\Leftarrow", "mathml": ""},
     '"hArr"': {"latex": "\\Leftrightarrow", "mathml": ""},
     '"Leftrightarrow"': {"latex": "\\Leftrightarrow", "mathml": ""},
+}
+
+colors = {
+    '"red"': {"latex": "red", "mathml": "red"},
 }
 
 misc_symbols = {

@@ -15,11 +15,16 @@ from ..transformer.transformer import LatexTransformer, MathMLTransformer
 
 class ASCIIMathTranslator(object):
     def __init__(self, grammar, *args, **kwargs):
+        if "log" in kwargs:
+            log = kwargs["log"]
+            del kwargs["log"]
+        else:
+            log = False
         if "transformer" in kwargs:
             transformer = kwargs["transformer"]
             del kwargs["transformer"]
         else:
-            transformer = LatexTransformer()
+            transformer = LatexTransformer(log=log)
         if "lexer" in kwargs:
             lexer = kwargs["lexer"]
             del kwargs["lexer"]

@@ -20,6 +20,7 @@ from ..translation.latex import unary_functions as latex_una
 from ..translation.mathml import binary_functions as mathml_bin
 from ..translation.mathml import left_parenthesis as mathml_left
 from ..translation.mathml import right_parenthesis as mathml_right
+from ..translation.mathml import colors
 from ..translation.mathml import smb as mathml_smb
 from ..translation.mathml import unary_functions as mathml_una
 from ..utils.log import Log
@@ -253,11 +254,11 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_under(self, items):
         items[1] = self.remove_parenthesis(items[1])
         return (
-            "<msub><mrow>"
+            "<munder><mrow>"
             + items[0]
             + "</mrow><mrow>"
             + items[1]
-            + "</mrow></msub>"
+            + "</mrow></munder>"
         )
 
     @ASCIIMathTransformer.log
@@ -337,20 +338,32 @@ class MathMLTransformer(ASCIIMathTransformer):
         elif unary == "ceil":
             return "\\left\\lceil " + items[1] + " \\right\\rceil"
         else:
-            return unary + "{" + items[1] + "}"
+            return unary.format("<mrow>" + items[1] + "</mrow>")
 
     @ASCIIMathTransformer.log
     def exp_binary(self, items):
         binary = mathml_bin[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
-        return binary.format(
-            "<mrow>" + items[1] + "</mrow>", "<mrow>" + items[2] + "</mrow>",
-        )
+        if concat(items[1]) in colors:
+            return binary.format(items[1], "<mrow>" + items[2] + "</mrow>",)
+        elif items[0] != "root":
+            return binary.format(
+                "<mrow>" + items[1] + "</mrow>",
+                "<mrow>" + items[2] + "</mrow>",
+            )
+        else:
+            return binary.format(
+                "<mrow>" + items[2] + "</mrow>",
+                "<mrow>" + items[1] + "</mrow>",
+            )
 
     @ASCIIMathTransformer.log
     def symbol(self, items):
-        return "<mo>" + mathml_smb[concat(items[0])] + "</mo>"
+        if concat(items[0]) in colors:
+            return mathml_smb[concat(items[0])]
+        else:
+            return "<mo>" + mathml_smb[concat(items[0])] + "</mo>"
 
     @ASCIIMathTransformer.log
     def const(self, items):

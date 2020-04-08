@@ -17,6 +17,7 @@ left_parenthesis = get_symbols_for("left_parenthesis", "latex")
 right_parenthesis = get_symbols_for("right_parenthesis", "latex")
 
 smb = get_symbols_for("misc_symbols", "latex")
+smb.update(get_symbols_for("colors", "latex"))
 smb.update(get_symbols_for("function_symbols", "latex"))
 smb.update(get_symbols_for("relation_symbols", "latex"))
 smb.update(get_symbols_for("logical_symbols", "latex"))
