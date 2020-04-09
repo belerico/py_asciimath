@@ -1,8 +1,10 @@
 """py_asciimath: a simple ASCIIMath converter.
 
 Usage:
-  py_asciimath.py ASCIIMATH ... (-o OLANG | --output=OLANG)
-            [--log] [--pprint] [--to-file]
+  py_asciimath.py ASCIIMATH ... (-o latex | --output=latex)
+            [--log] [--pprint]
+  py_asciimath.py ASCIIMATH ... (-o mathml | --output=mathml)
+            [--log] [--pprint] [--dstyle] [--validate-xml=MathMLDTD]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
@@ -11,7 +13,8 @@ Options:
   -o OLANG --output=OLANG       Output language.
   --log                         Log the transformation process.
   --pprint                      Pretty print
-  --to-file                     Save output to file
+  --dstyle                      Add display style
+  --validate-xml=MathMLDTD      Validate against a MathML DTD. MathMLDTD can be: mathml1, mathml2 or mathml3
   --version                     Show version.
 """
 from __future__ import (
@@ -30,7 +33,6 @@ from docopt import docopt
 from . import __version__
 from .grammar.asciimath_grammar import asciimath_grammar
 from .parser.parser import ASCIIMath2MathML, ASCIIMath2Tex
-from .transformer.transformer import LatexTransformer, MathMLTransformer
 
 
 def main():
@@ -41,23 +43,30 @@ def main():
             print("Translating ...")
             print(
                 ASCIIMath2Tex(
-                    asciimath_grammar,
-                    transformer=LatexTransformer(log=arguments["--log"]),
+                    asciimath_grammar, log=arguments["--log"],
                 ).translate(
                     " ".join(arguments["ASCIIMATH"]), arguments["--pprint"]
                 )
             )
         elif olang == "mathml":
-            print("Translating ...")
-            print(
-                ASCIIMath2MathML(
-                    asciimath_grammar,
-                    transformer=MathMLTransformer(log=arguments["--log"]),
-                ).translate(
-                    " ".join(arguments["ASCIIMATH"]),
-                    pprint=arguments["--pprint"],
-                )
+            validate = (
+                True if arguments["--validate-xml"] is not None else False
             )
+            print("Translating ...")
+            ok, s = ASCIIMath2MathML(
+                asciimath_grammar, log=arguments["--log"],
+            ).translate(
+                " ".join(arguments["ASCIIMATH"]),
+                displaystyle=arguments["--dstyle"],
+                dtd=arguments["--validate-xml"],
+                xml=validate,
+                dtd_validation=validate,
+                pprint=arguments["--pprint"],
+            )
+            if ok:
+                print(s)
+            else:
+                print("Something went wrong:", s)
         else:
             print("SUPPORTED OLANG: 'latex', 'mathml'", file=sys.stderr)
             sys.exit(1)
