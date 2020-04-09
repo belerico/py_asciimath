@@ -18,20 +18,80 @@ if __name__ == "__main__":
     asciimath2tex = ASCIIMath2Tex(asciimath_grammar, inplace=False,)
     asciimath2mathml = ASCIIMath2MathML(asciimath_grammar, inplace=False,)
     asciimath = "sum_(i=1)^n i^3=((n(n+1))/2)^2"
-    latex = asciimath2tex.translate(asciimath, pprint=True)
-    mathml = asciimath2tex.translate(asciimath, pprint=True)
+    latex = asciimath2tex.translate(asciimath, pprint=False)
+    mathml = asciimath2mathml.translate(asciimath, pprint=False)
     print(latex)
     print(mathml)
 ```
 results in:
-`\sum_{i = 1}^{n} i^{3} = \left(\frac{\left(n \left(n + 1\right)\right)}{2}\right)^{2}`
+```
+\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
+<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 3.0//EN" "http://www.w3.org/Math/DTD/mathml3/mathml3.dtd">
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <msubsup>
+      <mrow>
+        <mo>&sum;</mo>
+      </mrow>
+      <mrow>
+        <mi>i</mi>
+        <mo>=</mo>
+        <mn>1</mn>
+      </mrow>
+      <mrow>
+        <mi>n</mi>
+      </mrow>
+    </msubsup>
+  </mrow>
+  <mrow>
+    <msup>
+      <mrow>
+        <mi>i</mi>
+      </mrow>
+      <mrow>
+        <mn>3</mn>
+      </mrow>
+    </msup>
+  </mrow>
+  <mo>=</mo>
+  <mrow>
+    <msup>
+      <mrow>
+        <mo>(</mo>
+        <mrow>
+          <mfrac>
+            <mrow>
+              <mi>n</mi>
+              <mo>(</mo>
+              <mi>n</mi>
+              <mo>+</mo>
+              <mn>1</mn>
+              <mo>)</mo>
+            </mrow>
+            <mrow>
+              <mn>2</mn>
+            </mrow>
+          </mfrac>
+        </mrow>
+        <mo>)</mo>
+      </mrow>
+      <mrow>
+        <mn>2</mn>
+      </mrow>
+    </msup>
+  </mrow>
+</math>
+```
 
 ### From the command line
 ```
 py_asciimath: a simple ASCIIMath converter.
 
 Usage:
-  py_asciimath.py ASCIIMATH ... (-o OLANG | --output=OLANG) [--log]
+  py_asciimath.py ASCIIMATH ... (-o latex | --output=latex)
+            [--log] [--pprint]
+  py_asciimath.py ASCIIMATH ... (-o mathml | --output=mathml)
+            [--log] [--pprint] [--dstyle] [--validate-xml=MathMLDTD]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
@@ -39,6 +99,9 @@ Options:
   -h --help                     Show this screen.
   -o OLANG --output=OLANG       Output language.
   --log                         Log the transformation process.
+  --pprint                      Pretty print
+  --dstyle                      Add display style tag
+  --validate-xml=MathMLDTD      Validate against a MathML DTD. MathMLDTD can be: mathml1, mathml2 or mathml3
   --version                     Show version.
 ```
 
