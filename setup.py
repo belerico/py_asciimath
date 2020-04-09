@@ -5,7 +5,9 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 version = re.search(
-    r'^__version__\s*=\s*"(.*)"', open("py_asciimath/__init__.py").read()
+    r'^__version__\s*=\s*"(.*)"',
+    open("py_asciimath/__init__.py").read(),
+    re.MULTILINE,
 ).group(1)
 
 setuptools.setup(
@@ -29,7 +31,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.8",
     ],
     install_requires=["lark-parser", "docopt", "lxml"],
 )
