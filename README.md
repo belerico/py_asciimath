@@ -1,4 +1,4 @@
-## py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath)
+## py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![PyPI version](https://badge.fury.io/py/py-asciimath.svg)](https://badge.fury.io/py/py-asciimath)
 
 AsciiMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/.  
 The parser utility takes an ASCIIMath string in input and returns the corresponding LaTeX translation, via a syntactic and semantic transformation.
