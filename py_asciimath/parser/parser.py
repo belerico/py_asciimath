@@ -112,12 +112,11 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                     " AND VALIDATING " if dtd_validation else " "
                 )
             )
-            try:
-                return True, lxml.etree.fromstring(xml, lxml_parser)
-            except lxml.etree.XMLSyntaxError as XMLSE:
-                return False, str(XMLSE)
+            return lxml.etree.fromstring(xml, lxml_parser)
         else:
-            return False, "No connection available to check against DTD"
+            raise httplib.HTTPException(
+                "No connection available to check against DTD"
+            )
 
     def translate(
         self,
@@ -148,7 +147,9 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 + '"http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">'
             )
         else:
-            raise NotImplementedError("DTD validation only against MathML DTD 1, 2 or 3")
+            raise NotImplementedError(
+                "DTD validation only against MathML DTD 1, 2 or 3"
+            )
         parsed = (
             dtd_head
             + "<math"
@@ -162,10 +163,6 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             + "</math>"
         )
         if xml:
-            ok, root = self.__dtd_validation(parsed, dtd_validation)
-            return (
-                ok,
-                lxml.etree.tostring(root).decode("utf-8") if ok else root,
-            )
-        else:
-            return True, parsed
+            parsed = self.__dtd_validation(parsed, dtd_validation)
+            parsed = lxml.etree.tostring(parsed).decode("utf-8")
+        return parsed

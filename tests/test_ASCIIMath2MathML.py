@@ -1,6 +1,10 @@
 import unittest
+
+import lxml.etree
+
 from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 from py_asciimath.parser.parser import ASCIIMath2MathML
+from py_asciimath.utils.utils import httplib
 
 
 class TestUtilsMat(unittest.TestCase):
@@ -8,28 +12,34 @@ class TestUtilsMat(unittest.TestCase):
         self.maxDiff = None
 
     def test_asciimath2tex_ok_1(self):
-        ok, s = ASCIIMath2MathML(
-            asciimath_grammar,
-            inplace=True,
-            log=False,
-            parser="lalr",
-            lexer="contextual",
-        ).translate(
-            "floor root n x times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
-            displaystyle=True,
-            xml=True,
-            dtd="mathml1",
-            pprint=False,
-        )
+        try:
+            _ = ASCIIMath2MathML(
+                asciimath_grammar,
+                inplace=True,
+                log=False,
+                parser="lalr",
+                lexer="contextual",
+            ).translate(
+                "floor root n x times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
+                displaystyle=True,
+                xml=True,
+                dtd="mathml1",
+                pprint=False,
+            )
+            ok = True
+        except lxml.etree.XMLSyntaxError:
+            ok = False
+        except httplib.HTTPException:
+            ok = True
         self.assertTrue(ok)
 
     def test_asciimath2tex_ok_2(self):
-        ok, s = ASCIIMath2MathML(asciimath_grammar, log=True,).translate(
+        s = ASCIIMath2MathML(asciimath_grammar, log=True,).translate(
             "floor root n x times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
             pprint=True,
             dtd=None,
             displaystyle=True,
-            xml=False
+            xml=False,
         )
         self.assertEqual(
             s,
@@ -37,7 +47,7 @@ class TestUtilsMat(unittest.TestCase):
         )
 
     def test_asciimath2tex_ok_3(self):
-        ok, s = ASCIIMath2MathML(
+        s = ASCIIMath2MathML(
             asciimath_grammar,
             inplace=True,
             log=False,
@@ -55,7 +65,7 @@ class TestUtilsMat(unittest.TestCase):
         )
 
     def test_asciimath2tex_ok_4(self):
-        ok, s = ASCIIMath2MathML(
+        s = ASCIIMath2MathML(
             asciimath_grammar,
             inplace=True,
             log=False,

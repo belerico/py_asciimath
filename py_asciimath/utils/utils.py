@@ -13,9 +13,9 @@ import socket
 
 # # standard_library.install_aliases()
 try:
-    import httplib
-except ImportError:
     import http.client as httplib
+except ImportError:
+    import httplib
 
 try:
     import collections.abc as collections
