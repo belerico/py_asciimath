@@ -37,7 +37,9 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
 class ASCIIMathTransformer(Transformer):
-    def __init__(self, log=True, start_end_par_pattern="", visit_tokens=False):
+    def __init__(
+        self, log=True, start_end_par_pattern="{}{}", visit_tokens=False
+    ):
         Transformer.__init__(self, visit_tokens=visit_tokens)
         formatted_left_parenthesis = "|".join(
             ["\\(", "\\(:", "\\[", "\\{", "\\{:"]

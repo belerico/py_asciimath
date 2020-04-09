@@ -74,7 +74,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             grammar, *args, transformer=MathMLTransformer(), **kwargs
         )
 
-    def translate(self, s, displaystyle=True, xml=False, pprint=False):
+    def translate(self, s, displaystyle=False, xml=False, pprint=False):
         if displaystyle:
             dstyle = "<mstyle displaystyle='true'>{}</mstyle>"
         else:
