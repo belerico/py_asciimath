@@ -14,7 +14,7 @@ import socket
 # # standard_library.install_aliases()
 try:
     import httplib
-except ModuleNotFoundError:
+except ImportError:
     import http.client as httplib
 
 try:
