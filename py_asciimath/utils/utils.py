@@ -5,17 +5,22 @@ from __future__ import (
     unicode_literals,
 )
 
-import collections
 import logging
+import re
+import socket
 
 # # from future import standard_library
 
 # # standard_library.install_aliases()
+try:
+    import httplib
+except ModuleNotFoundError:
+    import http.client as httplib
 
 try:
-    collectionsAbc = collections.abc
-except AttributeError:
-    collectionsAbc = collections
+    import collections.abc as collections
+except ImportError:
+    import collections
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
@@ -47,14 +52,25 @@ def alias_string(mapping, init=False, alias=True, prefix=""):
     return s
 
 
+def check_connection(url="www.google.com", timeout=10):
+    conn = httplib.HTTPSConnection(url, timeout=timeout)
+    try:
+        conn.request("HEAD", "/")
+        conn.close()
+        return True
+    except (httplib.HTTPException, socket.error):
+        conn.close()
+        return False
+
+
 def concat(s):
     return '"' + s + '"'
 
 
-def flatten(l):
+def flatten(l):  # pragma: no cover
     """Flatten a list (or other iterable) recursively"""
     for el in l:
-        if isinstance(el, collectionsAbc.Iterable) and not isinstance(el, str):
+        if isinstance(el, collections.Iterable) and not isinstance(el, str):
             for sub in flatten(el):
                 yield sub
         else:
@@ -162,7 +178,7 @@ class UtilsMat(object):
             return False, []
 
     @classmethod
-    def get_mat(cls, s, row_par=["[", "]"]):
+    def get_latex_mat(cls, s, row_par=["[", "]"]):
         """Given a known matrix-structured string, translate it into the
         matrix LaTeX format.
 
@@ -218,7 +234,61 @@ class UtilsMat(object):
         else:
             return s
 
+    @classmethod
+    def get_mathml_mat(cls, s, row_par=["[", "]"]):
+        """Given a known matrix-structured string, translate it into the
+        matrix LaTeX format.
+
+        Parameters:
+        - s: str
+        - row_par: list. Row delimiters
+
+        Return:
+        - mat: str
+        """
+
+        def is_empty_col(s):
+            for c in s[::-1]:
+                if c == "&" or c == "\\":
+                    return True
+                elif not c.isspace():
+                    return False
+            return True
+
+        s = re.sub(r"<mo>([\[\]\,])</mo>", r"\1", s)
+        stack_par = []
+        mat = ""
+        if row_par != []:
+            for i, c in enumerate(s):
+                if c == row_par[0]:
+                    stack_par.append(c)
+                    if len(stack_par) == 1:
+                        mat = mat + "<mtr><mtd>"
+                    elif len(stack_par) > 1:
+                        mat = mat + "<mo>" + c + "</mo>"
+                elif c == row_par[1]:
+                    stack_par.pop()
+                    if len(stack_par) > 0:
+                        mat = mat + "<mo>" + c + "</mo>"
+                    else:
+                        mat = (
+                            mat
+                            + "</mtd>"
+                            + ("</mtr>" if i == len(s) - 1 else "")
+                        )
+                elif c == "," and len(stack_par) == 1:
+                    mat = mat + "</mtd><mtd>"
+                elif c == "," and len(stack_par) == 0:
+                    mat = mat + "</mtr>"
+                else:
+                    # Does not include \\left in the result string
+                    if len(stack_par) > 0:
+                        mat = mat + c
+            return mat
+        else:
+            return s
+
 
 if __name__ == "__main__":
-    s = "\\left[\\right] , \\left[\\right]"
-    print(UtilsMat.get_mat(s, ["[", "]"]))
+    s = "<mo>[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>]</mo><mo>,</mo><mo>[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>]</mo>"
+    print(UtilsMat.get_mat(s))
