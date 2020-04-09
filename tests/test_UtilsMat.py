@@ -44,19 +44,19 @@ class TestUtilsMat(unittest.TestCase):
         self.assertFalse(b)
 
     def test_get_mat_ok_1(self):
-        s = UtilsMat.get_mat("\\left[1 , 2\\right] , \\left[1 , 2\\right]")
+        s = UtilsMat.get_latex_mat("\\left[1 , 2\\right] , \\left[1 , 2\\right]")
         self.assertEqual(s, "1  &  2 \\\\ 1  &  2")
 
     def test_get_mat_ok_2(self):
-        s = UtilsMat.get_mat("\\left[1 , 2\\right] , \\left[1 , \\right]")
+        s = UtilsMat.get_latex_mat("\\left[1 , 2\\right] , \\left[1 , \\right]")
         self.assertEqual(s, "1  &  2 \\\\ 1  &  \\null")
 
     def test_get_mat_ok_3(self):
-        s = UtilsMat.get_mat("\\left[\\right] , \\left[\\right]")
+        s = UtilsMat.get_latex_mat("\\left[\\right] , \\left[\\right]")
         self.assertEqual(s, "\\null \\\\ \\null")
 
     def test_get_mat_ok_4(self):
-        s = UtilsMat.get_mat("\\left[,\\right] , \\left[,\\right]")
+        s = UtilsMat.get_latex_mat("\\left[,\\right] , \\left[,\\right]")
         self.assertEqual(s, "\\null & \\null \\\\ \\null & \\null")
 
     def test_check_get_mat_ok_4(self):
@@ -64,7 +64,7 @@ class TestUtilsMat(unittest.TestCase):
         b, row_par = UtilsMat.check_mat(s)
         self.assertTrue(b)
         self.assertEqual(row_par, ["[", "]"])
-        m = UtilsMat.get_mat(s, row_par)
+        m = UtilsMat.get_latex_mat(s, row_par)
         self.assertEqual(m, "2*[x+n] &  3(int x dx) \\\\ sqrt(x) &  a")
 
     def test_check_get_mat_fail_1(self):
@@ -72,7 +72,7 @@ class TestUtilsMat(unittest.TestCase):
         b, row_par = UtilsMat.check_mat(s)
         self.assertFalse(b)
         self.assertEqual(row_par, [])
-        m = UtilsMat.get_mat(s, row_par)
+        m = UtilsMat.get_latex_mat(s, row_par)
         self.assertNotEqual(m, "2*[x+n] &  3(int x dx) \\\\ sqrt(x) &  a")
 
 
