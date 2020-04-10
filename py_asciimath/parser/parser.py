@@ -106,6 +106,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 no_network=False,
                 load_dtd=True,
                 ns_clean=True,
+                remove_blank_text=True
             )
             logging.info(
                 "PARSING{}XML...".format(
@@ -164,5 +165,5 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         )
         if xml:
             parsed = self.__dtd_validation(parsed, dtd_validation)
-            parsed = lxml.etree.tostring(parsed).decode("utf-8")
+            parsed = lxml.etree.tostring(parsed, pretty_print=True).decode()
         return parsed
