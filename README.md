@@ -246,7 +246,7 @@ QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 ```
 For the complete list of symbols, please refer to http://asciimath.org/#syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
 
-## Rendering (semantics)
+## Rendering (LaTeX semantics)
 
 A parsed ASCIIMath string is rendered as follows:
 
@@ -290,3 +290,7 @@ that is:
 
 Since `L` and `R` can be any left or right parenthesis, and every matrices must have the same number of columns, to render a system of equation one can write something like `{[(root n x)/(x) <= 4], [x^2=e^x]:}`.  
 On the other hand a matrix can be somenthing like `[[(root n x)/(x) <= 4, int x dx], [x^2=e^x, lim_(x to infty) 1 / (x^2)]]`.
+
+## Rendering (MathML semantics)
+
+The translation follows the MathML specification at https://www.w3.org/TR/MathML3/
