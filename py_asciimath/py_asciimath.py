@@ -2,7 +2,7 @@
 
 Usage:
   py_asciimath.py ASCIIMATH ... (-o latex | --output=latex)
-            [--log] [--pprint]
+            [--log]
   py_asciimath.py ASCIIMATH ... (-o mathml | --output=mathml)
             [--log] [--pprint] [--dstyle] [--validate-xml=MathMLDTD]
   py_asciimath.py (-h | --help)
@@ -45,7 +45,7 @@ def main():
                 ASCIIMath2Tex(
                     asciimath_grammar, log=arguments["--log"],
                 ).translate(
-                    " ".join(arguments["ASCIIMATH"]), arguments["--pprint"]
+                    " ".join(arguments["ASCIIMATH"]), False
                 )
             )
         elif olang == "mathml":
@@ -53,20 +53,17 @@ def main():
                 True if arguments["--validate-xml"] is not None else False
             )
             print("Translating ...")
-            ok, s = ASCIIMath2MathML(
+            s = ASCIIMath2MathML(
                 asciimath_grammar, log=arguments["--log"],
             ).translate(
                 " ".join(arguments["ASCIIMATH"]),
                 displaystyle=arguments["--dstyle"],
                 dtd=arguments["--validate-xml"],
-                xml=validate,
                 dtd_validation=validate,
-                pprint=arguments["--pprint"],
+                pprint=False,
+                xml_pprint=arguments["--pprint"]
             )
-            if ok:
-                print(s)
-            else:
-                print("Something went wrong:", s)
+            print(s)
         else:
             print("SUPPORTED OLANG: 'latex', 'mathml'", file=sys.stderr)
             sys.exit(1)

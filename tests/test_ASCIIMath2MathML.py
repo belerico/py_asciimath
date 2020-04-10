@@ -22,7 +22,7 @@ class TestUtilsMat(unittest.TestCase):
             ).translate(
                 "floor root n x times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
                 displaystyle=True,
-                xml=True,
+                dtd_validation=True,
                 dtd="mathml1",
                 pprint=False,
             )
@@ -39,7 +39,7 @@ class TestUtilsMat(unittest.TestCase):
             pprint=True,
             dtd=None,
             displaystyle=True,
-            xml=False,
+            xml_pprint=False
         )
         self.assertEqual(
             s,
@@ -58,6 +58,7 @@ class TestUtilsMat(unittest.TestCase):
             dtd="mathml2",
             displaystyle=False,
             pprint=False,
+            xml_pprint=False
         )
         self.assertEqual(
             s,
@@ -75,8 +76,8 @@ class TestUtilsMat(unittest.TestCase):
             "langle [1,2], [2,int[3(x+1)]dx]:}",
             dtd="mathml1",
             displaystyle=True,
-            xml=False,
             pprint=False,
+            xml_pprint=False
         )
         self.assertEqual(
             s,

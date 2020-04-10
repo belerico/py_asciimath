@@ -106,7 +106,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 no_network=False,
                 load_dtd=True,
                 ns_clean=True,
-                remove_blank_text=True
+                remove_blank_text=True,
             )
             logging.info(
                 "PARSING{}XML...".format(
@@ -124,9 +124,9 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         s,
         displaystyle=False,
         dtd=None,
-        xml=False,
         dtd_validation=False,
         pprint=False,
+        xml_pprint=True,
     ):
         if displaystyle:
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
@@ -163,7 +163,9 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             + dstyle.format(super(ASCIIMath2MathML, self).translate(s, pprint))
             + "</math>"
         )
-        if xml:
+        if dtd_validation or xml_pprint:
             parsed = self.__dtd_validation(parsed, dtd_validation)
-            parsed = lxml.etree.tostring(parsed, pretty_print=True).decode()
+            parsed = lxml.etree.tostring(
+                parsed, pretty_print=xml_pprint
+            ).decode()
         return parsed
