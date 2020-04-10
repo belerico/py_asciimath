@@ -15,23 +15,22 @@ from py_asciimath.parser.parser import ASCIIMath2MathML, ASCIIMath2Tex
 from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 
 if __name__ == "__main__":
-    asciimath2tex = ASCIIMath2Tex(asciimath_grammar, inplace=False,)
-    asciimath2mathml = ASCIIMath2MathML(asciimath_grammar, inplace=False,)
+    asciimath2tex = ASCIIMath2Tex(asciimath_grammar)
+    asciimath2mathml = ASCIIMath2MathML(asciimath_grammar)
     asciimath = "sum_(i=1)^n i^3=((n(n+1))/2)^2"
-    latex = asciimath2tex.translate(asciimath, pprint=False)
-    mathml = asciimath2mathml.translate(asciimath, pprint=False)
+    latex = asciimath2tex.translate(asciimath)
+    mathml = asciimath2mathml.translate(asciimath, xml_pprint=True)
     print(latex)
     print(mathml)
 ```
 results in:
 ```
 \sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
-<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 3.0//EN" "http://www.w3.org/Math/DTD/mathml3/mathml3.dtd">
-<math xmlns="http://www.w3.org/1998/Math/MathML">
+<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
   <mrow>
     <msubsup>
       <mrow>
-        <mo>&sum;</mo>
+        <mo>&#8721;</mo>
       </mrow>
       <mrow>
         <mi>i</mi>
