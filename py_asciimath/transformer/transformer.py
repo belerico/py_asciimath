@@ -224,7 +224,7 @@ class MathMLTransformer(ASCIIMathTransformer):
         ASCIIMathTransformer.__init__(
             self,
             log,
-            r"^(?:<mo>(?:({}))</mo>)(.*?)(?:<mo>(?:({}))</mo>)$",
+            r"^(?:<mrow>)?(?:<mo>(?:({}))</mo>)(.*?)(?:<mo>(?:({}))</mo>)(?:</mrow>)?$",
             visit_tokens,
         )
 
@@ -258,10 +258,10 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_under(self, items):
         items[1] = self.remove_parenthesis(items[1])
         return self.encapsulate_mrow(
-            "<munder>"
+            "<msub>"
             + self.encapsulate_mrow(items[0])
             + self.encapsulate_mrow(items[1])
-            + "</munder>"
+            + "</msub>"
         )
 
     @ASCIIMathTransformer.log
@@ -290,7 +290,9 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_par(self, items):
         yeah_mat = False
         s = ", ".join(items[1:-1])
-        if re.match(r"^<mo>(\[|\(|\{|\{:|\|:|\|\|:|<<|\(:|langle)</mo>", s):
+        if re.match(
+            r"^<mrow><mo>(\[|\(|\{|\{:|\|:|\|\|:|<<|\(:|langle)</mo>", s
+        ):
             yeah_mat, row_par = UtilsMat.check_mat(s)
             if yeah_mat:
                 s = (
@@ -300,7 +302,15 @@ class MathMLTransformer(ASCIIMathTransformer):
                 )
         lpar = mathml_left[concat(items[0])]
         rpar = mathml_right[concat(items[-1])]
-        return "<mo>" + lpar + "</mo>" + s + "<mo>" + rpar + "</mo>"
+        return self.encapsulate_mrow(
+            "<mo>"
+            + lpar
+            + "</mo>"
+            + (self.encapsulate_mrow(s) if not yeah_mat else s)
+            + "<mo>"
+            + rpar
+            + "</mo>"
+        )
 
     @ASCIIMathTransformer.log
     def exp_unary(self, items):

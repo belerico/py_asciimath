@@ -95,6 +95,16 @@ class UtilsMat(object):
        col (& col)* \\\\ col (& col)* (\\\\ col (& col)*)*
     """
 
+    left_par = ["(", "(:", "[", "{", "{:", "|:", "||:", "langle", "&langle;"]
+    right_par = [")", ":)", "]", "}", ":}", ":|", ":||", "rangle", "&rangle;"]
+    mathml_par_pattern = re.compile(
+        r"<mo>(\,|\(|\(:|\[|\{|\{:|\|:|\|\|:|&langle;|\)|:\)|\]|\}|:\}|:\||:\|\||&rangle;)</mo>",
+    )
+
+    @classmethod
+    def is_par(cls, c):
+        return c in cls.left_par or c in cls.right_par
+
     @classmethod
     def get_row_par(cls, s):
         """Given a string, it returns the first index i such that the char in
@@ -115,7 +125,7 @@ class UtilsMat(object):
         return -1, []
 
     @classmethod
-    def check_mat(cls, s):
+    def check_mat(cls, s, olang="mathml"):
         """Given a string, runs a matrix-structure check.
         Return True if the string s has a matrix-structure-like,
         False otherwise. It returns also the row delimiters.
@@ -128,6 +138,21 @@ class UtilsMat(object):
         - [l_par, r_par]: list
         """
 
+        if olang == "mathml":
+            s = re.sub(
+                cls.mathml_par_pattern,
+                lambda match: match.group(1)
+                if match.group(1) != "&langle;"
+                and match.group(1) != "&rangle;"
+                else (
+                    "("
+                    if match.group(1) == "&langle;"
+                    or match.group(1) == "|:"
+                    or match.group(1) == "||:"
+                    else ")"
+                ),
+                s,
+            )
         rows = 0
         cols = 0
         max_cols = 0
@@ -137,13 +162,13 @@ class UtilsMat(object):
         if i != -1 or row_par == []:
             for c in s[i:]:
                 # c is a left par
-                if c == row_par[0]:
+                if c in cls.left_par:
                     if transitions != rows:
                         logging.info("ROW WITHOUT COMMA")
                         return False, []
                     par_stack.append(c)
                 # c is a right par
-                elif c == row_par[1]:
+                elif c in cls.right_par:
                     if len(par_stack) == 0:
                         logging.info("UNMATCHED PARS")
                         return False, []
@@ -255,17 +280,21 @@ class UtilsMat(object):
                     return False
             return True
 
-        s = re.sub(r"<mo>([\[\]\,])</mo>", r"\1", s)
+        split = re.split(cls.mathml_par_pattern, s,)
+        print(split)
         stack_par = []
         mat = ""
         if row_par != []:
-            for i, c in enumerate(s):
+            for i, c in enumerate(split):
                 if c == row_par[0]:
                     stack_par.append(c)
                     if len(stack_par) == 1:
                         mat = mat + "<mtr><mtd>"
                     elif len(stack_par) > 1:
                         mat = mat + "<mo>" + c + "</mo>"
+                elif c in cls.left_par:
+                    stack_par.append(c)
+                    mat = mat + "<mo>" + c + "</mo>"
                 elif c == row_par[1]:
                     stack_par.pop()
                     if len(stack_par) > 0:
@@ -274,15 +303,38 @@ class UtilsMat(object):
                         mat = (
                             mat
                             + "</mtd>"
-                            + ("</mtr>" if i == len(s) - 1 else "")
+                            + ("</mtr>" if i == len(split) - 2 else "")
                         )
-                elif c == "," and len(stack_par) == 1:
-                    mat = mat + "</mtd><mtd>"
-                elif c == "," and len(stack_par) == 0:
-                    mat = mat + "</mtr>"
-                else:
-                    # Does not include \\left in the result string
-                    if len(stack_par) > 0:
+                elif c in cls.right_par:
+                    stack_par.pop()
+                    mat = mat + "<mo>" + c + "</mo>"
+                elif c == ",":
+                    if len(stack_par) == 1:
+                        mat = mat + "</mtd><mtd>"
+                    elif len(stack_par) == 0:
+                        mat = mat + "</mtr>"
+                    else:
+                        mat = mat + "<mo>" + c + "</mo>"
+                # Initial and ending <mrow></mrow> are not needed if this is a matrix
+                elif (c == "<mrow>" or c == "</mrow>") and len(stack_par) == 0:
+                    pass
+                elif c != "":
+                    if len(stack_par) == 1:
+                        if (
+                            split[i - 1] == row_par[0]
+                            and stack_par[-1] == row_par[0]
+                        ):
+                            # Discard unneeded <mrow> tag
+                            mat = mat + c[6:]
+                        elif (
+                            split[i + 1] == row_par[1]
+                            and stack_par[-1] == row_par[0]
+                        ):
+                            # Discard unneeded </mrow> tag
+                            mat = mat + c[: len(c) - 7]
+                        else:
+                            mat = mat + c
+                    else:
                         mat = mat + c
             return mat
         else:

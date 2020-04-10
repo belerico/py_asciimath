@@ -1,0 +1,2 @@
+include LICENSE
+recursive-include py_asciimath/translation/dtd
