@@ -319,8 +319,8 @@ left_parenthesis = {
     '"["': {"latex": "[", "mathml": "["},
     '"{:"': {"latex": "{:", "mathml": ""},
     '"{"': {"latex": "\\{", "mathml": "{"},
-    '"|:"': {"latex": "\\vert", "mathml": "|:"},
-    '"||:"': {"latex": "\\lVert", "mathml": "||:"},
+    '"|:"': {"latex": "\\vert", "mathml": "&VerticalBar;"},
+    '"||:"': {"latex": "\\lVert", "mathml": "&DoubleVerticalBar;"},
     '"langle"': {"latex": "\\langle", "mathml": "&langle;"},
     '"<<"': {"latex": "\\langle", "mathml": "&langle;"},
 }
@@ -331,8 +331,8 @@ right_parenthesis = {
     '"]"': {"latex": "]", "mathml": "]"},
     '":}"': {"latex": ":}", "mathml": ""},
     '"}"': {"latex": "\\}", "mathml": "}"},
-    '":|"': {"latex": "\\vert", "mathml": ":|"},
-    '":||"': {"latex": "\\rVert", "mathml": ":||"},
+    '":|"': {"latex": "\\vert", "mathml": "&VerticalBar;"},
+    '":||"': {"latex": "\\rVert", "mathml": "&DoubleVerticalBar;"},
     '"rangle"': {"latex": "\\rangle", "mathml": "&rangle;"},
     '">>"': {"latex": "\\rangle", "mathml": "&rangle;"},
 }
