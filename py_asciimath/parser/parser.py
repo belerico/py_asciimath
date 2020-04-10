@@ -126,7 +126,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 else "SYSTEM "
                 + '"'
                 + PROJECT_ROOT
-                + '/translation/dtd/mathml3/mathml3.dtd"'
+                + '/dtd/mathml3/mathml3.dtd"'
             )
         elif dtd.lower() == "mathml1":
             dtd_head = dtd_head.format(
@@ -136,7 +136,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                     if conn
                     else '"'
                     + PROJECT_ROOT
-                    + '/translation/dtd/mathml1/mathml1.dtd"'
+                    + '/dtd/mathml1/mathml1.dtd"'
                 )
             )
         elif dtd.lower() == "mathml2":
@@ -147,7 +147,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 else "SYSTEM "
                 + '"'
                 + PROJECT_ROOT
-                + '/translation/dtd/mathml2/mathml2.dtd"'
+                + '/dtd/mathml2/mathml2.dtd"'
             )
         else:
             raise NotImplementedError(
