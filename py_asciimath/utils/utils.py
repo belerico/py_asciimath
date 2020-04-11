@@ -132,7 +132,7 @@ class UtilsMat(object):
         return -1, []
 
     @classmethod
-    def check_mat(cls, s, olang="mathml"):
+    def check_mat(cls, s):
         """Given a string, runs a matrix-structure check.
         Return True if the string s has a matrix-structure-like,
         False otherwise. It returns also the row delimiters.
@@ -145,21 +145,6 @@ class UtilsMat(object):
         - [l_par, r_par]: list
         """
 
-        if olang == "mathml":
-            s = re.sub(
-                cls.mathml_par_pattern,
-                lambda match: match.group(1)
-                if match.group(1) != "&langle;"
-                and match.group(1) != "&rangle;"
-                else (
-                    "("
-                    if match.group(1) == "&langle;"
-                    or match.group(1) == "|:"
-                    or match.group(1) == "||:"
-                    else ")"
-                ),
-                s,
-            )
         rows = 0
         cols = 0
         max_cols = 0
@@ -225,19 +210,13 @@ class UtilsMat(object):
         - mat: str
         """
 
-        def is_empty_col(s):
-            for c in s[::-1]:
-                if c == "&" or c == "\\":
-                    return True
-                elif not c.isspace():
-                    return False
-            return True
-
+        i = 0
         empty_col = True
         stack_par = []
         mat = ""
         if row_par != []:
-            for i, c in enumerate(s):
+            while i < len(s):
+                c = s[i]
                 if c == row_par[0]:
                     stack_par.append(c)
                     if len(stack_par) > 1:
@@ -247,23 +226,27 @@ class UtilsMat(object):
                     if len(stack_par) > 0:
                         mat = mat + c
                     else:
-                        # Remove '\\right' from the last parenthesis
-                        mat = mat[: len(mat) - 6]
-                        # Need to go backward after \\right removal
-                        # and check if col is empty
-                        if is_empty_col(mat):
+                        if empty_col:
                             mat = mat + "\\null"
                         empty_col = True
-                elif c == "," and len(stack_par) == 1:
-                    mat = mat + (" & " if not empty_col else "\\null & ")
-                elif c == "," and len(stack_par) == 0:
-                    mat = mat + " \\\\ "
+                elif c == ",":
+                    if len(stack_par) == 1:
+                        mat = mat + (" & " if not empty_col else "\\null & ")
+                    elif len(stack_par) == 0:
+                        mat = mat + " \\\\ "
+                    empty_col = True
                 else:
                     # Does not include \\left in the result string
-                    if len(stack_par) > 0:
+                    if len(stack_par) == 0 and s[i:i+5] == "\\left":
+                        i = i + 4
+                    # Does not include \\right in the result string
+                    elif len(stack_par) == 1 and s[i:i+6] == "\\right":
+                        i = i + 5
+                    else:
                         if not c.isspace():
                             empty_col = False
                         mat = mat + c
+                i = i + 1
             return mat
         else:
             return s
@@ -286,51 +269,62 @@ class UtilsMat(object):
         mat = ""
         if row_par != []:
             for i, c in enumerate(split):
+                # Row delimiting left par
                 if c == row_par[0]:
                     stack_par.append(c)
                     if len(stack_par) == 1:
+                        # Starts a new row
                         mat = mat + "<mtr><mtd>"
                     elif len(stack_par) > 1:
                         mat = mat + "<mo>" + c + "</mo>"
+                # It's an internal par expression
                 elif c in cls.left_par:
                     stack_par.append(c)
                     mat = mat + "<mo>" + c + "</mo>"
+                # Row delimiting right par
                 elif c == row_par[1]:
                     stack_par.pop()
                     if len(stack_par) > 0:
                         mat = mat + "<mo>" + c + "</mo>"
                     else:
+                        # Row it's terminated
                         mat = (
                             mat
                             + "</mtd>"
+                            # If it's the last par, close also the table row
                             + ("</mtr>" if i == len(split) - 2 else "")
                         )
                 elif c in cls.right_par:
                     stack_par.pop()
                     mat = mat + "<mo>" + c + "</mo>"
                 elif c == ",":
+                    # Column ends
                     if len(stack_par) == 1:
                         mat = mat + "</mtd><mtd>"
+                    # Row ends
                     elif len(stack_par) == 0:
                         mat = mat + "</mtr>"
                     else:
                         mat = mat + "<mo>" + c + "</mo>"
-                # Initial and ending <mrow></mrow> are not needed if this is a matrix
+                # Initial and ending <mrow></mrow> are not needed
+                # if this is a matrix
                 elif (c == "<mrow>" or c == "</mrow>") and len(stack_par) == 0:
                     pass
                 elif c != "":
                     if len(stack_par) == 1 and stack_par[-1] == row_par[0]:
+                        # Strip single column from <mrow></mrow>
                         if (
                             split[i - 1] == row_par[0]
                             and split[i + 1] == row_par[1]
                         ):
-                            # Discard unneeded <mrow> tag
-                            mat = mat + c[6 : len(c) - 7]
+                            mat = mat + c[6: len(c) - 7]
+                        # Discard unneeded <mrow> tag
+                        # if it's the first element in the row
                         elif split[i - 1] == row_par[0]:
-                            # Discard unneeded <mrow> tag
                             mat = mat + c[6:]
+                        # Discard unneeded </mrow> tag
+                        # if it's the last element in the row
                         elif split[i + 1] == row_par[1]:
-                            # Discard unneeded </mrow> tag
                             mat = mat + c[: len(c) - 7]
                         else:
                             mat = mat + c
@@ -342,5 +336,5 @@ class UtilsMat(object):
 
 
 if __name__ == "__main__":
-    s = "<mo>[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>]</mo><mo>,</mo><mo>[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>]</mo>"
-    print(UtilsMat.get_mat(s))
+    s = '\\left[2*[x+n], 3(int x dx)\\right], \\left[sqrt(x), a\\right]'
+    print(UtilsMat.get_latex_mat(s))
