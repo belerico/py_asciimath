@@ -17,7 +17,7 @@ class TestASCIIMath2Tex(unittest.TestCase):
         ).translate("[[int x dx], [log(x+1)]]")
         self.assertEqual(
             s,
-            r"\left[\begin{matrix}\int x dx  \\  \log \left(x + 1)\end{matrix}\right]",
+            r"\left[\begin{matrix}\int x dx  \\  \log \left(x + 1\right)\end{matrix}\right]",
         )
 
     def test_asciimath2tex_ok_2(self):
@@ -75,6 +75,25 @@ class TestASCIIMath2Tex(unittest.TestCase):
             r"\bigcup_{2 \left(x + 1\right) = 1}^{n} \min \left\{2 x | x^{y + 2} \in \mathbb{N} \wedge \arccos \sqrt[3]{\frac{1}{3 x}} < i \rightarrow \Omega < b , 5 = x\right\}",
         )
 
+    def test_asciimath2tex_ok_6(self):
+        parser = ASCIIMath2Tex(asciimath_grammar, log=True)
+        s = parser.translate(
+            "[(1,2), (2^|: 3 :|, (dstyle int x^{2(x-n)})), (2,4)]"
+        )
+        self.assertEqual(
+            s,
+            r"\left[\begin{matrix}1  &  2  \\  2^{\left\vert3\right\vert}  &  \left(\displaystyle{\int} x^{2 \left(x - n\right)}\right)  \\  2  &  4\end{matrix}\right]",
+        )
+
+    def test_asciimath2tex_ok_7(self):
+        parser = ASCIIMath2Tex(asciimath_grammar, log=True)
+        s = parser.translate(
+            "langle [1,2], [2,int[3(x+1)]dx]:}"
+        )
+        self.assertEqual(
+            s,
+            r"\left\langle \begin{matrix}1  &  2  \\  2  &  \int \left[3 \left(x + 1\right)\right] dx\end{matrix}\right.",
+        )
 
 if __name__ == "__main__":
     unittest.main()
