@@ -230,20 +230,43 @@ i: s -> exp_interm
 s: l start? r -> exp_par
     | u s -> exp_unary
     | b s s -> exp_binary
-    | latex -> symbol
+    | asciimath -> symbol
     | c -> const
     | QS -> q_str
 c: /d[A-Za-z]/ // derivatives
   | NUMBER
   | LETTER
-l: {} // left parenthesis
-r: {} // right parenthesis
-b: {} // binary functions
-u: {} // unary functions
-latex: {}
+l: "(" | "(:" | "[" | "{" | "{:" | "|:" | "||:" | "langle" | "<<" // left parenthesis
+r: ")" | ":)" | "]" | "}" | ":}" | ":|" | ":||" | "rangle" | ">>" // right parenthesis
+b: {} // binary functions symbols
+u: {} // unary functions symbols
+asciimath: {} // asciimath symbols
 QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 ```
 For the complete list of symbols, please refer to http://asciimath.org/#syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
+
+## Rendering (matrices and systems of equations)
+
+For a text to be rendered as a matrix must have a structure like 
+
+<div align="center">
+    <code>L '[' ... (, ...)* ']', '[' ... (, ...)* ']' (, '[' ... (, ...)* ']' )* R</code> 
+    <br>
+    or
+    <br>
+    <code>L '(' ... (, ...)* ')', '(' ... (, ...)* ')' (, '(' ... (, ...)* ')' )* R</code>
+</div>
+
+that is:
+
+* It must be delimited by a left (`L`) and right (`R`) parenthesis
+* Every row can be separated by `[]` XOR `()` (if one starts with `[]`, every row will be recognized with the same parenthesis, same for `()`), followed by `,` and possibly another row
+* Every matrix must contain at least two rows
+* Every rows contains zero or more columns, where `...` can be any ASCIIMath expression
+* Every row must contain the same number of columns
+
+Since `L` and `R` can be any left or right parenthesis, and every matrices must have the same number of columns, to render a system of equation one can write something like `{[(root n x)/(x) <= 4], [x^2=e^x]:}`.  
+On the other hand a matrix can be somenthing like `[[(root n x)/(x) <= 4, int x dx], [x^2=e^x, lim_(x to infty) 1 / (x^2)]]`.
 
 ## Rendering (LaTeX semantics)
 
@@ -267,29 +290,9 @@ Useless delimiters are automatically removed in expressions like:
   
 If you want them to be rendered, you have to double them, for example: `((x+y))/2` or `{: (x+y) :}/2`.
 
-### Matrices and systems of equations
-
-For a text to be rendered as a matrix must have a structure like 
-
-<div align="center">
-    <code>L '[' ... (, ...)* ']', '[' ... (, ...)* ']' (, '[' ... (, ...)* ']' )* R</code> 
-    <br>
-    or
-    <br>
-    <code>L '(' ... (, ...)* ')', '(' ... (, ...)* ')' (, '(' ... (, ...)* ')' )* R</code>
-</div>
-
-that is:
-
-* It must be delimited by a left (`L`) and right (`R`) parenthesis
-* Every row can be separated by `[]` XOR `()` (if one starts with `[]`, every row will be recognized with the same parenthesis, same for `()`), followed by `,` and possibly another row
-* Every matrix must contain at least two rows
-* Every rows contains zero or more columns, where `...` can be any ASCIIMath expression
-* Every row must contain the same number of columns
-
-Since `L` and `R` can be any left or right parenthesis, and every matrices must have the same number of columns, to render a system of equation one can write something like `{[(root n x)/(x) <= 4], [x^2=e^x]:}`.  
-On the other hand a matrix can be somenthing like `[[(root n x)/(x) <= 4, int x dx], [x^2=e^x, lim_(x to infty) 1 / (x^2)]]`.
-
 ## Rendering (MathML semantics)
 
-The translation follows the MathML specification at https://www.w3.org/TR/MathML3/
+The translation follows the MathML specification at https://www.w3.org/TR/MathML3/.
+
+# Known issues
+The MathML1 DTD validation will fail when one wish to apply a font style
