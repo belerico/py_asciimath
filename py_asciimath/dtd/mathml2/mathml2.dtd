@@ -20,7 +20,7 @@
 
      It is provided "as is" without expressed or implied warranty.
 
-        Revision:   $Id: mathml2.dtd,v 1.1 2009/05/12 02:51:26 ekimber Exp $
+        Revision:   $Id: mathml2.dtd,v 1.12 2003/11/04 13:14:35 davidc Exp $
 
      This entity may be identified by the PUBLIC and SYSTEM identifiers:
 
@@ -37,14 +37,8 @@
 <!-- MathML Qualified Names module ............................... -->
 <!ENTITY % mathml-qname.module "INCLUDE" >
 <![%mathml-qname.module;[
-<!-- WEK: Removed use of public identifier here to ensure that we always
-          get this version of the mathml2-qname-1.mod and not one
-          from another source, especially in tools like OxygenXML
-          where there could be any number of copies of MathML
-          referenced from different catalogs.
-  -->
 <!ENTITY % mathml-qname.mod
-     SYSTEM
+     PUBLIC "-//W3C//ENTITIES MathML 2.0 Qualified Names 1.0//EN"
             "mathml2-qname-1.mod" >
 %mathml-qname.mod;]]>
 
