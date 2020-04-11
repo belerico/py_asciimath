@@ -319,17 +319,17 @@ class UtilsMat(object):
                 elif (c == "<mrow>" or c == "</mrow>") and len(stack_par) == 0:
                     pass
                 elif c != "":
-                    if len(stack_par) == 1:
+                    if len(stack_par) == 1 and stack_par[-1] == row_par[0]:
                         if (
                             split[i - 1] == row_par[0]
-                            and stack_par[-1] == row_par[0]
+                            and split[i + 1] == row_par[1]
                         ):
                             # Discard unneeded <mrow> tag
+                            mat = mat + c[6 : len(c) - 7]
+                        elif split[i - 1] == row_par[0]:
+                            # Discard unneeded <mrow> tag
                             mat = mat + c[6:]
-                        elif (
-                            split[i + 1] == row_par[1]
-                            and stack_par[-1] == row_par[0]
-                        ):
+                        elif split[i + 1] == row_par[1]:
                             # Discard unneeded </mrow> tag
                             mat = mat + c[: len(c) - 7]
                         else:
