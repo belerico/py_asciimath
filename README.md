@@ -5,7 +5,7 @@ The parser utility takes an ASCIIMath string in input and returns the correspond
 
 ## Install
 
-To install the package run `pip install py-asciimath` or `pip3 install py-asciimath`
+To install the package run `pip install -U --user py-asciimath` or `pip3 install -U --user py-asciimath`
 
 ## Usage
 
