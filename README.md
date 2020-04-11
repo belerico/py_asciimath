@@ -5,7 +5,7 @@ The parser utility takes an ASCIIMath string in input and returns the correspond
 
 ## Install
 
-To install the package run `pip install py-asciimath` or `pip3 install py-asciimath`
+To install the package run `pip install -U --user py-asciimath` or `pip3 install -U --user py-asciimath`
 
 ## Usage
 
@@ -88,9 +88,9 @@ py_asciimath: a simple ASCIIMath converter.
 
 Usage:
   py_asciimath.py ASCIIMATH ... (-o latex | --output=latex)
-            [--log] [--pprint]
+            [--log] [--dstyle]
   py_asciimath.py ASCIIMATH ... (-o mathml | --output=mathml)
-            [--log] [--pprint] [--dstyle] [--validate-xml=MathMLDTD]
+            [--log] [--dstyle] [--pprint] [--validate-xml=MathMLDTD]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
@@ -98,8 +98,8 @@ Options:
   -h --help                     Show this screen.
   -o OLANG --output=OLANG       Output language.
   --log                         Log the transformation process.
+  --dstyle                      Add display style
   --pprint                      Pretty print
-  --dstyle                      Add display style tag
   --validate-xml=MathMLDTD      Validate against a MathML DTD. MathMLDTD can be: mathml1, mathml2 or mathml3
   --version                     Show version.
 ```
@@ -238,8 +238,8 @@ c: /d[A-Za-z]/ // derivatives
   | LETTER
 l: "(" | "(:" | "[" | "{" | "{:" | "|:" | "||:" | "langle" | "<<" // left parenthesis
 r: ")" | ":)" | "]" | "}" | ":}" | ":|" | ":||" | "rangle" | ">>" // right parenthesis
-b: {} // binary functions symbols
-u: {} // unary functions symbols
+b: {} // asciimath binary functions symbols
+u: {} // asciimath unary functions symbols
 asciimath: {} // asciimath symbols
 QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 ```
