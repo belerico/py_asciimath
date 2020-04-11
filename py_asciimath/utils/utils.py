@@ -237,10 +237,13 @@ class UtilsMat(object):
                     empty_col = True
                 else:
                     # Does not include \\left in the result string
-                    if len(stack_par) == 0 and s[i:i+5] == "\\left":
+                    if len(stack_par) == 0 and s[i: i + 5] == "\\left":
                         i = i + 4
                     # Does not include \\right in the result string
-                    elif len(stack_par) == 1 and s[i:i+6] == "\\right":
+                    elif (
+                        len(stack_par) == 1
+                        and s[i: i + 7] == "\\right" + row_par[1]
+                    ):
                         i = i + 5
                     else:
                         if not c.isspace():
@@ -317,7 +320,7 @@ class UtilsMat(object):
                             split[i - 1] == row_par[0]
                             and split[i + 1] == row_par[1]
                         ):
-                            mat = mat + c[6: len(c) - 7]
+                            mat = mat + c[6 : len(c) - 7]
                         # Discard unneeded <mrow> tag
                         # if it's the first element in the row
                         elif split[i - 1] == row_par[0]:
@@ -336,5 +339,5 @@ class UtilsMat(object):
 
 
 if __name__ == "__main__":
-    s = '\\left[2*[x+n], 3(int x dx)\\right], \\left[sqrt(x), a\\right]'
+    s = "\\left[2*[x+n], 3(int x dx)\\right], \\left[sqrt(x), a\\right]"
     print(UtilsMat.get_latex_mat(s))
