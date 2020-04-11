@@ -99,7 +99,6 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         )
 
     def __dtd_validation(self, xml, dtd_validation, conn):
-        print(xml)
         logging.info("LOADING DTD...")
         lxml_parser = lxml.etree.XMLParser(
             dtd_validation=dtd_validation,
@@ -134,9 +133,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 + (
                     '"http://www.w3.org/Math/DTD/mathml1/mathml.dtd"'
                     if conn
-                    else '"'
-                    + PROJECT_ROOT
-                    + '/dtd/mathml1/mathml1.dtd"'
+                    else '"' + PROJECT_ROOT + '/dtd/mathml1/mathml1.dtd"'
                 )
             )
         elif dtd.lower() == "mathml2":
@@ -172,7 +169,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         parsed = (
             dtd_head
             + (
-                "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">"
+                '<math xmlns="http://www.w3.org/1998/Math/MathML">'
                 if dtd != "mathml1"
                 else "<math>"
             )

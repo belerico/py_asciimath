@@ -5,11 +5,11 @@ from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 from py_asciimath.parser.parser import ASCIIMath2MathML
 
 
-class TestUtilsMat(unittest.TestCase):
+class TestASCIIMath2MathML(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-    def test_asciimath2tex_ok_1(self):
+    def test_asciimath2mathml_ok_1(self):
         s = ASCIIMath2MathML(
             asciimath_grammar,
             inplace=True,
@@ -31,7 +31,7 @@ class TestUtilsMat(unittest.TestCase):
             + '/dtd/mathml3/mathml3.dtd"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="true"><mrow><mo>&lfloor;</mo><mrow><mrow><mroot><mrow><mrow><mo>f</mo><mrow><mo>(</mo><mrow><mi>x</mi></mrow><mo>)</mo></mrow></mrow></mrow><mrow><mi>n</mi></mrow></mroot></mrow></mrow><mo>&rfloor;</mo></mrow><mo>&times;</mo><mrow><mfrac><mrow><mi>a</mi></mrow><mrow><mi>b</mi></mrow></mfrac></mrow><mrow><msubsup><mrow><mo>&sum;</mo></mrow><mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow></mrow><mrow><mi>n</mi></mrow></msubsup></mrow><mrow><msup><mrow><mi>i</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow><mo>=</mo><mrow><msup><mrow><mrow><mo>(</mo><mrow><mrow><mfrac><mrow><mrow><mi>n</mi><mrow><msub><mrow><mrow><mo>(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mrow><mn>2</mn></mrow></msub></mrow></mrow></mrow><mrow><mn>2</mn></mrow></mfrac></mrow></mrow><mo>)</mo></mrow></mrow><mrow><mn>2</mn></mrow></msup></mrow></mstyle></math>',
         )
 
-    def test_asciimath2tex_ok_2(self):
+    def test_asciimath2mathml_ok_2(self):
         s = ASCIIMath2MathML(asciimath_grammar, log=True,).translate(
             "floor root n (f(x)) times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
             pprint=True,
@@ -46,7 +46,7 @@ class TestUtilsMat(unittest.TestCase):
             + '/dtd/mathml3/mathml3.dtd"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="true"><mrow><mo>&lfloor;</mo><mrow><mrow><mroot><mrow><mrow><mo>f</mo><mrow><mo>(</mo><mrow><mi>x</mi></mrow><mo>)</mo></mrow></mrow></mrow><mrow><mi>n</mi></mrow></mroot></mrow></mrow><mo>&rfloor;</mo></mrow><mo>&times;</mo><mrow><mfrac><mrow><mi>a</mi></mrow><mrow><mi>b</mi></mrow></mfrac></mrow><mrow><msubsup><mrow><mo>&sum;</mo></mrow><mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow></mrow><mrow><mi>n</mi></mrow></msubsup></mrow><mrow><msup><mrow><mi>i</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow><mo>=</mo><mrow><msup><mrow><mrow><mo>(</mo><mrow><mrow><mfrac><mrow><mrow><mi>n</mi><mrow><msub><mrow><mrow><mo>(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mrow><mn>2</mn></mrow></msub></mrow></mrow></mrow><mrow><mn>2</mn></mrow></mfrac></mrow></mrow><mo>)</mo></mrow></mrow><mrow><mn>2</mn></mrow></msup></mrow></mstyle></math>',
         )
 
-    def test_asciimath2tex_ok_3(self):
+    def test_asciimath2mathml_ok_3(self):
         s = ASCIIMath2MathML(
             asciimath_grammar,
             inplace=True,
@@ -67,7 +67,7 @@ class TestUtilsMat(unittest.TestCase):
             + '/dtd/mathml2/mathml2.dtd"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mo>&lfloor;</mo><mrow><mrow><mroot><mrow><mrow><mo>f</mo><mrow><mo>(</mo><mrow><mi>x</mi></mrow><mo>)</mo></mrow></mrow></mrow><mrow><mi>n</mi></mrow></mroot></mrow></mrow><mo>&rfloor;</mo></mrow><mo>&times;</mo><mrow><mfrac><mrow><mi>a</mi></mrow><mrow><mi>b</mi></mrow></mfrac></mrow><mrow><msubsup><mrow><mo>&sum;</mo></mrow><mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow></mrow><mrow><mi>n</mi></mrow></msubsup></mrow><mrow><msup><mrow><mi>i</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow><mo>=</mo><mrow><msup><mrow><mrow><mo>(</mo><mrow><mrow><mfrac><mrow><mrow><mi>n</mi><mrow><msub><mrow><mrow><mo>(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mrow><mn>2</mn></mrow></msub></mrow></mrow></mrow><mrow><mn>2</mn></mrow></mfrac></mrow></mrow><mo>)</mo></mrow></mrow><mrow><mn>2</mn></mrow></msup></mrow></math>',
         )
 
-    def test_asciimath2tex_ok_4(self):
+    def test_asciimath2mathml_ok_4(self):
         s = ASCIIMath2MathML(
             asciimath_grammar,
             inplace=True,

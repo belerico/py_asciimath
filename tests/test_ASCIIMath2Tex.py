@@ -3,7 +3,7 @@ from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 from py_asciimath.parser.parser import ASCIIMath2Tex
 
 
-class TestUtilsMat(unittest.TestCase):
+class TestASCIIMath2Tex(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 

@@ -63,6 +63,10 @@ def check_connection(url="www.google.com", timeout=10):
         return False
 
 
+def encapsulate_mrow(s):
+    return "<mrow>" + s + "</mrow>"
+
+
 def concat(s):
     return '"' + s + '"'
 
@@ -98,7 +102,10 @@ class UtilsMat(object):
     left_par = ["(", "(:", "[", "{", "{:", "|:", "||:", "langle", "&langle;"]
     right_par = [")", ":)", "]", "}", ":}", ":|", ":||", "rangle", "&rangle;"]
     mathml_par_pattern = re.compile(
-        r"<mo>(\,|\(|\(:|\[|\{|\{:|\|:|\|\|:|&langle;|\)|:\)|\]|\}|:\}|:\||:\|\||&rangle;)</mo>",
+        r"<mo>"
+        r"(\,|\(|\(:|\[|\{|\{:|\|:|\|\|:|&langle;|"
+        r"\)|:\)|\]|\}|:\}|:\||:\|\||&rangle;)"
+        r"</mo>",
     )
 
     @classmethod
@@ -186,8 +193,10 @@ class UtilsMat(object):
                     if len(par_stack) == 1 and par_stack[-1] == row_par[0]:
                         cols = cols + 1
                     elif len(par_stack) == 0:
+                        # If the comma is not at the and of the string
+                        # count another row
                         rows = rows + 1
-                        if transitions != rows:
+                        if transitions - rows != 0:
                             logging.info(
                                 "NO OPEN-CLOSE PAR BETWEEN TWO COMMAS"
                             )
@@ -195,7 +204,7 @@ class UtilsMat(object):
             if len(par_stack) != 0:
                 logging.info("UNMATCHED PARS")
                 return False, []
-            elif rows == 0 or transitions - rows != 1:
+            elif rows == 0 or transitions - rows > 1:
                 logging.info("MISSING COMMA OR EMPTY ROW")
                 return False, []
             return True, row_par
@@ -272,16 +281,7 @@ class UtilsMat(object):
         - mat: str
         """
 
-        def is_empty_col(s):
-            for c in s[::-1]:
-                if c == "&" or c == "\\":
-                    return True
-                elif not c.isspace():
-                    return False
-            return True
-
         split = re.split(cls.mathml_par_pattern, s,)
-        print(split)
         stack_par = []
         mat = ""
         if row_par != []:

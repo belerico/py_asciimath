@@ -32,7 +32,7 @@ class TestUtilsMat(unittest.TestCase):
         self.assertFalse(b)
 
     def test_check_mat_fail_3(self):
-        b, _ = UtilsMat.check_mat("[,],")
+        b, _ = UtilsMat.check_mat("[,][,]")
         self.assertFalse(b)
 
     def test_check_mat_fail_4(self):
