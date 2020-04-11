@@ -2,9 +2,9 @@
 
 Usage:
   py_asciimath.py ASCIIMATH ... (-o latex | --output=latex)
-            [--log]
+            [--log] [--dstyle]
   py_asciimath.py ASCIIMATH ... (-o mathml | --output=mathml)
-            [--log] [--pprint] [--dstyle] [--validate-xml=MathMLDTD]
+            [--log] [--dstyle] [--pprint] [--validate-xml=MathMLDTD]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
@@ -12,8 +12,8 @@ Options:
   -h --help                     Show this screen.
   -o OLANG --output=OLANG       Output language.
   --log                         Log the transformation process.
-  --pprint                      Pretty print
   --dstyle                      Add display style
+  --pprint                      Pretty print
   --validate-xml=MathMLDTD      Validate against a MathML DTD. MathMLDTD can be: mathml1, mathml2 or mathml3
   --version                     Show version.
 """
@@ -41,11 +41,17 @@ def main():
         olang = arguments["--output"].lower()
         if olang == "latex":
             print("Translating ...")
+            if arguments["--pprint"]:
+                print("Ignoring option --pprint")
+            if arguments["--validate-xml"]:
+                print("Ignoring option --validate-xml")
             print(
                 ASCIIMath2Tex(
                     asciimath_grammar, log=arguments["--log"],
                 ).translate(
-                    " ".join(arguments["ASCIIMATH"]), False
+                    " ".join(arguments["ASCIIMATH"]),
+                    displaystyle=arguments["--dstyle"],
+                    pprint=False,
                 )
             )
         elif olang == "mathml":
@@ -61,7 +67,7 @@ def main():
                 dtd=arguments["--validate-xml"],
                 dtd_validation=validate,
                 pprint=False,
-                xml_pprint=arguments["--pprint"]
+                xml_pprint=arguments["--pprint"],
             )
             print(s)
         else:

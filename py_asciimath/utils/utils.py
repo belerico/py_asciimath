@@ -154,13 +154,13 @@ class UtilsMat(object):
         if i != -1 or row_par == []:
             for c in s[i:]:
                 # c is a left par
-                if c in cls.left_par:
+                if c == row_par[0]:
                     if transitions != rows:
                         logging.info("ROW WITHOUT COMMA")
                         return False, []
                     par_stack.append(c)
                 # c is a right par
-                elif c in cls.right_par:
+                elif c == row_par[1]:
                     if len(par_stack) == 0:
                         logging.info("UNMATCHED PARS")
                         return False, []

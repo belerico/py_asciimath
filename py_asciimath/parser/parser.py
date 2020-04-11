@@ -72,7 +72,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
             grammar, *args, transformer=LatexTransformer(log=log), **kwargs
         )
 
-    def translate(self, s, pprint=False):
+    def translate(self, s, displaystyle=False, pprint=False):
         """
             \\documentclass{article}
             \\usepackage[active]{preview}
@@ -84,7 +84,18 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
             \\end{preview}
             \\end{document}
         """
-        return super(ASCIIMath2Tex, self).translate(s, pprint=pprint)
+        if displaystyle:
+            return (
+                "\\["
+                + super(ASCIIMath2Tex, self).translate(s, pprint=pprint)
+                + "\\]"
+            )
+        else:
+            return (
+                "$"
+                + super(ASCIIMath2Tex, self).translate(s, pprint=pprint)
+                + "$"
+            )
 
 
 class ASCIIMath2MathML(ASCIIMathTranslator):
