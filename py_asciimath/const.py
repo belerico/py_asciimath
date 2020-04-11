@@ -314,22 +314,22 @@ greek_letters = {
 }
 
 left_parenthesis = {
-    '"(:"': {"latex": "\\langle", "mathml": "&langle;"},
+    '"(:"': {"latex": "\\langle ", "mathml": "&langle;"},
     '"("': {"latex": "(", "mathml": "("},
     '"["': {"latex": "[", "mathml": "["},
-    '"{:"': {"latex": "{:", "mathml": ""},
+    '"{:"': {"latex": ".", "mathml": ""},
     '"{"': {"latex": "\\{", "mathml": "{"},
     '"|:"': {"latex": "\\vert", "mathml": "&VerticalBar;"},
     '"||:"': {"latex": "\\lVert", "mathml": "&DoubleVerticalBar;"},
-    '"langle"': {"latex": "\\langle", "mathml": "&langle;"},
-    '"<<"': {"latex": "\\langle", "mathml": "&langle;"},
+    '"langle"': {"latex": "\\langle ", "mathml": "&langle;"},
+    '"<<"': {"latex": "\\langle ", "mathml": "&langle;"},
 }
 
 right_parenthesis = {
     '":)"': {"latex": "\\rangle", "mathml": "&rangle;"},
     '")"': {"latex": ")", "mathml": ")"},
     '"]"': {"latex": "]", "mathml": "]"},
-    '":}"': {"latex": ":}", "mathml": ""},
+    '":}"': {"latex": ".", "mathml": ""},
     '"}"': {"latex": "\\}", "mathml": "}"},
     '":|"': {"latex": "\\vert", "mathml": "&VerticalBar;"},
     '":||"': {"latex": "\\rVert", "mathml": "&DoubleVerticalBar;"},

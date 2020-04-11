@@ -159,24 +159,12 @@ class LatexTransformer(ASCIIMathTransformer):
             yeah_mat, row_par = UtilsMat.check_mat(s)
             if yeah_mat:
                 s = UtilsMat.get_latex_mat(s, row_par)
-        lpar = latex_left[concat(items[0])]
-        rpar = latex_right[concat(items[-1])]
-        if lpar == "\\langle":
-            left = "\\left" + lpar + " "
-        elif lpar == "{:":
-            left = "\\left."
-        else:
-            left = "\\left" + lpar
-        if rpar == "\\rangle":
-            right = " \\right" + rpar
-        elif rpar == ":}":
-            right = "\\right."
-        else:
-            right = "\\right" + rpar
+        lpar = "\\left" + latex_left[concat(items[0])]
+        rpar = "\\right" + latex_right[concat(items[-1])]
         return (
-            left
+            lpar
             + ("\\begin{matrix}" + s + "\\end{matrix}" if yeah_mat else s)
-            + right
+            + rpar
         )
 
     @ASCIIMathTransformer.log
