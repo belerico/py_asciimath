@@ -15,13 +15,27 @@ from lark import Lark
 from .. import PROJECT_ROOT
 from ..transformer.transformer import LatexTransformer, MathMLTransformer
 
+try:
+    from io import StringIO
+except ImportError:
+    import StringIO
+
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 # standard_library.install_aliases()
 
 
-class ASCIIMathTranslator(object):
+class Translator(object):
+    def __init__(self, *args, **kwargs):
+        super(Translator, self).__init__()
+
+    def translate(self, s):
+        raise NotImplementedError
+
+
+class ASCIIMathTranslator(Translator):
     def __init__(self, grammar, *args, **kwargs):
+        super(ASCIIMathTranslator, self).__init__(*args, **kwargs)
         if "transformer" in kwargs:
             transformer = kwargs["transformer"]
             del kwargs["transformer"]
@@ -111,7 +125,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
 
     def __dtd_validation(self, xml, dtd_validation, conn):
         logging.info("LOADING DTD...")
-        lxml_parser = lxml.etree.XMLParser(
+        mathml_parser = lxml.etree.XMLParser(
             dtd_validation=dtd_validation,
             no_network=(not conn),
             load_dtd=True,
@@ -124,7 +138,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 " AND VALIDATING " if dtd_validation else " "
             )
         )
-        return lxml.etree.fromstring(xml, lxml_parser)
+        return lxml.etree.parse(StringIO(xml), mathml_parser)
 
     def __get_dtd_head(self, dtd, conn):
         dtd_head = "<!DOCTYPE math {}>"
@@ -190,6 +204,33 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         if dtd_validation or xml_pprint:
             parsed = self.__dtd_validation(parsed, dtd_validation, False)
             parsed = lxml.etree.tostring(
-                parsed, pretty_print=xml_pprint
+                parsed,
+                pretty_print=xml_pprint,
+                doctype=dtd_head, 
             ).decode()
         return parsed
+
+
+class MathML2Tex(Translator):
+    def __init__(self, *args, **kwargs):
+        super(MathML2Tex, self).__init__(*args, **kwargs)
+        self.mathml_parser = lxml.etree.XMLParser(
+            dtd_validation=True,
+            no_network=True,
+            load_dtd=True,
+            ns_clean=False,
+            remove_blank_text=True,
+            resolve_entities=True,
+        )
+        transformer = lxml.etree.parse(
+            open(PROJECT_ROOT + "/translation/mathml2tex/mmltex.xsl", "rb")
+        )
+        self.transformer = lxml.etree.XSLT(transformer)
+
+    def translate(self, s):
+        return str(
+            self.transformer(
+                lxml.etree.HTML(StringIO(s).read(), self.mathml_parser)
+            )
+        )
+

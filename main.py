@@ -1,8 +1,15 @@
-from py_asciimath.parser.parser import ASCIIMath2MathML, ASCIIMath2Tex
+from py_asciimath.parser.parser import (
+    ASCIIMath2MathML,
+    ASCIIMath2Tex,
+    MathML2Tex,
+)
 from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 
 if __name__ == "__main__":
-    parser = ASCIIMath2Tex(asciimath_grammar, log=True, inplace=True)
+    asciimath2mathml = ASCIIMath2MathML(
+        asciimath_grammar, log=True, inplace=True
+    )
+    mathml2tex = MathML2Tex()
     text = ""
     # text = (
     #     text
@@ -55,15 +62,16 @@ if __name__ == "__main__":
     #             [y = dstyle integral_{0}^{x} t dt]
     #         ]}"""
     # )
-    text = text + """langle [1,2], [2,int[3(x+1)]dx]:}"""
+    text = text + """rarr langle [1,2], [2,int[3(x+1)]dx]:}"""
     # text = text + "[(1,2), (2^|: 3 :|, (dstyle int x^{2(x-n)})), (2,4)]"
     # text = text + "[[int x dx], [log(x+1)]]"
-    parsed = parser.translate(
-        text,
-        # displaystyle=True,
-        # dtd="mathml1",
-        # dtd_validation=True,
-        # pprint=False,
-        # xml_pprint=True
+    parsed = asciimath2mathml.translate(
+        "langle [1,2], [2,int[3(x+1)]dx]:}",
+        dtd="mathml1",
+        dtd_validation=True,
+        displaystyle=True,
+        pprint=False,
+        xml_pprint=False,
     )
     print(parsed)
+    print(mathml2tex.translate(parsed))
