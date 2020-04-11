@@ -24,7 +24,7 @@ from ..translation.mathml import colors
 from ..translation.mathml import smb as mathml_smb
 from ..translation.mathml import unary_functions as mathml_una
 from ..utils.log import Log
-from ..utils.utils import UtilsMat, concat
+from ..utils.utils import UtilsMat, concat, encapsulate_mrow
 
 # standard_library.install_aliases()
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
@@ -106,7 +106,7 @@ class ASCIIMathTransformer(Transformer):  # pragma: no cover
         raise NotImplementedError
 
 
-class LatexTransformer(ASCIIMathTransformer):  # pragma: no cover
+class LatexTransformer(ASCIIMathTransformer):
     """Trasformer class, read `lark.Transformer`."""
 
     def __init__(self, log=True, visit_tokens=False):
@@ -206,6 +206,8 @@ class LatexTransformer(ASCIIMathTransformer):  # pragma: no cover
 
     @ASCIIMathTransformer.log
     def symbol(self, items):
+        if concat(items[0]) == '"\\"':
+            return "\\setminus"
         return latex_smb[concat(items[0])]
 
     @ASCIIMathTransformer.log
@@ -224,12 +226,13 @@ class MathMLTransformer(ASCIIMathTransformer):
         ASCIIMathTransformer.__init__(
             self,
             log,
-            r"^(?:<mrow>)?(?:<mo>(?:({}))</mo>)(.*?)(?:<mo>(?:({}))</mo>)(?:</mrow>)?$",
+            r"^(?:<mrow>)?"
+            r"(?:<mo>(?:({}))</mo>)"
+            r"(.*?)"
+            r"(?:<mo>(?:({}))</mo>)"
+            r"(?:</mrow>)?$",
             visit_tokens,
         )
-
-    def encapsulate_mrow(self, s):
-        return "<mrow>" + s + "</mrow>"
 
     @ASCIIMathTransformer.log
     def remove_parenthesis(self, s):
@@ -247,30 +250,30 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_frac(self, items):
         items[0] = self.remove_parenthesis(items[0])
         items[1] = self.remove_parenthesis(items[1])
-        return self.encapsulate_mrow(
+        return encapsulate_mrow(
             "<mfrac>"
-            + self.encapsulate_mrow(items[0])
-            + self.encapsulate_mrow(items[1])
+            + encapsulate_mrow(items[0])
+            + encapsulate_mrow(items[1])
             + "</mfrac>"
         )
 
     @ASCIIMathTransformer.log
     def exp_under(self, items):
         items[1] = self.remove_parenthesis(items[1])
-        return self.encapsulate_mrow(
+        return encapsulate_mrow(
             "<msub>"
-            + self.encapsulate_mrow(items[0])
-            + self.encapsulate_mrow(items[1])
+            + encapsulate_mrow(items[0])
+            + encapsulate_mrow(items[1])
             + "</msub>"
         )
 
     @ASCIIMathTransformer.log
     def exp_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
-        return self.encapsulate_mrow(
+        return encapsulate_mrow(
             "<msup>"
-            + self.encapsulate_mrow(items[0])
-            + self.encapsulate_mrow(items[1])
+            + encapsulate_mrow(items[0])
+            + encapsulate_mrow(items[1])
             + "</msup>"
         )
 
@@ -278,11 +281,11 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_under_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
-        return self.encapsulate_mrow(
+        return encapsulate_mrow(
             "<msubsup>"
-            + self.encapsulate_mrow(items[0])
-            + self.encapsulate_mrow(items[1])
-            + self.encapsulate_mrow(items[2])
+            + encapsulate_mrow(items[0])
+            + encapsulate_mrow(items[1])
+            + encapsulate_mrow(items[2])
             + "</msubsup>"
         )
 
@@ -302,11 +305,11 @@ class MathMLTransformer(ASCIIMathTransformer):
                 )
         lpar = mathml_left[concat(items[0])]
         rpar = mathml_right[concat(items[-1])]
-        return self.encapsulate_mrow(
+        return encapsulate_mrow(
             "<mo>"
             + lpar
             + "</mo>"
-            + (self.encapsulate_mrow(s) if not yeah_mat else s)
+            + (encapsulate_mrow(s) if not yeah_mat else s)
             + "<mo>"
             + rpar
             + "</mo>"
@@ -316,9 +319,7 @@ class MathMLTransformer(ASCIIMathTransformer):
     def exp_unary(self, items):
         unary = mathml_una[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
-        return self.encapsulate_mrow(
-            unary.format(self.encapsulate_mrow(items[1]))
-        )
+        return encapsulate_mrow(unary.format(encapsulate_mrow(items[1])))
 
     @ASCIIMathTransformer.log
     def exp_binary(self, items):
@@ -326,23 +327,23 @@ class MathMLTransformer(ASCIIMathTransformer):
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
         if concat(items[1]) in colors:
-            s = binary.format(items[1], self.encapsulate_mrow(items[2]))
+            s = binary.format(items[1], encapsulate_mrow(items[2]))
         elif items[0] != "root":
             s = binary.format(
-                self.encapsulate_mrow(items[1]),
-                self.encapsulate_mrow(items[2]),
+                encapsulate_mrow(items[1]), encapsulate_mrow(items[2]),
             )
         else:
             s = binary.format(
-                self.encapsulate_mrow(items[2]),
-                self.encapsulate_mrow(items[1]),
+                encapsulate_mrow(items[2]), encapsulate_mrow(items[1]),
             )
-        return self.encapsulate_mrow(s)
+        return encapsulate_mrow(s)
 
     @ASCIIMathTransformer.log
     def symbol(self, items):
         if concat(items[0]) in colors:
             return mathml_smb[concat(items[0])]
+        elif concat(items[0]) == '"\\"':
+            return "<mo>&setminus;</mo>"
         else:
             return "<mo>" + mathml_smb[concat(items[0])] + "</mo>"
 

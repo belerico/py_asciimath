@@ -135,8 +135,8 @@ operation_symbols = {
     '"ast"': {"latex": "\\ast", "mathml": "&ast;"},
     '"***"': {"latex": "\\star", "mathml": "&Star;"},
     '"star"': {"latex": "\\star", "mathml": "&Star;"},
-    '"//"': {"latex": "/", "mathml": "&frasl;"},
-    '"\\\\"': {"latex": "\\setminus", "mathml": "&setminus;"},
+    '"//"': {"latex": "/", "mathml": "/"},
+    r'/\\/': {"latex": "\\setminus", "mathml": "&setminus;"},
     '"setminus"': {"latex": "\\setminus", "mathml": "&setminus;"},
     '"xx"': {"latex": "\\times", "mathml": "&times;"},
     '"times"': {"latex": "\\times", "mathml": "&times;"},
@@ -160,8 +160,8 @@ operation_symbols = {
     '"prod"': {"latex": "\\prod", "mathml": "&prod;"},
     '"^^"': {"latex": "\\wedge", "mathml": "&wedge;"},
     '"wedge"': {"latex": "\\wedge", "mathml": "&wedge;"},
-    '"^^^"': {"latex": "\\bigwedge", "mathml": "&bidwedge;"},
-    '"bidwedge"': {"latex": "\\bidwedge", "mathml": "&bidwedge;"},
+    '"^^^"': {"latex": "\\bigwedge", "mathml": "&bigwedge;"},
+    '"bigwedge"': {"latex": "\\bigwedge", "mathml": "&bigwedge;"},
     '"vv"': {"latex": "\\vee", "mathml": "&vee;"},
     '"vee"': {"latex": "\\vee", "mathml": "&vee;"},
     '"vvv"': {"latex": "\\bigvee", "mathml": "&bigvee;"},
@@ -229,8 +229,8 @@ relation_symbols = {
     '"supset"': {"latex": "\\supset", "mathml": "&supset;"},
     '"sube"': {"latex": "\\subseteq", "mathml": "&SubsetEqual;"},
     '"subseteq"': {"latex": "\\subseteq", "mathml": "&SubsetEqual;"},
-    '"supe"': {"latex": "\\supseteq", "mathml": "&SupsetEqual;"},
-    '"supseteq"': {"latex": "\\supseteq", "mathml": "&SupsetEqual;"},
+    '"supe"': {"latex": "\\supseteq", "mathml": "&SupersetEqual;"},
+    '"supseteq"': {"latex": "\\supseteq", "mathml": "&SupersetEqual;"},
     '"-="': {"latex": "\\equiv", "mathml": "&equiv;"},
     '"equiv"': {"latex": "\\equiv", "mathml": "&equiv;"},
     '"~="': {"latex": "\\cong", "mathml": "&cong;"},
@@ -281,7 +281,7 @@ greek_letters = {
     '"Gamma"': {"latex": "\\Gamma", "mathml": "&Gamma;"},
     '"delta"': {"latex": "\\delta", "mathml": "&delta;"},
     '"Delta"': {"latex": "\\Delta", "mathml": "&Delta;"},
-    '"epsilon"': {"latex": "\\epsilon", "mathml": "&epsilon;"},
+    '"epsilon"': {"latex": "\\epsilon", "mathml": "&epsiv;"},
     '"varepsilon"': {"latex": "\\varepsilon", "mathml": "&varepsilon;"},
     '"zeta"': {"latex": "\\zeta", "mathml": "&zeta;"},
     '"eta"': {"latex": "\\eta", "mathml": "&eta;"},
@@ -381,13 +381,8 @@ arrows = {
 }
 
 colors = {
-    '"red"': {"latex": "red", "mathml": "red"},
+    # '"red"': {"latex": "red", "mathml": "red"},
 }
-
-"""
-    '"(\w+)"'(: \{"\w+": "\\\\\w+", "\w+": )""
-    '"$1"'$2"&$1;"
-"""
 
 misc_symbols = {
     '"^"': {"latex": "^", "mathml": "&#x5E;"},
@@ -420,11 +415,11 @@ misc_symbols = {
     '"cdots"': {"latex": "\\cdots", "mathml": "&ctdot;"},
     '"vdots"': {"latex": "\\vdots", "mathml": "&vellip;"},
     '"ddots"': {"latex": "\\ddots", "mathml": "&dtdot;"},
-    '"quad"': {"latex": "\\quad", "mathml": "&NonBreakingSpace;"},
+    '"quad"': {"latex": "\\quad", "mathml": "&nbsp;"},
     '"/_"': {"latex": "\\angle", "mathml": "&angle;"},
     '"angle"': {"latex": "\\angle", "mathml": "&angle;"},
     '"frown"': {"latex": "\\frown", "mathml": "&frown;"},
-    '"/_\\\\"': {"latex": "\\triangle", "mathml": "&bigtriangleup;"},
+    r'/_\\/': {"latex": "\\triangle", "mathml": "&bigtriangleup;"},
     '"triangle"': {"latex": "\\triangle", "mathml": "&bigtriangleup;"},
     '"diamond"': {"latex": "\\diamond", "mathml": "&diamond;"},
     '"square"': {"latex": "\\square", "mathml": "&square;"},
@@ -436,11 +431,11 @@ misc_symbols = {
     '"lceiling"': {"latex": "\\lceiling", "mathml": "&lceil;"},
     '"~|"': {"latex": "\\rceiling", "mathml": "&rceil;"},
     '"rceiling"': {"latex": "\\rceiling", "mathml": "&rceil;"},
-    '"CC"': {"latex": "\\mathbb{C}", "mathml": "&complexes;"},
-    '"NN"': {"latex": "\\mathbb{N}", "mathml": "&naturals;"},
-    '"QQ"': {"latex": "\\mathbb{Q}", "mathml": "&rationals;"},
-    '"RR"': {"latex": "\\mathbb{R}", "mathml": "&reals;"},
-    '"ZZ"': {"latex": "\\mathbb{Z}", "mathml": "&integers;"},
+    '"CC"': {"latex": "\\mathbb{C}", "mathml": "&Copf;"},
+    '"NN"': {"latex": "\\mathbb{N}", "mathml": "&Nopf;"},
+    '"QQ"': {"latex": "\\mathbb{Q}", "mathml": "&Qopf;"},
+    '"RR"': {"latex": "\\mathbb{R}", "mathml": "&Ropf;"},
+    '"ZZ"': {"latex": "\\mathbb{Z}", "mathml": "&Zopf;"},
 }
 
 # matrix2par = {
