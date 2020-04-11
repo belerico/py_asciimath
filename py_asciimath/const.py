@@ -177,13 +177,13 @@ operation_symbols = {
 }
 
 logical_symbols = {
-    '"and"': {"latex": "\\text{and}", "mathml": "and"},
-    '"or"': {"latex": "\\text{and}", "mathml": "or"},
+    '"and"': {"latex": "\\mathmr{and}", "mathml": "and"},
+    '"or"': {"latex": "\\mathmr{and}", "mathml": "or"},
     '"not"': {"latex": "\\neg", "mathml": "&not;"},
     '"neg"': {"latex": "\\neg", "mathml": "&not;"},
     '"=>"': {"latex": "\\implies", "mathml": "&Implies;"},
     '"implies"': {"latex": "\\implies", "mathml": "&Implies;"},
-    '"if"': {"latex": "\\text{if}", "mathml": "if"},
+    '"if"': {"latex": "\\mathmr{if}", "mathml": "if"},
     '"<=>"': {"latex": "\\iff", "mathml": "&iff;"},
     '"iff"': {"latex": "\\iff", "mathml": "&iff;"},
     '"AA"': {"latex": "\\forall", "mathml": "&ForAll;"},
