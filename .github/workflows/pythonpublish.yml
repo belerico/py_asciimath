@@ -26,7 +26,7 @@ jobs:
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        TWINE_REPOSITORY: https://pypi.org/project/py-asciimath/ 
+        TWINE_REPOSITORY_URL: https://pypi.org/project/py-asciimath/ 
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/*
