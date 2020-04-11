@@ -1,1 +1,3 @@
-include LICENSE README.md
+include LICENSE
+include README.md
+recursive-include py_asciimath/dtd/ *
