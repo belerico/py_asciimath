@@ -205,11 +205,39 @@
 		<xsl:when test="starts-with($content,'&#x021D1;')"><xsl:value-of select="'\Uparrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D1;')"/></xsl:call-template></xsl:when>	<!--/Uparrow A: up dbl arrow -->
 		<xsl:when test="starts-with($content,'&#x021D2;')"><xsl:value-of select="'\Rightarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D2;')"/></xsl:call-template></xsl:when>	<!--/Rightarrow A: implies -->
 		<xsl:when test="starts-with($content,'&#x021D3;')"><xsl:value-of select="'\Downarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D3;')"/></xsl:call-template></xsl:when>	<!--/Downarrow A: down dbl arrow -->
-<!--		<xsl:when test="starts-with($content,'&#x021D4;')"><xsl:value-of select="'\Leftrightarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D4;')"/></xsl:call-template></xsl:when>	/Leftrightarrow A: l&r dbl arrow -->
+		<xsl:when test="starts-with($content,'&#x021D4;')"><xsl:value-of select="'\Leftrightarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D4;')"/></xsl:call-template></xsl:when>	<!--/Leftrightarrow A: l&r dbl arrow-->
 		<xsl:when test="starts-with($content,'&#x021D4;')"><xsl:value-of select="'\iff '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D4;')"/></xsl:call-template></xsl:when>	<!--/iff if and only if	-->
 		<xsl:when test="starts-with($content,'&#x021D5;')"><xsl:value-of select="'\Updownarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021D5;')"/></xsl:call-template></xsl:when>	<!--/Updownarrow A: up&down dbl arrow -->
 		<xsl:when test="starts-with($content,'&#x021DA;')"><xsl:value-of select="'\Lleftarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021DA;')"/></xsl:call-template></xsl:when>	<!--/Lleftarrow A: left triple arrow --> <!-- Required amssymb -->
 		<xsl:when test="starts-with($content,'&#x021DB;')"><xsl:value-of select="'\Rrightarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021DB;')"/></xsl:call-template></xsl:when>	<!--/Rrightarrow A: right triple arrow --> <!-- Required amssymb -->
+		<xsl:when test="starts-with($content,'&#x02916;')"><xsl:value-of select="'\twoheadrightarrowtail '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02916;')"/></xsl:call-template></xsl:when>	<!--right two-headed arrow with tail --> <!-- Required amssymb -->
+
+		
+<!-- ====================================================================== -->
+<!-- MISSING UNICODE														-->
+<!-- ====================================================================== -->	
+
+		<xsl:when test="starts-with($content,'&#x02192;')"><xsl:value-of select="'\rightarrow '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02192;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02308;')"><xsl:value-of select="'\lceiling '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02308;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02309;')"><xsl:value-of select="'\rceiling '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02309;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x025b3;')"><xsl:value-of select="'\triangle '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x025b3;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x021d2;')"><xsl:value-of select="'\implies '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021d2;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x022c9;')"><xsl:value-of select="'\ltimes '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x022c9;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02aaf;')"><xsl:value-of select="'\preceq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02aaf;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x022ca;')"><xsl:value-of select="'\rtimes '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x022ca;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02ab0;')"><xsl:value-of select="'\succeq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02ab0;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02322;')"><xsl:value-of select="'\frown '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02322;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x022ee;')"><xsl:value-of select="'\vdots '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x022ee;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x000a0;')"><xsl:value-of select="'\quad '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x000a0;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02aaf;')"><xsl:value-of select="'\preceq '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02aaf;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02227;')"><xsl:value-of select="'\mathmr{and} '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02227;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x022a5;')"><xsl:value-of select="'\bot '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x022a5;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x000f7;')"><xsl:value-of select="'\div '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x000f7;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x021d2;')"><xsl:value-of select="'\implies '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x021d2;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02102;')"><xsl:value-of select="'\mathbb{C} '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02102;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x0211d;')"><xsl:value-of select="'\mathbb{R} '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0211d;')"/></xsl:call-template></xsl:when>
+		<xsl:when test="starts-with($content,'&#x02228;')"><xsl:value-of select="'\mathmr{and} '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02228;')"/></xsl:call-template></xsl:when>
+
 		
 <!-- ====================================================================== -->
 <!-- 	Unicode 3.2

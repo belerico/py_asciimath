@@ -128,9 +128,9 @@ unary_functions = {
 
 operation_symbols = {
     '"+"': {"latex": "+", "mathml": "+"},
-    '"*"': {"latex": "\\cdot", "mathml": "&#x22C5;"},
+    '"*"': {"latex": "\\cdot", "mathml": "&sdot;"},
     '"-"': {"latex": "-", "mathml": "-"},
-    '"cdot"': {"latex": "\\cdot", "mathml": "&CenterDot;"},
+    '"cdot"': {"latex": "\\cdot", "mathml": "&sdot;"},
     '"**"': {"latex": "\\ast", "mathml": "&ast;"},
     '"ast"': {"latex": "\\ast", "mathml": "&ast;"},
     '"***"': {"latex": "\\star", "mathml": "&Star;"},
