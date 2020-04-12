@@ -1,7 +1,13 @@
 # py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=mathml)](https://travis-ci.com/belerico/py_asciimath) [![PyPI version](https://badge.fury.io/py/py-asciimath.svg)](https://badge.fury.io/py/py-asciimath)
 
-AsciiMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/.  
-The parser utility takes an ASCIIMath string in input and returns the corresponding LaTeX or MathML translation, via a syntactic and semantic transformation. It can also translate a MathML string to LaTeX: the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/) (**this feature is still under development**).
+py_asciimath is a simple yet powerful Python module that can:
+
+* convert an ASCIIMath string to LaTeX or MathML
+* convert a MathML string to LaTeX ((**under dev**) the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/))
+
+ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/.  
+MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html.  
+LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.
 
 ## Install
 
