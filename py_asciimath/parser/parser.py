@@ -14,11 +14,7 @@ from lark import Lark
 
 from .. import PROJECT_ROOT
 from ..transformer.transformer import LatexTransformer, MathMLTransformer
-
-try:
-    from io import StringIO
-except ImportError:
-    import StringIO
+from ..utils.utils import check_connection, get_dtd, validate_dtd
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
@@ -87,17 +83,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         )
 
     def translate(self, s, displaystyle=False, pprint=False):
-        """
-            \\documentclass{article}
-            \\usepackage[active]{preview}
-            \\begin{document}
-            \\begin{preview}
-            \\[
-            \\pi = \\sqrt{12}\\sum^\\infty_{k=0} \\frac{ (-3)^{-k} }{ 2k+1 }
-            \\]
-            \\end{preview}
-            \\end{document}
-        """
+        logging.info("TRANSLATING...")
         if displaystyle:
             return (
                 "\\["
@@ -123,66 +109,13 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             grammar, *args, transformer=MathMLTransformer(log=log), **kwargs
         )
 
-    def __dtd_validation(self, xml, dtd_validation, conn):
-        logging.info("LOADING DTD...")
-        mathml_parser = lxml.etree.XMLParser(
-            dtd_validation=dtd_validation,
-            no_network=(not conn),
-            load_dtd=True,
-            ns_clean=True,
-            remove_blank_text=True,
-            resolve_entities=False,
-        )
-        logging.info(
-            "PARSING{}XML...".format(
-                " AND VALIDATING " if dtd_validation else " "
-            )
-        )
-        return lxml.etree.parse(StringIO(xml), mathml_parser)
-
-    def __get_dtd_head(self, dtd, conn):
-        dtd_head = "<!DOCTYPE math {}>"
-        if dtd is None or dtd.lower() == "mathml3":
-            dtd_head = dtd_head.format(
-                'PUBLIC "-//W3C//DTD MathML 3.0//EN" '
-                + '"http://www.w3.org/Math/DTD/mathml3/mathml3.dtd"'
-                if conn
-                else "SYSTEM "
-                + '"'
-                + PROJECT_ROOT
-                + '/dtd/mathml3/mathml3.dtd"'
-            )
-        elif dtd.lower() == "mathml1":
-            dtd_head = dtd_head.format(
-                "SYSTEM "
-                + (
-                    '"http://www.w3.org/Math/DTD/mathml1/mathml.dtd"'
-                    if conn
-                    else '"' + PROJECT_ROOT + '/dtd/mathml1/mathml1.dtd"'
-                )
-            )
-        elif dtd.lower() == "mathml2":
-            dtd_head = dtd_head.format(
-                'PUBLIC "-//W3C//DTD MathML 2.0//EN" '
-                + '"http://www.w3.org/Math/DTD/mathml2/mathml2.dtd"'
-                if conn
-                else "SYSTEM "
-                + '"'
-                + PROJECT_ROOT
-                + '/dtd/mathml2/mathml2.dtd"'
-            )
-        else:
-            raise NotImplementedError(
-                "DTD validation only against MathML DTD 1, 2 or 3"
-            )
-        return dtd_head
-
     def translate(
         self,
         s,
         displaystyle=False,
         dtd=None,
         dtd_validation=False,
+        network=False,
         pprint=False,
         xml_pprint=True,
     ):
@@ -190,10 +123,17 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
         else:
             dstyle = "{}"
-        dtd_head = self.__get_dtd_head(dtd, False)
-        parsed = (
-            dtd_head
-            + (
+        if network:
+            if check_connection():
+                dtd_head = get_dtd(dtd, True)
+            else:
+                network = False
+                dtd_head = get_dtd(dtd, False)
+                logging.info("NO CONNECTION AVAILABLE...")
+        else:
+            dtd_head = get_dtd(dtd, False)
+        parsed = dtd_head + (
+            (
                 '<math xmlns="http://www.w3.org/1998/Math/MathML">'
                 if dtd != "mathml1"
                 else "<math>"
@@ -202,11 +142,9 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             + "</math>"
         )
         if dtd_validation or xml_pprint:
-            parsed = self.__dtd_validation(parsed, dtd_validation, False)
+            parsed = validate_dtd(parsed, dtd_validation, network)
             parsed = lxml.etree.tostring(
-                parsed,
-                pretty_print=xml_pprint,
-                doctype=dtd_head, 
+                parsed, pretty_print=xml_pprint, doctype=dtd_head,
             ).decode()
         return parsed
 
@@ -214,23 +152,20 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
 class MathML2Tex(Translator):
     def __init__(self, *args, **kwargs):
         super(MathML2Tex, self).__init__(*args, **kwargs)
-        self.mathml_parser = lxml.etree.XMLParser(
-            dtd_validation=True,
-            no_network=True,
-            load_dtd=True,
-            ns_clean=False,
-            remove_blank_text=True,
-            resolve_entities=True,
-        )
         transformer = lxml.etree.parse(
             open(PROJECT_ROOT + "/translation/mathml2tex/mmltex.xsl", "rb")
         )
         self.transformer = lxml.etree.XSLT(transformer)
 
-    def translate(self, s):
+    def translate(
+        self, s, dtd_validation=False, network=False,
+    ):
+        if network:
+            if not check_connection():
+                network = False
+                logging.info("NO CONNECTION AVAILABLE...")
         return str(
             self.transformer(
-                lxml.etree.HTML(StringIO(s).read(), self.mathml_parser)
+                validate_dtd(s, dtd_validation, network, resolve_entities=True)
             )
         )
-
