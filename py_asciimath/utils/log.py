@@ -33,7 +33,7 @@ except ImportError:
 # standard_library.install_aliases()
 
 
-class Log(object):
+class Log(object):  # pragma: no cover
     def __init__(self, logger_func=None, print_self=False):
         if logger_func is None:
             self.logger_func = lambda x: x

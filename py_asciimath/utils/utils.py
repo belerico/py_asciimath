@@ -56,7 +56,7 @@ def alias_string(mapping, init=False, alias=True, prefix=""):
     return s
 
 
-def check_connection(url="www.google.com", timeout=10):
+def check_connection(url="www.google.com", timeout=10):  # pragma: no cover
     """Check connection against url.
 
     Parameters:
@@ -107,12 +107,13 @@ def get_dtd(dtd, network):
     return dtd_head
 
 
-def validate_dtd(xml, dtd_validation, network, resolve_entities=False):
-    if network:
-        logging.info("VALIDATING AGAINST REMOTE DTD...")
-    else:
-        logging.info("VALIDATING AGAINST LOCAL DTD...")
-    logging.info("LOADING DTD...")
+def validate_dtd(xml, dtd_validation, network, resolve_entities=False):  # pragma: no cover
+    if dtd_validation:
+        if network:
+            logging.info("Validating against remote dtd...")
+        else:
+            logging.info("Validating against local dtd...")
+        logging.info("Loading dtd and validating...")
     mathml_parser = lxml.etree.XMLParser(
         dtd_validation=dtd_validation,
         no_network=(not network),
@@ -120,7 +121,6 @@ def validate_dtd(xml, dtd_validation, network, resolve_entities=False):
         ns_clean=True,
         resolve_entities=resolve_entities,
     )
-    logging.info("TRANSLATING...")
     return lxml.etree.fromstring(xml, mathml_parser)
 
 
@@ -168,10 +168,6 @@ class UtilsMat(object):
         r"\)|:\)|\]|\}|:\}|:\||:\|\||&rangle;)"
         r"</mo>",
     )
-
-    @classmethod
-    def is_par(cls, c):
-        return c in cls.left_par or c in cls.right_par
 
     @classmethod
     def get_row_par(cls, s):

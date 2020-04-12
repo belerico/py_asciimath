@@ -6,6 +6,7 @@ from __future__ import (
 )
 
 import logging
+import re
 
 import lxml.etree
 
@@ -21,7 +22,7 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 # standard_library.install_aliases()
 
 
-class Translator(object):
+class Translator(object):  # pragma: no cover
     def __init__(self, *args, **kwargs):
         super(Translator, self).__init__()
 
@@ -83,7 +84,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         )
 
     def translate(self, s, displaystyle=False, pprint=False):
-        logging.info("TRANSLATING...")
+        logging.info("Translating...")
         if displaystyle:
             return (
                 "\\["
@@ -123,15 +124,16 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
         else:
             dstyle = "{}"
-        if network:
+        if network:  # pragma: no cover
             if check_connection():
                 dtd_head = get_dtd(dtd, True)
             else:
                 network = False
                 dtd_head = get_dtd(dtd, False)
-                logging.info("NO CONNECTION AVAILABLE...")
+                logging.info("No connection available...")
         else:
             dtd_head = get_dtd(dtd, False)
+        logging.info("Translating...")
         parsed = dtd_head + (
             (
                 '<math xmlns="http://www.w3.org/1998/Math/MathML">'
@@ -149,23 +151,51 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         return parsed
 
 
-class MathML2Tex(Translator):
+class MathML2Tex(Translator):  # pragma: no cover
     def __init__(self, *args, **kwargs):
         super(MathML2Tex, self).__init__(*args, **kwargs)
         transformer = lxml.etree.parse(
             open(PROJECT_ROOT + "/translation/mathml2tex/mmltex.xsl", "rb")
         )
         self.transformer = lxml.etree.XSLT(transformer)
+        self.doctype_pattern = re.compile(
+            r"(<!DOCTYPE math ([A-Z]+).*?mathml(\d)?\.dtd\">)"
+        )
 
     def translate(
-        self, s, dtd_validation=False, network=False,
+        self, s, network=False,
     ):
         if network:
             if not check_connection():
                 network = False
-                logging.info("NO CONNECTION AVAILABLE...")
-        return str(
-            self.transformer(
-                validate_dtd(s, dtd_validation, network, resolve_entities=True)
+                logging.info("No connection available...")
+        match = re.match(self.doctype_pattern, s)
+        if match is not None:
+            if match.group(3) is None or match.group(3) == "1":
+                raise NotImplementedError(
+                    "Translation from MathML1 is not supported"
+                )
+            if match.group(2) == "PUBLIC" and not network:
+                logging.warn(
+                    "Remote DTD found and network is False: "
+                    "replacing with local DTD"
+                )
+                s = (
+                    get_dtd("mathml" + match.group(3), False)
+                    + s[match.span(1)[1] :]
+                )
+            elif match.group(2) == "SYSTEM" and network:
+                logging.warn(
+                    "Local DTD found and network is True: "
+                    "no need to bother your ISP"
+                )
+                network = False
+        else:
+            logging.warn(
+                "No DTD declaration found: "
+                "validating against local MathML3 DTD"
             )
-        )
+            s = get_dtd("mathml3", False) + s
+        parsed = validate_dtd(s, True, network, resolve_entities=True)
+        logging.info("Translating...")
+        return str(self.transformer(parsed))
