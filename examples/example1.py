@@ -1,5 +1,4 @@
 from py_asciimath import PROJECT_ROOT
-from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 from py_asciimath.parser.parser import (
     ASCIIMath2MathML,
     ASCIIMath2Tex,
@@ -8,9 +7,8 @@ from py_asciimath.parser.parser import (
 
 
 if __name__ == "__main__":
-    asciimath2mathml = ASCIIMath2MathML(
-        asciimath_grammar, log=False, inplace=True
-    )
+    print("ASCIIMath to MathML")
+    asciimath2mathml = ASCIIMath2MathML(log=False, inplace=True)
     parsed = asciimath2mathml.translate(
         PROJECT_ROOT + "/../examples/asciimath_exp.txt",
         dtd="mathml2",
@@ -21,15 +19,15 @@ if __name__ == "__main__":
         xml_pprint=False,
         from_file=True,
     )
-    print(parsed)
-    asciimath2tex = ASCIIMath2Tex(asciimath_grammar, log=False, inplace=True)
+    print(parsed, "\n\nASCIIMath to LaTeX")
+    asciimath2tex = ASCIIMath2Tex(log=False, inplace=True)
     parsed = asciimath2mathml.translate(
         PROJECT_ROOT + "/../examples/asciimath_exp.txt",
         displaystyle=True,
         pprint=False,
         from_file=True,
     )
-    print(parsed)
+    print(parsed, "\n\nMathML to LaTeX")
     mathml2tex = MathML2Tex()
     parsed = mathml2tex.translate(
         PROJECT_ROOT + "/../examples/mathml_exp.xml",
