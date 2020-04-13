@@ -8,9 +8,9 @@ from __future__ import (
 import logging
 import os
 import re
-from builtins import open, str, super
 
 import lxml.etree
+# from future import standard_library
 from lark import Lark
 
 from .. import PROJECT_ROOT
