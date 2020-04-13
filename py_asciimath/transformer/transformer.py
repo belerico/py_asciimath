@@ -200,6 +200,8 @@ class LatexTransformer(ASCIIMathTransformer):
 
     @ASCIIMathTransformer.log
     def const(self, items):
+        if len(items[0].value) == 2 and items[0].value[0] == "d":
+            return "\\mathrm{" + items[0].value + "}"
         return items[0].value
 
     @ASCIIMathTransformer.log

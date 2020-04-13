@@ -15,7 +15,7 @@ setuptools.setup(
     version=version,
     author="Federico Belotti",
     author_email="belo.fede@outlook.com",
-    description="A simple converter from ASCIIMath to LaTeX",
+    description="A simple converter from ASCIIMath/MathML to LaTeX/MathML",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/belerico/py-asciimath",

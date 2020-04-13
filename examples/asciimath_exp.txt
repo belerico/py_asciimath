@@ -1,0 +1,1 @@
+langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2], [rarr 2,int[3(x+1)]dx]:}

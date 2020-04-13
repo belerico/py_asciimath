@@ -1,3 +1,5 @@
 include LICENSE
 include README.md
+recursive-include examples *
 recursive-include py_asciimath/dtd/ *
+recursive-include py_asciimath/translation/mathml2tex/ *

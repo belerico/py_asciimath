@@ -1,7 +1,6 @@
 import unittest
 
 from py_asciimath import PROJECT_ROOT
-from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
 from py_asciimath.parser.parser import ASCIIMath2MathML
 
 
@@ -11,13 +10,10 @@ class TestASCIIMath2MathML(unittest.TestCase):
 
     def test_asciimath2mathml_ok_1(self):
         s = ASCIIMath2MathML(
-            asciimath_grammar,
-            inplace=True,
-            log=False,
-            parser="lalr",
-            lexer="contextual",
+            inplace=True, log=False, parser="lalr", lexer="contextual",
         ).translate(
-            "floor root n (f(x)) times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
+            r"floor root n (f(x)) times a / b "
+            r"sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
             displaystyle=True,
             dtd_validation=False,
             dtd="mathml3",
@@ -32,7 +28,7 @@ class TestASCIIMath2MathML(unittest.TestCase):
         )
 
     def test_asciimath2mathml_ok_2(self):
-        s = ASCIIMath2MathML(asciimath_grammar, log=True,).translate(
+        s = ASCIIMath2MathML(log=True,).translate(
             "floor root n (f(x)) times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
             pprint=True,
             dtd=None,
@@ -48,11 +44,7 @@ class TestASCIIMath2MathML(unittest.TestCase):
 
     def test_asciimath2mathml_ok_3(self):
         s = ASCIIMath2MathML(
-            asciimath_grammar,
-            inplace=True,
-            log=False,
-            parser="lalr",
-            lexer="contextual",
+            inplace=True, log=False, parser="lalr", lexer="contextual",
         ).translate(
             "floor root n (f(x)) times a / b sum_(i=1)^n i^3=(frac (n(n+1)_2) 2)^2",
             dtd="mathml2",
@@ -69,22 +61,20 @@ class TestASCIIMath2MathML(unittest.TestCase):
 
     def test_asciimath2mathml_ok_4(self):
         s = ASCIIMath2MathML(
-            asciimath_grammar,
-            inplace=True,
-            log=False,
-            parser="lalr",
-            lexer="contextual",
+            inplace=True, log=False, parser="lalr", lexer="contextual",
         ).translate(
             "langle [1,2], [2,int[3(x+1)]dx]:}",
             dtd="mathml1",
-            dtd_validation=True,
+            dtd_validation=False,
             displaystyle=True,
             pprint=False,
             xml_pprint=False,
         )
         self.assertEqual(
             s,
-            '<math><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mo>&Integral;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo/></mrow></mstyle></math>',
+            '<!DOCTYPE math SYSTEM "'
+            + PROJECT_ROOT
+            + '/dtd/mathml1/mathml1.dtd"><math><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mo>&Integral;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo></mo></mrow></mstyle></math>',
         )
 
 

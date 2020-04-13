@@ -6,6 +6,8 @@ from __future__ import (
 )
 
 import logging
+import os
+import re
 
 import lxml.etree
 
@@ -13,15 +15,61 @@ import lxml.etree
 from lark import Lark
 
 from .. import PROJECT_ROOT
+from ..grammar.asciimath_grammar import asciimath_grammar
 from ..transformer.transformer import LatexTransformer, MathMLTransformer
+from ..utils.utils import check_connection, get_dtd, validate_dtd
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 # standard_library.install_aliases()
 
 
-class ASCIIMathTranslator(object):
+class Translator(object):  # pragma: no cover
+    def __init__(self, *args, **kwargs):
+        super(Translator, self).__init__()
+
+    def _from_file(self, from_file):
+        if os.path.exists(from_file):
+            logging.info("Loading file '" + from_file + "'...")
+            with open(from_file) as f:
+                s = f.read()
+                f.close()
+            return s
+        else:
+            raise FileNotFoundError("File '" + from_file + "' not found")
+
+    def _to_file(self, s, to_file):
+        logging.info("Writing translation to '" + to_file + "'...")
+        with open(to_file, "w") as f:
+            f.write(s)
+            f.close()
+
+    def _translate(self, s, *args, **kwargs):
+        raise NotImplementedError
+
+    def translate(self, s, *args, **kwargs):
+        if "from_file" in kwargs:
+            from_file = kwargs["from_file"]
+            del kwargs["from_file"]
+        else:
+            from_file = False
+        if "to_file" in kwargs:
+            to_file = kwargs["to_file"]
+            del kwargs["to_file"]
+        else:
+            to_file = None
+        if from_file:
+            s = self._from_file(s)
+        logging.info("Translating...")
+        s = self._translate(s, *args, **kwargs)
+        if to_file is not None:
+            self._to_file(s, to_file)
+        return s
+
+
+class ASCIIMathTranslator(Translator):
     def __init__(self, grammar, *args, **kwargs):
+        super(ASCIIMathTranslator, self).__init__(*args, **kwargs)
         if "transformer" in kwargs:
             transformer = kwargs["transformer"]
             del kwargs["transformer"]
@@ -51,7 +99,12 @@ class ASCIIMathTranslator(object):
             grammar, *args, parser=parser, lexer=lexer, **kwargs
         )
 
-    def translate(self, s, pprint=False):
+    def _translate(self, s, *args, **kwargs):
+        if "pprint" in kwargs:
+            pprint = kwargs["pprint"]
+            del kwargs["pprint"]
+        else:
+            pprint = False
         if not self.inplace:
             parsed = self.parser.parse(s)
             if pprint:
@@ -62,134 +115,169 @@ class ASCIIMathTranslator(object):
 
 
 class ASCIIMath2Tex(ASCIIMathTranslator):
-    def __init__(self, grammar, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         if "log" in kwargs:
             log = kwargs["log"]
             del kwargs["log"]
         else:
             log = False
         super(ASCIIMath2Tex, self).__init__(
-            grammar, *args, transformer=LatexTransformer(log=log), **kwargs
+            asciimath_grammar,
+            *args,
+            transformer=LatexTransformer(log=log),
+            **kwargs
         )
 
-    def translate(self, s, displaystyle=False, pprint=False):
-        """
-            \\documentclass{article}
-            \\usepackage[active]{preview}
-            \\begin{document}
-            \\begin{preview}
-            \\[
-            \\pi = \\sqrt{12}\\sum^\\infty_{k=0} \\frac{ (-3)^{-k} }{ 2k+1 }
-            \\]
-            \\end{preview}
-            \\end{document}
-        """
+    def _translate(self, s, *args, **kwargs):
+        if "pprint" in kwargs:
+            pprint = kwargs["pprint"]
+            del kwargs["pprint"]
+        else:
+            pprint = False
+        if "displaystyle" in kwargs:
+            displaystyle = kwargs["displaystyle"]
+            del kwargs["displaystyle"]
+        else:
+            displaystyle = False
         if displaystyle:
             return (
                 "\\["
-                + super(ASCIIMath2Tex, self).translate(s, pprint=pprint)
+                + super(ASCIIMath2Tex, self)._translate(s, pprint=pprint)
                 + "\\]"
             )
         else:
             return (
                 "$"
-                + super(ASCIIMath2Tex, self).translate(s, pprint=pprint)
+                + super(ASCIIMath2Tex, self)._translate(s, pprint=pprint)
                 + "$"
             )
 
 
 class ASCIIMath2MathML(ASCIIMathTranslator):
-    def __init__(self, grammar, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         if "log" in kwargs:
             log = kwargs["log"]
             del kwargs["log"]
         else:
             log = False
         super(ASCIIMath2MathML, self).__init__(
-            grammar, *args, transformer=MathMLTransformer(log=log), **kwargs
+            asciimath_grammar,
+            *args,
+            transformer=MathMLTransformer(log=log),
+            **kwargs
         )
 
-    def __dtd_validation(self, xml, dtd_validation, conn):
-        logging.info("LOADING DTD...")
-        lxml_parser = lxml.etree.XMLParser(
-            dtd_validation=dtd_validation,
-            no_network=(not conn),
-            load_dtd=True,
-            ns_clean=True,
-            remove_blank_text=True,
-            resolve_entities=False,
-        )
-        logging.info(
-            "PARSING{}XML...".format(
-                " AND VALIDATING " if dtd_validation else " "
-            )
-        )
-        return lxml.etree.fromstring(xml, lxml_parser)
-
-    def __get_dtd_head(self, dtd, conn):
-        dtd_head = "<!DOCTYPE math {}>"
-        if dtd is None or dtd.lower() == "mathml3":
-            dtd_head = dtd_head.format(
-                'PUBLIC "-//W3C//DTD MathML 3.0//EN" '
-                + '"http://www.w3.org/Math/DTD/mathml3/mathml3.dtd"'
-                if conn
-                else "SYSTEM "
-                + '"'
-                + PROJECT_ROOT
-                + '/dtd/mathml3/mathml3.dtd"'
-            )
-        elif dtd.lower() == "mathml1":
-            dtd_head = dtd_head.format(
-                "SYSTEM "
-                + (
-                    '"http://www.w3.org/Math/DTD/mathml1/mathml.dtd"'
-                    if conn
-                    else '"' + PROJECT_ROOT + '/dtd/mathml1/mathml1.dtd"'
-                )
-            )
-        elif dtd.lower() == "mathml2":
-            dtd_head = dtd_head.format(
-                'PUBLIC "-//W3C//DTD MathML 2.0//EN" '
-                + '"http://www.w3.org/Math/DTD/mathml2/mathml2.dtd"'
-                if conn
-                else "SYSTEM "
-                + '"'
-                + PROJECT_ROOT
-                + '/dtd/mathml2/mathml2.dtd"'
-            )
+    def _translate(self, s, *args, **kwargs):
+        if "xml_pprint" in kwargs:
+            xml_pprint = kwargs["xml_pprint"]
+            del kwargs["xml_pprint"]
         else:
-            raise NotImplementedError(
-                "DTD validation only against MathML DTD 1, 2 or 3"
-            )
-        return dtd_head
-
-    def translate(
-        self,
-        s,
-        displaystyle=False,
-        dtd=None,
-        dtd_validation=False,
-        pprint=False,
-        xml_pprint=True,
-    ):
+            xml_pprint = True
+        if "pprint" in kwargs:
+            pprint = kwargs["pprint"]
+            del kwargs["pprint"]
+        else:
+            pprint = False
+        if "network" in kwargs:
+            network = kwargs["network"]
+            del kwargs["network"]
+        else:
+            network = False
+        if "dtd_validation" in kwargs:
+            dtd_validation = kwargs["dtd_validation"]
+            del kwargs["dtd_validation"]
+        else:
+            dtd_validation = False
+        if "dtd" in kwargs:
+            dtd = kwargs["dtd"]
+            del kwargs["dtd"]
+        else:
+            dtd = None
+        if "displaystyle" in kwargs:
+            displaystyle = kwargs["displaystyle"]
+            del kwargs["displaystyle"]
+        else:
+            displaystyle = False
         if displaystyle:
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
         else:
             dstyle = "{}"
-        dtd_head = self.__get_dtd_head(dtd, False)
-        parsed = (
-            dtd_head
-            + (
+        if network:  # pragma: no cover
+            if check_connection():
+                dtd_head = get_dtd(dtd, True)
+            else:
+                network = False
+                dtd_head = get_dtd(dtd, False)
+                logging.warn("No connection available...")
+        else:
+            dtd_head = get_dtd(dtd, False)
+        parsed = dtd_head + (
+            (
                 '<math xmlns="http://www.w3.org/1998/Math/MathML">'
                 if dtd != "mathml1"
                 else "<math>"
             )
-            + dstyle.format(super(ASCIIMath2MathML, self).translate(s, pprint))
+            + dstyle.format(
+                super(ASCIIMath2MathML, self)._translate(s, pprint=pprint)
+            )
             + "</math>"
         )
         if dtd_validation or xml_pprint:
-            parsed = self.__dtd_validation(parsed, dtd_validation, False)
+            parsed = validate_dtd(parsed, dtd_validation, network)
             parsed = lxml.etree.tostring(
-                parsed, pretty_print=xml_pprint
+                parsed, pretty_print=xml_pprint, doctype=dtd_head,
             ).decode()
         return parsed
+
+
+class MathML2Tex(Translator):  # pragma: no cover
+    def __init__(self, *args, **kwargs):
+        super(MathML2Tex, self).__init__(*args, **kwargs)
+        transformer = lxml.etree.parse(
+            open(PROJECT_ROOT + "/translation/mathml2tex/mmltex.xsl", "rb")
+        )
+        self.transformer = lxml.etree.XSLT(transformer)
+        self.doctype_pattern = re.compile(
+            r"(<!DOCTYPE math ([A-Z]+).*?mathml(\d)?\.dtd\">)"
+        )
+
+    def _translate(self, s, *args, **kwargs):
+        if "network" in kwargs:
+            network = kwargs["network"]
+            del kwargs["network"]
+        else:
+            network = False
+        if network:
+            if not check_connection():
+                network = False
+                logging.warn("No connection available...")
+        match = re.match(self.doctype_pattern, s)
+        if match is not None:
+            if match.group(3) is None or match.group(3) == "1":
+                raise NotImplementedError(
+                    "Translation from MathML1 is not supported"
+                )
+            if match.group(2) == "PUBLIC" and not network:
+                logging.warn(
+                    "Remote DTD found and network is False: "
+                    "replacing with local DTD"
+                )
+                s = (
+                    get_dtd("mathml" + match.group(3), False)
+                    + s[match.span(1)[1] :]
+                )
+            elif match.group(2) == "SYSTEM" and network:
+                logging.warn(
+                    "Local DTD found and network is True: "
+                    "no need to bother your ISP"
+                )
+                network = False
+        else:
+            logging.warn(
+                "No DTD declaration found: "
+                "validating against local MathML3 DTD"
+            )
+            s = get_dtd("mathml3", False) + s
+        parsed = validate_dtd(s, True, network, resolve_entities=True)
+        logging.info("Translating...")
+        return str(self.transformer(parsed))
