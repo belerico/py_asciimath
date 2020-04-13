@@ -10,6 +10,7 @@ import os
 import re
 
 import lxml.etree
+
 # from future import standard_library
 from lark import Lark
 
@@ -26,6 +27,22 @@ class Translator(object):  # pragma: no cover
     def __init__(self, *args, **kwargs):
         super(Translator, self).__init__()
 
+    def _from_file(self, from_file):
+        if os.path.exists(from_file):
+            logging.info("Loading file '" + from_file + "'...")
+            with open(from_file) as f:
+                s = f.read()
+                f.close()
+            return s
+        else:
+            raise FileNotFoundError("File '" + s + "' not found")
+
+    def _to_file(self, s, to_file):
+        logging.info("Writing translation to '" + to_file + "'...")
+        with open(to_file, "w") as f:
+            f.write(s)
+            f.close()
+
     def _translate(self, s, *args, **kwargs):
         raise NotImplementedError
 
@@ -35,14 +52,18 @@ class Translator(object):  # pragma: no cover
             del kwargs["from_file"]
         else:
             from_file = False
+        if "to_file" in kwargs:
+            to_file = kwargs["to_file"]
+            del kwargs["to_file"]
+        else:
+            to_file = None
         if from_file:
-            if os.path.exists(s):
-                logging.info("Loading file '" + s + "'...")
-                s = open(s).read()
-            else:
-                raise FileNotFoundError("File '" + s + "' not found")
+            s = self._from_file(s)
         logging.info("Translating...")
-        return self._translate(s, *args, **kwargs)
+        s = self._translate(s, *args, **kwargs)
+        if to_file is not None:
+            self._to_file(s, to_file)
+        return s
 
 
 class ASCIIMathTranslator(Translator):
