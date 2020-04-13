@@ -11,16 +11,12 @@ import re
 from builtins import open, str, super
 
 import lxml.etree
-from future import standard_library
-
-# from future import standard_library
 from lark import Lark
 
 from .. import PROJECT_ROOT
 from ..transformer.transformer import LatexTransformer, MathMLTransformer
 from ..utils.utils import check_connection, get_dtd, validate_dtd
 
-standard_library.install_aliases()
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 # standard_library.install_aliases()
