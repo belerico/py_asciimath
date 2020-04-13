@@ -1,0 +1,54 @@
+<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
+<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <mstyle displaystyle="true">
+        <mrow>
+            <mo>&langle;</mo>
+            <mtable>
+                <mtr>
+                    <mtd>
+                        <mo>&bigcup;</mo>
+                        <mo>&Theta;</mo>
+                        <mo>&Copf;</mo>
+                        <mo>&Nopf;</mo>
+                        <mo>&Qopf;</mo>
+                        <mo>&Ropf;</mo>
+                        <mo>&Zopf;</mo>
+                        <mn>1</mn>
+                    </mtd>
+                    <mtd>
+                        <mo>&Rarrtl;</mo>
+                        <mo>&sdot;</mo>
+                        <mn>2</mn>
+                    </mtd>
+                </mtr>
+                <mtr>
+                    <mtd>
+                        <mo>&rarr;</mo>
+                        <mn>2</mn>
+                    </mtd>
+                    <mtd>
+                        <mo>&Integral;</mo>
+                        <mrow>
+                            <mo>[</mo>
+                            <mrow>
+                                <mn>3</mn>
+                                <mrow>
+                                    <mo>(</mo>
+                                    <mrow>
+                                        <mi>x</mi>
+                                        <mo>+</mo>
+                                        <mn>1</mn>
+                                    </mrow>
+                                    <mo>)</mo>
+                                </mrow>
+                            </mrow>
+                            <mo>]</mo>
+                        </mrow>
+                        <mi>dx</mi>
+                    </mtd>
+                </mtr>
+            </mtable>
+            <mo />
+        </mrow>
+    </mstyle>
+</math>
