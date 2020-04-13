@@ -387,6 +387,7 @@ colors = {
 misc_symbols = {
     '"^"': {"latex": "^", "mathml": "&#x5E;"},
     '","': {"latex": ",", "mathml": ","},
+    '"."': {"latex": ".", "mathml": "."},
     '"_"': {"latex": "_", "mathml": "_"},
     '"\'"': {"latex": "'", "mathml": "'"},
     '"/"': {"latex": "/", "mathml": "/"},

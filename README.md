@@ -3,11 +3,9 @@
 py_asciimath is a simple yet powerful Python module that can:
 
 * convert an ASCIIMath string to LaTeX or MathML
-* convert a MathML string to LaTeX ((**under dev**) the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/))
+* convert a MathML string to LaTeX (the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/). Please report any unexpected behavior)
 
-ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/.  
-MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html.  
-LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.
+ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/. MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html. LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.
 
 ## Install
 
@@ -17,210 +15,156 @@ To install the package run `pip install -U --user py-asciimath` or `pip3 install
 
 ### As python module
 ```python
-from py_asciimath.parser.parser import ASCIIMath2MathML, ASCIIMath2Tex
-from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
+from py_asciimath.parser.parser import (
+        ASCIIMath2MathML,
+        ASCIIMath2Tex,
+        MathML2Tex,
+    )
+
 
 if __name__ == "__main__":
-    asciimath2tex = ASCIIMath2Tex(asciimath_grammar)
-    asciimath2mathml = ASCIIMath2MathML(asciimath_grammar)
-    asciimath = "sum_(i=1)^n i^3=((n(n+1))/2)^2"
-    latex = asciimath2tex.translate(asciimath)
-    mathml = asciimath2mathml.translate(asciimath, xml_pprint=True)
-    print(latex)
-    print(mathml)
+    print("ASCIIMath to MathML")
+    asciimath2mathml = ASCIIMath2MathML(log=False, inplace=True)
+    parsed = asciimath2mathml.translate(
+        r"langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2],"
+        r"[rarr 2,int[3(x+1)]dx]:}",
+        dtd="mathml2",
+        dtd_validation=True,
+        network=True,
+        displaystyle=True,
+        pprint=False,
+        xml_pprint=False,
+        from_file=False,
+    )
+    
+    print(parsed, "\n\nMathML to LaTeX")
+    mathml2tex = MathML2Tex()
+    parsed = mathml2tex.translate(parsed, network=False, from_file=False,)
+
+    print(parsed, "\n\nASCIIMath to LaTeX")
+    asciimath2tex = ASCIIMath2Tex(log=False, inplace=True)
+    parsed = asciimath2tex.translate(
+        r"langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2],"
+        r"[rarr 2,int[3(x+1)]dx]:}",
+        displaystyle=True,
+        pprint=False,
+        from_file=False,
+    )
+    print(parsed)
 ```
+
 results in:
+
 ```
-\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
-<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <mrow>
-    <msubsup>
-      <mrow>
-        <mo>&#8721;</mo>
-      </mrow>
-      <mrow>
-        <mi>i</mi>
-        <mo>=</mo>
-        <mn>1</mn>
-      </mrow>
-      <mrow>
-        <mi>n</mi>
-      </mrow>
-    </msubsup>
-  </mrow>
-  <mrow>
-    <msup>
-      <mrow>
-        <mi>i</mi>
-      </mrow>
-      <mrow>
-        <mn>3</mn>
-      </mrow>
-    </msup>
-  </mrow>
-  <mo>=</mo>
-  <mrow>
-    <msup>
-      <mrow>
-        <mo>(</mo>
-        <mrow>
-          <mfrac>
-            <mrow>
-              <mi>n</mi>
-              <mo>(</mo>
-              <mi>n</mi>
-              <mo>+</mo>
-              <mn>1</mn>
-              <mo>)</mo>
-            </mrow>
-            <mrow>
-              <mn>2</mn>
-            </mrow>
-          </mfrac>
-        </mrow>
-        <mo>)</mo>
-      </mrow>
-      <mrow>
-        <mn>2</mn>
-      </mrow>
-    </msup>
-  </mrow>
-</math>
+ASCIIMath to MathML
+INFO:Translating...
+INFO:Validating against remote dtd...
+INFO:Loading dtd and validating...
+<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
+<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mo>&bigcup;</mo><mo>&Theta;</mo><mo>&Copf;</mo><mo>&Nopf;</mo><mo>&Qopf;</mo><mo>&Ropf;</mo><mo>&Zopf;</mo><mn>1</mn></mtd><mtd><mo>&Rarrtl;</mo><mo>&sdot;</mo><mn>2</mn></mtd></mtr><mtr><mtd><mo>&rarr;</mo><mn>2</mn></mtd><mtd><mo>&Integral;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo/></mrow></mstyle></math> 
+
+MathML to LaTeX
+INFO:Translating...
+WARNING:Remote DTD found and network is False: replacing with local DTD
+INFO:Validating against local dtd...
+INFO:Loading dtd and validating...
+INFO:Translating...
+$ {\displaystyle \langle \begin{array}{cc}\bigcup \Theta \mathbb{C} \mathbb{N}\mathbb{Q}\mathbb{R} \mathbb{Z}1& \twoheadrightarrowtail \cdot 2\\ \to 2& \int \left[3\left(x+1\right)\right]\mathrm{dx}\end{array}}$ 
+
+ASCIIMath to LaTeX
+INFO:Translating...
+\[\left\langle \begin{matrix}\bigcup \Theta \mathbb{C} \mathbb{N} \mathbb{Q} \mathbb{R} \mathbb{Z} 1  &  \twoheadrightarrowtail \cdot 2  \\  \rightarrow 2  &  \int \left[3 \left(x + 1\right)\right] \mathrm{dx}\end{matrix}\right.\]
 ```
 
 ### From the command line
 ```
-py_asciimath: a simple ASCIIMath converter.
+py_asciimath: a simple ASCIIMath/MathML/LaTeX converter
 
 Usage:
-  py_asciimath.py ASCIIMATH ... (-o latex | --output=latex)
-            [--log] [--dstyle]
-  py_asciimath.py ASCIIMATH ... (-o mathml | --output=mathml)
-            [--log] [--dstyle] [--pprint] [--validate-xml=MathMLDTD]
+  py_asciimath.py <EXP> from <ILANG> to <OLANG> [options]
+  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG)
+                        (-o <OLANG> | --output=OLANG)
+                        [options]
+  py_asciimath.py from-file <PATH> from <ILANG> to <OLANG> [options]
+  py_asciimath.py from-file <PATH> (-i <ILANG> | --input=ILANG)
+                                   (-o <OLANG> | --output=OLANG) [options]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
 Options:
-  -h --help                     Show this screen.
-  -o OLANG --output=OLANG       Output language.
-  --log                         Log the transformation process.
   --dstyle                      Add display style
-  --pprint                      Pretty print
-  --validate-xml=MathMLDTD      Validate against a MathML DTD. MathMLDTD can be: mathml1, mathml2 or mathml3
-  --version                     Show version.
+  -i <ILANG> --input=ILANG      Input language
+                                Supported input language: asciimath, mathml
+  --log                         Log the transformation process
+  --network                     Works only with ILANG=mathnml or OLANG=mathml
+                                Use network to validate XML against DTD
+  -o <OLANG> --output=OLANG     Output language
+                                Supported output language: latex, mathml
+  --pprint                      Works only with OLANG=mathml. Pretty print
+  --to-file=OPATH               Save translation to OPATH file
+  --validate-xml=MathMLDTD      Works only with OLANG=mathml
+                                Validate against a MathML DTD
+                                MathMLDTD can be: mathml1, mathml2 or mathml3
+  --version                     Show version
 ```
 
-For example, `py_asciimath "sum_(i=1)^n i^3=((n(n+1))/2)^2" -o latex` prints:
+For example, `py_asciimath "sum_(i=1)^n i^3=((n(n+1))/2)^2" from asciimath to latex` prints:
 
 ```
-Translating ...
-\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
+INFO:Translating...
+$\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}$
 ```
-If the option `--log` is present, then it prints also every transformation of the input, so `py_asciimath "sum_(i=1)^n i^3=((n(n+1))/2)^2" -o latex --log` prints:
+If the option `--log` is present, then it prints also every transformation of the input, so `py_asciimath "e^x > 0 forall x in RR" from asciimath to latex --log` prints:
 
 ```
-Translating ...
-INFO:Calling symbol with args:
-INFO:	items = [Token(SUM, 'sum')]
+INFO:Translating...
 INFO:Calling const with args:
-INFO:	items = [Token(LETTER, 'i')]
-INFO:Calling exp_interm with args:
-INFO:	items = ['i']
-INFO:Calling symbol with args:
-INFO:	items = [Token(EQUAL, '=')]
-INFO:Calling exp_interm with args:
-INFO:	items = ['=']
+INFO:   items = [Token(LETTER, 'e')]
 INFO:Calling const with args:
-INFO:	items = [Token(NUMBER, '1')]
-INFO:Calling exp_interm with args:
-INFO:	items = ['1']
-INFO:Calling exp with args:
-INFO:	items = ['1']
-INFO:Calling exp with args:
-INFO:	items = ['=', '1']
-INFO:Calling exp with args:
-INFO:	items = ['i', '= 1']
-INFO:Calling exp_par with args:
-INFO:	items = [Token(LPAR, '('), 'i = 1', Token(RPAR, ')')]
-INFO:Calling const with args:
-INFO:	items = [Token(LETTER, 'n')]
-INFO:Calling exp_under_super with args:
-INFO:	items = ['\\sum', '\\left(i = 1\\right)', 'n']
-INFO:Calling remove_parenthesis with args:
-INFO:	s = '\\left(i = 1\\right)'
-INFO:Calling remove_parenthesis with args:
-INFO:	s = 'n'
-INFO:Calling const with args:
-INFO:	items = [Token(LETTER, 'i')]
-INFO:Calling const with args:
-INFO:	items = [Token(NUMBER, '3')]
+INFO:   items = [Token(LETTER, 'x')]
 INFO:Calling exp_super with args:
-INFO:	items = ['i', '3']
+INFO:   items = ['e', 'x']
 INFO:Calling remove_parenthesis with args:
-INFO:	s = '3'
+INFO:   s = 'x'
 INFO:Calling symbol with args:
-INFO:	items = [Token(EQUAL, '=')]
+INFO:   items = [Token(MORETHAN, '>')]
 INFO:Calling exp_interm with args:
-INFO:	items = ['=']
+INFO:   items = ['>']
 INFO:Calling const with args:
-INFO:	items = [Token(LETTER, 'n')]
+INFO:   items = [Token(NUMBER, '0')]
 INFO:Calling exp_interm with args:
-INFO:	items = ['n']
-INFO:Calling const with args:
-INFO:	items = [Token(LETTER, 'n')]
-INFO:Calling exp_interm with args:
-INFO:	items = ['n']
+INFO:   items = ['0']
 INFO:Calling symbol with args:
-INFO:	items = [Token(PLUS, '+')]
+INFO:   items = [Token(FORALL, 'forall')]
 INFO:Calling exp_interm with args:
-INFO:	items = ['+']
+INFO:   items = ['\\forall']
 INFO:Calling const with args:
-INFO:	items = [Token(NUMBER, '1')]
+INFO:   items = [Token(LETTER, 'x')]
 INFO:Calling exp_interm with args:
-INFO:	items = ['1']
-INFO:Calling exp with args:
-INFO:	items = ['1']
-INFO:Calling exp with args:
-INFO:	items = ['+', '1']
-INFO:Calling exp with args:
-INFO:	items = ['n', '+ 1']
-INFO:Calling exp_par with args:
-INFO:	items = [Token(LPAR, '('), 'n + 1', Token(RPAR, ')')]
+INFO:   items = ['x']
+INFO:Calling symbol with args:
+INFO:   items = [Token(IN, 'in')]
 INFO:Calling exp_interm with args:
-INFO:	items = ['\\left(n + 1\\right)']
+INFO:   items = ['\\in']
+INFO:Calling symbol with args:
+INFO:   items = [Token(RR, 'RR')]
+INFO:Calling exp_interm with args:
+INFO:   items = ['\\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['\\left(n + 1\\right)']
+INFO:   items = ['\\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['n', '\\left(n + 1\\right)']
-INFO:Calling exp_par with args:
-INFO:	items = [Token(LPAR, '('), 'n \\left(n + 1\\right)', Token(RPAR, ')')]
-INFO:Calling const with args:
-INFO:	items = [Token(NUMBER, '2')]
-INFO:Calling exp_frac with args:
-INFO:	items = ['\\left(n \\left(n + 1\\right)\\right)', '2']
-INFO:Calling remove_parenthesis with args:
-INFO:	s = '\\left(n \\left(n + 1\\right)\\right)'
-INFO:Calling remove_parenthesis with args:
-INFO:	s = '2'
+INFO:   items = ['\\in', '\\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['\\frac{n \\left(n + 1\\right)}{2}']
-INFO:Calling exp_par with args:
-INFO:	items = [Token(LPAR, '('), '\\frac{n \\left(n + 1\\right)}{2}', Token(RPAR, ')')]
-INFO:Calling const with args:
-INFO:	items = [Token(NUMBER, '2')]
-INFO:Calling exp_super with args:
-INFO:	items = ['\\left(\\frac{n \\left(n + 1\\right)}{2}\\right)', '2']
-INFO:Calling remove_parenthesis with args:
-INFO:	s = '2'
+INFO:   items = ['x', '\\in \\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['\\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+INFO:   items = ['\\forall', 'x \\in \\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['=', '\\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+INFO:   items = ['0', '\\forall x \\in \\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['i^{3}', '= \\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
+INFO:   items = ['>', '0 \\forall x \\in \\mathbb{R}']
 INFO:Calling exp with args:
-INFO:	items = ['\\sum_{i = 1}^{n}', 'i^{3} = \\left(\\frac{n \\left(n + 1\\right)}{2}\\right)^{2}']
-\sum_{i = 1}^{n} i^{3} = \left(\frac{n \left(n + 1\right)}{2}\right)^{2}
+INFO:   items = ['e^{x}', '> 0 \\forall x \\in \\mathbb{R}']
+$e^{x} > 0 \forall x \in \mathbb{R}$
 ```
 
 ## Grammar

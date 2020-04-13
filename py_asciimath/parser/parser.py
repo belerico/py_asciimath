@@ -15,6 +15,7 @@ import lxml.etree
 from lark import Lark
 
 from .. import PROJECT_ROOT
+from ..grammar.asciimath_grammar import asciimath_grammar
 from ..transformer.transformer import LatexTransformer, MathMLTransformer
 from ..utils.utils import check_connection, get_dtd, validate_dtd
 
@@ -35,7 +36,7 @@ class Translator(object):  # pragma: no cover
                 f.close()
             return s
         else:
-            raise FileNotFoundError("File '" + s + "' not found")
+            raise FileNotFoundError("File '" + from_file + "' not found")
 
     def _to_file(self, s, to_file):
         logging.info("Writing translation to '" + to_file + "'...")
@@ -114,14 +115,17 @@ class ASCIIMathTranslator(Translator):
 
 
 class ASCIIMath2Tex(ASCIIMathTranslator):
-    def __init__(self, grammar, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         if "log" in kwargs:
             log = kwargs["log"]
             del kwargs["log"]
         else:
             log = False
         super(ASCIIMath2Tex, self).__init__(
-            grammar, *args, transformer=LatexTransformer(log=log), **kwargs
+            asciimath_grammar,
+            *args,
+            transformer=LatexTransformer(log=log),
+            **kwargs
         )
 
     def _translate(self, s, *args, **kwargs):
@@ -150,14 +154,17 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
 
 
 class ASCIIMath2MathML(ASCIIMathTranslator):
-    def __init__(self, grammar, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         if "log" in kwargs:
             log = kwargs["log"]
             del kwargs["log"]
         else:
             log = False
         super(ASCIIMath2MathML, self).__init__(
-            grammar, *args, transformer=MathMLTransformer(log=log), **kwargs
+            asciimath_grammar,
+            *args,
+            transformer=MathMLTransformer(log=log),
+            **kwargs
         )
 
     def _translate(self, s, *args, **kwargs):
