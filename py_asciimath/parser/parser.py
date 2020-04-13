@@ -182,7 +182,7 @@ class MathML2Tex(Translator):  # pragma: no cover
                 )
                 s = (
                     get_dtd("mathml" + match.group(3), False)
-                    + s[match.span(1)[1] :]
+                    + s[match.span(1)[1]:]
                 )
             elif match.group(2) == "SYSTEM" and network:
                 logging.warn(

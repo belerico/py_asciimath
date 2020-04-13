@@ -43,12 +43,20 @@ class TestUtilsMat(unittest.TestCase):
         b, _ = UtilsMat.check_mat("[1,2],[1,2,[1,2],[3,4]")
         self.assertFalse(b)
 
+    def test_check_mat_fail_6(self):
+        b, _ = UtilsMat.check_mat("[,],")
+        self.assertFalse(b)
+
     def test_get_mat_ok_1(self):
-        s = UtilsMat.get_latex_mat("\\left[1 , 2\\right] , \\left[1 , 2\\right]")
+        s = UtilsMat.get_latex_mat(
+            "\\left[1 , 2\\right] , \\left[1 , 2\\right]"
+        )
         self.assertEqual(s, "1  &  2  \\\\  1  &  2")
 
     def test_get_mat_ok_2(self):
-        s = UtilsMat.get_latex_mat("\\left[1 , 2\\right] , \\left[1 , \\right]")
+        s = UtilsMat.get_latex_mat(
+            "\\left[1 , 2\\right] , \\left[1 , \\right]"
+        )
         self.assertEqual(s, "1  &  2  \\\\  1  &  \\null")
 
     def test_get_mat_ok_3(self):

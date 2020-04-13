@@ -213,13 +213,13 @@ class UtilsMat(object):
                 # c is a left par
                 if c == row_par[0]:
                     if transitions != rows:
-                        logging.info("ROW WITHOUT COMMA")
+                        logging.info("Row without comma")
                         return False, []
                     par_stack.append(c)
                 # c is a right par
                 elif c == row_par[1]:
                     if len(par_stack) == 0:
-                        logging.info("UNMATCHED PARS")
+                        logging.info("Unmatched pars")
                         return False, []
                     else:
                         par_stack.pop()
@@ -228,7 +228,7 @@ class UtilsMat(object):
                         if transitions == 1 and max_cols == 0 and cols > 0:
                             max_cols = cols
                         elif max_cols != cols:
-                            logging.info("COLS DIFFER")
+                            logging.info("Cols differ")
                             return False, []
                         cols = 0
                 elif c == ",":
@@ -240,14 +240,17 @@ class UtilsMat(object):
                         rows = rows + 1
                         if transitions - rows != 0:
                             logging.info(
-                                "NO OPEN-CLOSE PAR BETWEEN TWO COMMAS"
+                                "No open-close par between two commas"
                             )
                             return False, []
             if len(par_stack) != 0:
-                logging.info("UNMATCHED PARS")
+                logging.info("Unmatched pars")
+                return False, []
+            elif transitions < 2:
+                logging.info("Not enough rows: at least 2")
                 return False, []
             elif rows == 0 or transitions - rows > 1:
-                logging.info("MISSING COMMA OR EMPTY ROW")
+                logging.info("Missing comma or empty row")
                 return False, []
             return True, row_par
         else:
