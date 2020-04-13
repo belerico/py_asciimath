@@ -1,4 +1,4 @@
-# py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) ![PyPI version](https://img.shields.io/pypi/v/py-asciimath?color=light%20green)
+# py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![pypi](https://img.shields.io/pypi/v/py-asciimath?color=light%20green)](https://pypi.org/project/py-asciimath/)
 
 py_asciimath is a simple yet powerful Python module that can:
 
