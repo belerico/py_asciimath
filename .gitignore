@@ -1,3 +1,6 @@
+# Exclude main.py
+main.py
+
 # Lark grammar cache
 .lark*
 
