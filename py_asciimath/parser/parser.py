@@ -70,11 +70,16 @@ class Translator(object):  # pragma: no cover
 class ASCIIMathTranslator(Translator):
     def __init__(self, grammar, *args, **kwargs):
         super(ASCIIMathTranslator, self).__init__(*args, **kwargs)
+        if "log" in kwargs:
+            log = kwargs["log"]
+            del kwargs["log"]
+        else:
+            log = False
         if "transformer" in kwargs:
             transformer = kwargs["transformer"]
             del kwargs["transformer"]
         else:
-            transformer = LatexTransformer(log=True)
+            transformer = LatexTransformer(log=log)
         if "lexer" in kwargs:
             lexer = kwargs["lexer"]
             del kwargs["lexer"]
@@ -116,15 +121,12 @@ class ASCIIMathTranslator(Translator):
 
 class ASCIIMath2Tex(ASCIIMathTranslator):
     def __init__(self, *args, **kwargs):
-        if "log" in kwargs:
-            log = kwargs["log"]
-            del kwargs["log"]
-        else:
-            log = False
         super(ASCIIMath2Tex, self).__init__(
             asciimath_grammar,
             *args,
-            transformer=LatexTransformer(log=log),
+            transformer=LatexTransformer(
+                log=kwargs["log"] if "log" in kwargs else False
+            ),
             **kwargs
         )
 
@@ -155,15 +157,12 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
 
 class ASCIIMath2MathML(ASCIIMathTranslator):
     def __init__(self, *args, **kwargs):
-        if "log" in kwargs:
-            log = kwargs["log"]
-            del kwargs["log"]
-        else:
-            log = False
         super(ASCIIMath2MathML, self).__init__(
             asciimath_grammar,
             *args,
-            transformer=MathMLTransformer(log=log),
+            transformer=MathMLTransformer(
+                log=kwargs["log"] if "log" in kwargs else False
+            ),
             **kwargs
         )
 

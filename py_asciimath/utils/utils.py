@@ -107,7 +107,9 @@ def get_dtd(dtd, network):
     return dtd_head
 
 
-def validate_dtd(xml, dtd_validation, network, resolve_entities=False):  # pragma: no cover
+def validate_dtd(
+    xml, dtd_validation, network, resolve_entities=False
+):  # pragma: no cover
     if dtd_validation:
         if network:
             logging.info("Validating against remote dtd...")
