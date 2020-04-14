@@ -114,12 +114,7 @@ class ASCIIMathTranslator(Translator):
             grammar, *args, parser=parser, lexer=lexer, **kwargs
         )
 
-    def _translate(self, s, *args, **kwargs):
-        if "pprint" in kwargs:
-            pprint = kwargs["pprint"]
-            del kwargs["pprint"]
-        else:
-            pprint = False
+    def _translate(self, s, pprint=False):
         if not self.inplace:
             parsed = self.parser.parse(s)
             if pprint:
