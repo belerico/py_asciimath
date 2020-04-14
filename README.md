@@ -87,7 +87,8 @@ Usage:
                         [options]
   py_asciimath.py from-file <PATH> from <ILANG> to <OLANG> [options]
   py_asciimath.py from-file <PATH> (-i <ILANG> | --input=ILANG)
-                                   (-o <OLANG> | --output=OLANG) [options]
+                                   (-o <OLANG> | --output=OLANG)
+                                   [options]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
