@@ -178,11 +178,13 @@ class UtilsMat(object):
         open-close parenthesis couple, needed to identify matrix
         rows in the string.
 
-        Parameters:
-        - s: str
+        Args:
+            s (str): Input string
 
         Returns:
-        - i: int, [left_par, right_par]: list
+            int, list: Index i of the first open parenthesis,
+                and the list [left_par, right_par]. -1 and [] if no parenthesis
+                is found
         """
 
         for i, c in enumerate(s):
@@ -196,12 +198,12 @@ class UtilsMat(object):
         Returns True if the string s has a matrix-structure-like,
         False otherwise. It returns also the row delimiters.
 
-        Parameters:
-        - s: str
+        Args:
+            s (str): Input string to be matrix-checked
 
         Returns:
-        - b: bool
-        - [l_par, r_par]: list
+            bool, list: `True`, [left_par, right_par] if the string s
+                has a matrix-like structure; False, [] otherwise
         """
 
         rows = 0
@@ -263,13 +265,13 @@ class UtilsMat(object):
         """Given a known matrix-structured string, translate it into the
         matrix LaTeX format.
 
-        Parameters:
-        - s: str
-        - max_cols: int. How many columns per rows
-        - row_par: list. Row delimiters
+        Args:
+            s (str): Input string
+            max_cols (int): How many columns per rows
+            row_par (list, optional): Row delimiters
 
         Returns:
-        - mat: str
+            str: LaTeX well-formed matrix
         """
 
         i = 0
@@ -321,12 +323,13 @@ class UtilsMat(object):
         """Given a known matrix-structured string, translate it into the
         matrix LaTeX format.
 
-        Parameters:
-        - s: str
-        - row_par: list. Row delimiters
+        Args:
+            s (str): Input string
+            max_cols (int): How many columns per rows
+            row_par (list, optional): Row delimiters
 
         Returns:
-        - mat: str
+            str: MathML well-formed matrix
         """
 
         split = re.split(cls.mathml_par_pattern, s,)

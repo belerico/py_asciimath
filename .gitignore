@@ -1,3 +1,6 @@
+# Exclude docs
+docs/*
+
 # Exclude main.py
 main.py
 

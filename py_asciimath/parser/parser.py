@@ -47,17 +47,20 @@ class Translator(object):  # pragma: no cover
     def _translate(self, s, *args, **kwargs):
         raise NotImplementedError
 
-    def translate(self, s, *args, **kwargs):
-        if "from_file" in kwargs:
-            from_file = kwargs["from_file"]
-            del kwargs["from_file"]
-        else:
-            from_file = False
-        if "to_file" in kwargs:
-            to_file = kwargs["to_file"]
-            del kwargs["to_file"]
-        else:
-            to_file = None
+    def translate(self, s, from_file=False, to_file=None, *args, **kwargs):
+        """Translates an input expression `s`
+
+        Args:
+            s (str): String to translate. If from_file is `True`, then `s`
+                must represent the file's path
+            from_file (bool, optional): If `True`, load the string to translate
+                from the file specified by `s`. Defaults to False.
+            to_file (str, optional): If specified, save the translation to
+                `to_file`. Defaults to None.
+
+        Returns:
+            str: Translated expression
+        """
         if from_file:
             s = self._from_file(s)
         logging.info("Translating...")
@@ -68,33 +71,40 @@ class Translator(object):  # pragma: no cover
 
 
 class ASCIIMathTranslator(Translator):
-    def __init__(self, grammar, *args, **kwargs):
-        super(ASCIIMathTranslator, self).__init__(*args, **kwargs)
-        if "log" in kwargs:
-            log = kwargs["log"]
-            del kwargs["log"]
-        else:
-            log = False
-        if "transformer" in kwargs:
-            transformer = kwargs["transformer"]
-            del kwargs["transformer"]
-        else:
-            transformer = LatexTransformer(log=log)
-        if "lexer" in kwargs:
-            lexer = kwargs["lexer"]
-            del kwargs["lexer"]
-        else:
-            lexer = "contextual"
-        if "parser" in kwargs:
-            parser = kwargs["parser"]
-            del kwargs["parser"]
-        else:
-            parser = "lalr"
-        if "inplace" in kwargs:
-            inplace = kwargs["inplace"]
-            del kwargs["inplace"]
-        else:
-            inplace = False
+    """Class that handle the translation from ASCIIMath.
+
+    An ASCIIMathTranslator translates an ASCIIMath string into another
+    language, specified by the `transformer` parameter
+
+    Args:
+        grammar (str): ASCIIMath grammar
+        transformer (lark.Transformer): A transformer to transform parsed
+            input. See `~lark.Transformer`
+        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            Defaults to "contextual".
+        log (bool, optional): If True log the parsing process.
+            Defaults to False.
+        inplace (bool, optional): If True, parse the input inplace.
+            See `~lark.Lark`. Defaults to True.
+        parser (str, optional): Parser algorithm. See `~lark.Lark`.
+            Defaults to "lalr".
+        *args: Additional variable length argument list
+            to the `~lark.Lark` class.
+        **kwargs: Additional keyword arguments to the `~lark.Lark` class.
+    """
+
+    def __init__(
+        self,
+        grammar,
+        transformer,
+        lexer="contextual",
+        log=False,
+        inplace=True,
+        parser="lalr",
+        *args,
+        **kwargs
+    ):
+        super(ASCIIMathTranslator, self).__init__()
         self.inplace = inplace
         self.grammar = grammar
         self.transformer = transformer
@@ -120,27 +130,33 @@ class ASCIIMathTranslator(Translator):
 
 
 class ASCIIMath2Tex(ASCIIMathTranslator):
+    """Class that handle the translation from ASCIIMath to LaTeX
+
+    Args:
+        transformer (lark.Transformer): A transformer to transform parsed
+            input. See `~lark.Transformer`
+        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            Defaults to "contextual".
+        log (bool, optional): If True log the parsing process.
+            Defaults to False.
+        inplace (bool, optional): If True, parse the input inplace.
+            See `~lark.Lark`. Defaults to True.
+        parser (str, optional): Parser algorithm. See `~lark.Lark`.
+            Defaults to "lalr".
+        *args: Additional variable length argument list
+            to the `~lark.Lark` class.
+        **kwargs: Additional keyword arguments to the `~lark.Lark` class.
+    """
+
     def __init__(self, *args, **kwargs):
         super(ASCIIMath2Tex, self).__init__(
             asciimath_grammar,
+            LatexTransformer(log=kwargs.pop("log", False)),
             *args,
-            transformer=LatexTransformer(
-                log=kwargs["log"] if "log" in kwargs else False
-            ),
             **kwargs
         )
 
-    def _translate(self, s, *args, **kwargs):
-        if "pprint" in kwargs:
-            pprint = kwargs["pprint"]
-            del kwargs["pprint"]
-        else:
-            pprint = False
-        if "displaystyle" in kwargs:
-            displaystyle = kwargs["displaystyle"]
-            del kwargs["displaystyle"]
-        else:
-            displaystyle = False
+    def _translate(self, s, displaystyle=False, pprint=False):
         if displaystyle:
             return (
                 "\\["
@@ -154,49 +170,77 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
                 + "$"
             )
 
+    def translate(
+        self,
+        s,
+        displaystyle=False,
+        from_file=False,
+        pprint=False,
+        to_file=None,
+    ):
+        """Translates an ASCIIMath string to LaTeX
+
+        Args:
+            s (str): String to translate. If from_file is `True`, then `s`
+                must represent the file's path
+            displaystyle (bool, optional): Add displaystyle attribute.
+                Defaults to False.
+            from_file (bool, optional): If `True`, load the string to translate
+                from the file specified by `s`. Defaults to False.
+            pprint (bool, optional): Abstract Syntax Tree pretty print.
+                Defaults to False.
+            to_file (str, optional): If specified, save the translation to
+                `to_file`. Defaults to None.
+
+        Returns:
+            str: LaTeX translated expression
+        """
+        return super(ASCIIMath2Tex, self).translate(
+            s,
+            displaystyle=displaystyle,
+            from_file=from_file,
+            pprint=pprint,
+            to_file=to_file,
+        )
+
 
 class ASCIIMath2MathML(ASCIIMathTranslator):
+    """Class that handle the translation from ASCIIMath to MathML
+
+    Args:
+        transformer (lark.Transformer): A transformer to transform parsed
+            input. See `~lark.Transformer`
+        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            Defaults to "contextual".
+        log (bool, optional): If True log the parsing process.
+            Defaults to False.
+        inplace (bool, optional): If True, parse the input inplace.
+            See `~lark.Lark`. Defaults to True.
+        parser (str, optional): Parser algorithm. See `~lark.Lark`.
+            Defaults to "lalr".
+        *args: Additional variable length argument list
+            to the `~lark.Lark` class.
+        **kwargs: Additional keyword arguments to the `~lark.Lark` class.
+    """
+
     def __init__(self, *args, **kwargs):
         super(ASCIIMath2MathML, self).__init__(
             asciimath_grammar,
+            MathMLTransformer(log=kwargs.pop("log", False)),
             *args,
-            transformer=MathMLTransformer(
-                log=kwargs["log"] if "log" in kwargs else False
-            ),
             **kwargs
         )
 
-    def _translate(self, s, *args, **kwargs):
-        if "xml_pprint" in kwargs:
-            xml_pprint = kwargs["xml_pprint"]
-            del kwargs["xml_pprint"]
-        else:
-            xml_pprint = True
-        if "pprint" in kwargs:
-            pprint = kwargs["pprint"]
-            del kwargs["pprint"]
-        else:
-            pprint = False
-        if "network" in kwargs:
-            network = kwargs["network"]
-            del kwargs["network"]
-        else:
-            network = False
-        if "dtd_validation" in kwargs:
-            dtd_validation = kwargs["dtd_validation"]
-            del kwargs["dtd_validation"]
-        else:
-            dtd_validation = False
-        if "dtd" in kwargs:
-            dtd = kwargs["dtd"]
-            del kwargs["dtd"]
-        else:
-            dtd = None
-        if "displaystyle" in kwargs:
-            displaystyle = kwargs["displaystyle"]
-            del kwargs["displaystyle"]
-        else:
-            displaystyle = False
+    def _translate(
+        self,
+        s,
+        displaystyle=False,
+        dtd=None,
+        dtd_validation=False,
+        network=False,
+        pprint=False,
+        xml_pprint=True,
+    ):
         if displaystyle:
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
         else:
@@ -228,10 +272,67 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             ).decode()
         return parsed
 
+    def translate(
+        self,
+        s,
+        displaystyle=False,
+        dtd=None,
+        dtd_validation=False,
+        from_file=False,
+        network=False,
+        pprint=False,
+        to_file=None,
+        xml_pprint=True,
+    ):
+        """Translates an ASCIIMath string to MathML
+
+        Args:
+            s (str): String to translate. If from_file is `True`, then `s`
+                must represent the file's path
+            displaystyle (bool, optional): Add displaystyle attribute.
+                Defaults to False.
+            dtd (str, optional): MathML DTD version to validate the output
+                against. It can be: `mathml1`, `mathml2` or `mathml3`.
+                Defaults to None.
+            dtd_validation (bool, optional): If `True` validate output against
+                the DTD version specified by `dtd`.
+                Defaults to False.
+            from_file (bool, optional): If `True`, load the string to translate
+                from the file specified by `s`. Defaults to False.
+            network (bool, optional): If `True` validate the output against
+                a remote DTD.
+                Defaults to False.
+            pprint (bool, optional): Abstract Syntax Tree pretty print.
+                Defaults to False.
+            to_file (str, optional): If specified, save the translation to
+                `to_file`. Defaults to None.
+            xml_pprint (bool, optional): XML pretty print. Defaults to True.
+
+        Returns:
+            str: MathML translated expression
+        """
+        return super(ASCIIMath2MathML, self).translate(
+            s,
+            displaystyle=displaystyle,
+            dtd=dtd,
+            dtd_validation=dtd_validation,
+            from_file=from_file,
+            network=network,
+            pprint=pprint,
+            to_file=to_file,
+            xml_pprint=xml_pprint,
+        )
+
 
 class MathML2Tex(Translator):  # pragma: no cover
-    def __init__(self, *args, **kwargs):
-        super(MathML2Tex, self).__init__(*args, **kwargs)
+    """Class that handle the translation from MathML to LaTeX
+
+    The translation from MathML to LaTeX is done via the XSLT provided by
+    https://sourceforge.net/projects/xsltml/
+    """
+
+    def __init__(self):
+        super(MathML2Tex, self).__init__()
         transformer = lxml.etree.parse(
             open(PROJECT_ROOT + "/translation/mathml2tex/mmltex.xsl", "rb")
         )
@@ -240,12 +341,7 @@ class MathML2Tex(Translator):  # pragma: no cover
             r"(<!DOCTYPE math ([A-Z]+).*?mathml(\d)?\.dtd\">)"
         )
 
-    def _translate(self, s, *args, **kwargs):
-        if "network" in kwargs:
-            network = kwargs["network"]
-            del kwargs["network"]
-        else:
-            network = False
+    def _translate(self, s, network=False):
         if network:
             if not check_connection():
                 network = False
@@ -280,3 +376,24 @@ class MathML2Tex(Translator):  # pragma: no cover
         parsed = validate_dtd(s, True, network, resolve_entities=True)
         logging.info("Translating...")
         return str(self.transformer(parsed))
+
+    def translate(self, s, from_file=False, network=False, to_file=None):
+        """Translates a MathML string to LaTeX
+
+        Args:
+            s (str): String to translate. If from_file is `True`, then `s`
+                must represent the file's path
+            from_file (bool, optional): If `True`, load the string to translate
+                from the file specified by `s`. Defaults to False.
+            network (bool, optional): If `True` validate the output against
+                a remote DTD.
+                Defaults to False.
+            to_file (str, optional): If specified, save the translation to
+                `to_file`. Defaults to None.
+
+        Returns:
+            str: LaTeX translated expression
+        """
+        return super(MathML2Tex, self).translate(
+            s, from_file=from_file, network=network, to_file=to_file
+        )
