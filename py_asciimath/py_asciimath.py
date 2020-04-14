@@ -1,13 +1,22 @@
 """py_asciimath: a simple ASCIIMath/MathML/LaTeX converter
 
 Usage:
-  py_asciimath.py <EXP> from <ILANG> to <OLANG> [options]
-  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG)
-                        (-o <OLANG> | --output=OLANG)
+  py_asciimath.py <EXP> from <ILANG> to <OLANG>
                         [options]
-  py_asciimath.py from-file <PATH> from <ILANG> to <OLANG> [options]
-  py_asciimath.py from-file <PATH> (-i <ILANG> | --input=ILANG)
-                                   (-o <OLANG> | --output=OLANG) [options]
+  py_asciimath.py <EXP> from <ILANG> (-o <OLANG> | --output=OLANG)
+                        [options]
+  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG) to <OLANG>
+                        [options]
+  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG) (-o <OLANG> | --output=OLANG)
+                        [options]
+  py_asciimath.py from-file <PATH>  from <ILANG> to <OLANG>
+                                    [options]
+  py_asciimath.py from-file <PATH>  from <ILANG> (-o <OLANG> | --output=OLANG)
+                                    [options]
+  py_asciimath.py from-file <PATH>  (-i <ILANG> | --input=ILANG) to <OLANG>
+                                    [options]
+  py_asciimath.py from-file <PATH>  (-i <ILANG> | --input=ILANG) (-o <OLANG> | --output=OLANG)
+                                    [options]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
@@ -48,8 +57,16 @@ _supported_olang = ["latex", "mathml"]
 
 def main():
     arguments = docopt(__doc__)
-    ilang = arguments["<ILANG>"].lower()
-    olang = arguments["<OLANG>"].lower()
+    ilang = (
+        arguments["<ILANG>"].lower()
+        if arguments["from"]
+        else arguments["--input"]
+    )
+    olang = (
+        arguments["<OLANG>"].lower()
+        if arguments["to"]
+        else arguments["--output"]
+    )
     if ilang == olang:
         print("Same input and output language. Nothing to do")
         sys.exit(0)
@@ -64,25 +81,44 @@ def main():
         if arguments["from-file"]
         else "".join(arguments["<EXP>"])
     )
-    validate = True if arguments["--validate-xml"] is not None else False
     if ilang == "asciimath":
         if olang == "latex":
             parser = ASCIIMath2Tex(log=arguments["--log"], inplace=True)
+            print(
+                parser.translate(
+                    exp,
+                    displaystyle=arguments["--dstyle"],
+                    from_file=arguments["from-file"],
+                    pprint=False,
+                    to_file=arguments["--to-file"],
+                )
+            )
         elif olang == "mathml":
             parser = ASCIIMath2MathML(log=arguments["--log"], inplace=True)
+            validate = (
+                True if arguments["--validate-xml"] is not None else False
+            )
+            print(
+                parser.translate(
+                    exp,
+                    displaystyle=arguments["--dstyle"],
+                    dtd=arguments["--validate-xml"],
+                    dtd_validation=validate,
+                    network=arguments["--network"],
+                    pprint=False,
+                    xml_pprint=arguments["--pprint"],
+                    from_file=arguments["from-file"],
+                    to_file=arguments["--to-file"],
+                )
+            )
     elif ilang == "mathml":
         parser = MathML2Tex()
-    print(
-        parser.translate(
-            exp,
-            displaystyle=arguments["--dstyle"],
-            dtd=arguments["--validate-xml"],
-            dtd_validation=validate,
-            network=arguments["--network"],
-            pprint=False,
-            xml_pprint=arguments["--pprint"],
-            from_file=arguments["from-file"],
-            to_file=arguments["--to-file"],
+        print(
+            parser.translate(
+                exp,
+                from_file=arguments["from-file"],
+                network=arguments["--network"],
+                to_file=arguments["--to-file"],
+            )
         )
-    )
     sys.exit(0)
