@@ -81,14 +81,22 @@ INFO:Translating...
 py_asciimath: a simple ASCIIMath/MathML/LaTeX converter
 
 Usage:
-  py_asciimath.py <EXP> from <ILANG> to <OLANG> [options]
-  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG)
-                        (-o <OLANG> | --output=OLANG)
+  py_asciimath.py <EXP> from <ILANG> to <OLANG>
                         [options]
-  py_asciimath.py from-file <PATH> from <ILANG> to <OLANG> [options]
-  py_asciimath.py from-file <PATH> (-i <ILANG> | --input=ILANG)
-                                   (-o <OLANG> | --output=OLANG)
-                                   [options]
+  py_asciimath.py <EXP> from <ILANG> (-o <OLANG> | --output=OLANG)
+                        [options]
+  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG) to <OLANG>
+                        [options]
+  py_asciimath.py <EXP> (-i <ILANG> | --input=ILANG) (-o <OLANG> | --output=OLANG)
+                        [options]
+  py_asciimath.py from-file <PATH>  from <ILANG> to <OLANG>
+                                    [options]
+  py_asciimath.py from-file <PATH>  from <ILANG> (-o <OLANG> | --output=OLANG)
+                                    [options]
+  py_asciimath.py from-file <PATH>  (-i <ILANG> | --input=ILANG) to <OLANG>
+                                    [options]
+  py_asciimath.py from-file <PATH>  (-i <ILANG> | --input=ILANG) (-o <OLANG> | --output=OLANG)
+                                    [options]
   py_asciimath.py (-h | --help)
   py_asciimath.py --version
 
