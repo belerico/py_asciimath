@@ -16,27 +16,26 @@ To install the package run `pip install -U --user py-asciimath` or `pip3 install
 ### As python module
 ```python
 from py_asciimath.parser.parser import (
-        ASCIIMath2MathML,
-        ASCIIMath2Tex,
-        MathML2Tex,
-    )
+    ASCIIMath2MathML,
+    ASCIIMath2Tex,
+    MathML2Tex,
+)
 
 
 if __name__ == "__main__":
     print("ASCIIMath to MathML")
     asciimath2mathml = ASCIIMath2MathML(log=False, inplace=True)
     parsed = asciimath2mathml.translate(
-        r"langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2],"
-        r"[rarr 2,int[3(x+1)]dx]:}",
+        r"e^x > 0 forall x in RR",
         dtd="mathml2",
         dtd_validation=True,
         network=True,
         displaystyle=True,
         pprint=False,
-        xml_pprint=False,
+        xml_pprint=True,
         from_file=False,
     )
-    
+
     print(parsed, "\n\nMathML to LaTeX")
     mathml2tex = MathML2Tex()
     parsed = mathml2tex.translate(parsed, network=False, from_file=False,)
@@ -44,13 +43,13 @@ if __name__ == "__main__":
     print(parsed, "\n\nASCIIMath to LaTeX")
     asciimath2tex = ASCIIMath2Tex(log=False, inplace=True)
     parsed = asciimath2tex.translate(
-        r"langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2],"
-        r"[rarr 2,int[3(x+1)]dx]:}",
+        r"e^x > 0 forall x in RR",
         displaystyle=True,
         pprint=False,
         from_file=False,
     )
     print(parsed)
+
 ```
 
 results in:
@@ -61,7 +60,27 @@ INFO:Translating...
 INFO:Validating against remote dtd...
 INFO:Loading dtd and validating...
 <!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
-<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mo>&bigcup;</mo><mo>&Theta;</mo><mo>&Copf;</mo><mo>&Nopf;</mo><mo>&Qopf;</mo><mo>&Ropf;</mo><mo>&Zopf;</mo><mn>1</mn></mtd><mtd><mo>&Rarrtl;</mo><mo>&sdot;</mo><mn>2</mn></mtd></mtr><mtr><mtd><mo>&rarr;</mo><mn>2</mn></mtd><mtd><mo>&Integral;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo/></mrow></mstyle></math> 
+<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <mstyle displaystyle="true">
+    <mrow>
+      <msup>
+        <mrow>
+          <mi>e</mi>
+        </mrow>
+        <mrow>
+          <mi>x</mi>
+        </mrow>
+      </msup>
+    </mrow>
+    <mo>&gt;</mo>
+    <mn>0</mn>
+    <mo>&ForAll;</mo>
+    <mi>x</mi>
+    <mo>&in;</mo>
+    <mo>&Ropf;</mo>
+  </mstyle>
+</math>
+ 
 
 MathML to LaTeX
 INFO:Translating...
@@ -69,11 +88,11 @@ WARNING:Remote DTD found and network is False: replacing with local DTD
 INFO:Validating against local dtd...
 INFO:Loading dtd and validating...
 INFO:Translating...
-$ {\displaystyle \langle \begin{array}{cc}\bigcup \Theta \mathbb{C} \mathbb{N}\mathbb{Q}\mathbb{R} \mathbb{Z}1& \twoheadrightarrowtail \cdot 2\\ \to 2& \int \left[3\left(x+1\right)\right]\mathrm{dx}\end{array}}$ 
+$ {\displaystyle {e}^{x}>0\forall x\in \mathbb{R} }$ 
 
 ASCIIMath to LaTeX
 INFO:Translating...
-\[\left\langle \begin{matrix}\bigcup \Theta \mathbb{C} \mathbb{N} \mathbb{Q} \mathbb{R} \mathbb{Z} 1  &  \twoheadrightarrowtail \cdot 2  \\  \rightarrow 2  &  \int \left[3 \left(x + 1\right)\right] \mathrm{dx}\end{matrix}\right.\]
+\[e^{x} > 0 \forall x \in \mathbb{R}\]
 ```
 
 ### From the command line

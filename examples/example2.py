@@ -9,14 +9,13 @@ if __name__ == "__main__":
     print("ASCIIMath to MathML")
     asciimath2mathml = ASCIIMath2MathML(log=False, inplace=True)
     parsed = asciimath2mathml.translate(
-        r"langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2],"
-        r"[rarr 2,int[3(x+1)]dx]:}",
+        r"e^x > 0 forall x in RR",
         dtd="mathml2",
         dtd_validation=True,
         network=True,
         displaystyle=True,
         pprint=False,
-        xml_pprint=False,
+        xml_pprint=True,
         from_file=False,
     )
 
@@ -27,8 +26,7 @@ if __name__ == "__main__":
     print(parsed, "\n\nASCIIMath to LaTeX")
     asciimath2tex = ASCIIMath2Tex(log=False, inplace=True)
     parsed = asciimath2tex.translate(
-        r"langle [bigcup Theta CC NN QQ RR ZZ 1,twoheadrightarrowtail cdot 2],"
-        r"[rarr 2,int[3(x+1)]dx]:}",
+        r"e^x > 0 forall x in RR",
         displaystyle=True,
         pprint=False,
         from_file=False,
