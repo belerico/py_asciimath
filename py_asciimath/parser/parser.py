@@ -95,10 +95,11 @@ class MathMLParser(object):
             doctype_match = doctype_match[0]
             if (
                 doctype_match.group(2) == "PUBLIC"
-                and not network
-                or doctype_match.group(2) == "SYSTEM"
-                and "http" in doctype_match.group(1)
-            ):
+                or (
+                    doctype_match.group(2) == "SYSTEM"
+                    and "http" in doctype_match.group(1)
+                )
+            ) and not network:
                 logging.warning(
                     "Remote DTD found and network is False: "
                     "replacing with local DTD"
@@ -113,7 +114,7 @@ class MathMLParser(object):
                     )
                     + s[doctype_match.span(1)[1] :]
                 )
-            elif "http" not in doctype_match.group(1) and network:
+            elif doctype_match.group(2) == "SYSTEM" and network:
                 logging.warning(
                     "Local DTD found and network is True: "
                     "no need to bother your ISP"
