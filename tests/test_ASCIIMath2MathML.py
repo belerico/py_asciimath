@@ -74,6 +74,72 @@ class TestASCIIMath2MathML(unittest.TestCase):
             + '/dtd/mathml1/mathml1.dtd">\n<math><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mo>&Integral;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo/></mrow></mstyle></math>',
         )
 
+    def test_asciimath2mathml_xml_fields_ok_1(self):
+        s = ASCIIMath2MathML(
+            inplace=True, log=False, parser="lalr", lexer="contextual",
+        ).translate(
+            "1",
+            dtd="mathml1",
+            dtd_validation=False,
+            network=True,
+            xml_declaration=True,
+            xml_pprint=False,
+        )
+        self.assertEqual(
+            s,
+            "<?xml version='1.0' encoding='UTF-8'?>\n<math><mn>1</mn></math>",
+        )
+
+    def test_asciimath2mathml_xml_fields_ok_2(self):
+        s = ASCIIMath2MathML(
+            inplace=True, log=False, parser="lalr", lexer="contextual",
+        ).translate(
+            "1",
+            dtd="mathml1",
+            dtd_validation=True,
+            network=True,
+            xml_declaration=True,
+            xml_pprint=False,
+        )
+        self.assertEqual(
+            s,
+            "<?xml version='1.0' encoding='UTF-8'?>\n<!DOCTYPE math SYSTEM \"http://www.w3.org/Math/DTD/mathml1/mathml.dtd\">\n<math><mn>1</mn></math>",
+        )
+
+    def test_asciimath2mathml_xml_fields_ok_3(self):
+        s = ASCIIMath2MathML(
+            inplace=True, log=False, parser="lalr", lexer="contextual",
+        ).translate(
+            "1",
+            dtd="mathml2",
+            dtd_validation=True,
+            network=True,
+            xml_declaration=False,
+            xml_pprint=False,
+        )
+        self.assertEqual(
+            s,
+            '<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">\n<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mn>1</mn></math>',
+        )
+
+    def test_asciimath2mathml_xml_fields_ok_3(self):
+        s = ASCIIMath2MathML(
+            inplace=True, log=False, parser="lalr", lexer="contextual",
+        ).translate(
+            "1",
+            dtd="mathml2",
+            dtd_validation=True,
+            network=False,
+            xml_declaration=False,
+            xml_pprint=False,
+        )
+        self.assertEqual(
+            s,
+            '<!DOCTYPE math SYSTEM "'
+            + PROJECT_ROOT
+            + '/dtd/mathml2/mathml2.dtd">\n<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink"><mn>1</mn></math>',
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

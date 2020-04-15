@@ -157,7 +157,7 @@ class UtilsMat(object):
         par_stack = []
         transitions = 0
         i, row_par = cls.get_row_par(s)
-        if i != -1 or row_par == []:
+        if i != -1 and row_par != []:
             for c in s[i:]:
                 # c is a left par
                 if c == row_par[0]:
@@ -349,5 +349,5 @@ class UtilsMat(object):
 
 
 if __name__ == "__main__":
-    s = "\\left[2*[x+n], 3(int x dx)\\right], \\left[sqrt(x), a\\right]"
-    print(UtilsMat.get_latex_mat(s))
+    s = "<mrow><mo>[</mo><mrow><mn>1</mn><mo>,</mo><mo>[</mo><mrow><mn>2</mn></mrow><mo>]</mo></mrow><mo>]</mo></mrow>"
+    print(UtilsMat.check_mat(s))
