@@ -7,15 +7,18 @@ dependencies:
   - attrs
   - black
   - ca-certificates
-  - certifi
   - click
   - entrypoints
   - flake8
+  - icu
   - ld_impl_linux-64
   - libedit
   - libffi
   - libgcc-ng
   - libstdcxx-ng
+  - libxml2
+  - libxslt
+  - lxml
   - mccabe
   - mypy_extensions
   - ncurses
@@ -37,8 +40,13 @@ dependencies:
   - xz
   - zlib
   - pip:
+    - 2to3
     - 3to2
+    - alabaster
+    - alembic
+    - babel
     - bleach
+    - certifi
     - cffi
     - chardet
     - coverage
@@ -47,27 +55,59 @@ dependencies:
     - docopt
     - docutils
     - filelock
+    - flask
+    - flask-heroku
+    - flask-marshmallow
+    - flask-migrate
+    - flask-script
+    - flask-sqlalchemy
     - future
+    - gunicorn
     - idna
+    - imagesize
+    - itsdangerous
     - jeepney
+    - jinja2
     - keyring
     - lark-parser
+    - mako
+    - markupsafe
+    - marshmallow
+    - marshmallow-sqlalchemy
+    - mysql-connector
     - packaging
+    - pillow
     - pkginfo
     - pluggy
     - py
     - pycparser
     - pygments
+    - pymysql
     - pyparsing
+    - python-dateutil
+    - python-dotenv
+    - python-editor
+    - pytz
     - readme-renderer
     - requests
     - requests-toolbelt
+    - rstcheck
     - secretstorage
     - six
+    - snowballstemmer
+    - sphinx
+    - sphinxcontrib-applehelp
+    - sphinxcontrib-devhelp
+    - sphinxcontrib-htmlhelp
+    - sphinxcontrib-jsmath
+    - sphinxcontrib-qthelp
+    - sphinxcontrib-serializinghtml
+    - sqlalchemy
     - tox
     - tqdm
     - twine
     - urllib3
     - virtualenv
     - webencodings
+    - werkzeug
 
