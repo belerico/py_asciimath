@@ -197,7 +197,7 @@ INFO:   items = ['e^{x}', '> 0 \\forall x \\in \\mathbb{R}']
 $e^{x} > 0 \forall x \in \mathbb{R}$
 ```
 
-## Grammar
+## ASCIIMath grammar
 
 The grammar used to parse the input is:
 ```
