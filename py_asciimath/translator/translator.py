@@ -23,33 +23,33 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
 class Translator(object):  # pragma: no cover
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         super(Translator, self).__init__()
 
     def _from_file(self, from_file):
         if os.path.exists(from_file):
             logging.info("Loading file '" + from_file + "'...")
             with open(from_file) as f:
-                s = f.read()
+                exp = f.read()
                 f.close()
-            return s
+            return exp
         else:
             raise FileNotFoundError("File '" + from_file + "' not found")
 
-    def _to_file(self, s, to_file):
+    def _to_file(self, exp, to_file):
         logging.info("Writing translation to '" + to_file + "'...")
         with open(to_file, "w") as f:
-            f.write(s)
+            f.write(exp)
             f.close()
 
-    def _translate(self, s, *args, **kwargs):
+    def _translate(self, exp, **kwargs):
         raise NotImplementedError
 
-    def translate(self, s, from_file=False, to_file=None, *args, **kwargs):
+    def translate(self, exp, from_file=False, to_file=None, **kwargs):
         """Translates an input expression s
 
         Args:
-            s (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             from_file (bool, optional): If `True`, load the string to translate
                 from the file specified by s. Defaults to False.
@@ -60,12 +60,12 @@ class Translator(object):  # pragma: no cover
             str: Translated expression
         """
         if from_file:
-            s = self._from_file(s)
+            exp = self._from_file(exp)
         logging.info("Translating...")
-        s = self._translate(s, *args, **kwargs)
+        exp = self._translate(exp, **kwargs)
         if to_file is not None:
-            self._to_file(s, to_file)
-        return s
+            self._to_file(exp, to_file)
+        return exp
 
 
 class ASCIIMathTranslator(Translator):
@@ -86,8 +86,6 @@ class ASCIIMathTranslator(Translator):
             See `~lark.Lark`. Defaults to True.
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
             Defaults to "lalr".
-        *args: Additional variable length argument list
-            to the `~lark.Lark` class.
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
     """
 
@@ -99,7 +97,6 @@ class ASCIIMathTranslator(Translator):
         log=False,
         inplace=True,
         parser="lalr",
-        *args,
         **kwargs
     ):
         super(ASCIIMathTranslator, self).__init__()
@@ -108,27 +105,25 @@ class ASCIIMathTranslator(Translator):
         self.transformer = transformer
         if inplace:
             kwargs.update({"transformer": transformer})
-        self.parser = Lark(
-            grammar, *args, parser=parser, lexer=lexer, **kwargs
-        )
+        self.parser = Lark(grammar, parser=parser, lexer=lexer, **kwargs)
 
-    def _translate(self, s, pprint=False):
+    def _translate(self, exp, pprint=False):
         if not self.inplace:
-            parsed = self.parser.parse(s)
+            parsed = self.parser.parse(exp)
             if pprint:
                 print(parsed.pretty())
             return self.transformer.transform(parsed)
         else:
-            return self.parser.parse(s)
+            return self.parser.parse(exp)
 
     def translate(
-        self, s, from_file=False, to_file=None, pprint=False, *args, **kwargs
+        self, exp, from_file=False, to_file=None, pprint=False, **kwargs
     ):
-        """Translates an input expression s applying the transformation
+        """Translates an input expression exp applying the transformation
         specified by `self.transformer`
 
         Args:
-            s (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             from_file (bool, optional): If `True`, load the string to translate
                 from the file specified by s. Defaults to False.
@@ -141,7 +136,7 @@ class ASCIIMathTranslator(Translator):
             str: Translated expression
         """
         return super(ASCIIMathTranslator, self).translate(
-            s, from_file=from_file, to_file=to_file, *args, **kwargs
+            exp, from_file=from_file, to_file=to_file, pprint=pprint, **kwargs
         )
 
 
@@ -159,36 +154,33 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
             See `~lark.Lark`. Defaults to True.
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
             Defaults to "lalr".
-        *args: Additional variable length argument list
-            to the `~lark.Lark` class.
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         super(ASCIIMath2Tex, self).__init__(
             asciimath_grammar,
             LatexTransformer(log=kwargs.pop("log", False)),
-            *args,
             **kwargs
         )
 
-    def _translate(self, s, displaystyle=False, pprint=False):
+    def _translate(self, exp, displaystyle=False, pprint=False):
         if displaystyle:
             return (
                 "\\["
-                + super(ASCIIMath2Tex, self)._translate(s, pprint=pprint)
+                + super(ASCIIMath2Tex, self)._translate(exp, pprint=pprint)
                 + "\\]"
             )
         else:
             return (
                 "$"
-                + super(ASCIIMath2Tex, self)._translate(s, pprint=pprint)
+                + super(ASCIIMath2Tex, self)._translate(exp, pprint=pprint)
                 + "$"
             )
 
     def translate(
         self,
-        s,
+        exp,
         displaystyle=False,
         from_file=False,
         pprint=False,
@@ -197,7 +189,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         """Translates an ASCIIMath string to LaTeX
 
         Args:
-            s (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             displaystyle (bool, optional): Add displaystyle attribute.
                 Defaults to False.
@@ -212,7 +204,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
             str: LaTeX translated expression
         """
         return super(ASCIIMath2Tex, self).translate(
-            s,
+            exp,
             displaystyle=displaystyle,
             from_file=from_file,
             pprint=pprint,
@@ -234,22 +226,19 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             See `~lark.Lark`. Defaults to True.
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
             Defaults to "lalr".
-        *args: Additional variable length argument list
-            to the `~lark.Lark` class.
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         super(ASCIIMath2MathML, self).__init__(
             asciimath_grammar,
             MathMLTransformer(log=kwargs.pop("log", False)),
-            *args,
             **kwargs
         )
 
     def _translate(
         self,
-        s,
+        exp,
         displaystyle=False,
         dtd=None,
         dtd_validation=False,
@@ -269,7 +258,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             else:
                 network = False
                 doctype = MathMLParser.get_doctype(dtd, False)
-                logging.warn("No connection available...")
+                logging.warning("No connection available...")
         else:
             doctype = MathMLParser.get_doctype(dtd, False)
         parsed = (
@@ -279,7 +268,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 else "<math>"
             )
             + dstyle.format(
-                super(ASCIIMath2MathML, self)._translate(s, pprint=pprint)
+                super(ASCIIMath2MathML, self)._translate(exp, pprint=pprint)
             )
             + "</math>"
         )
@@ -299,7 +288,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
 
     def translate(
         self,
-        s,
+        exp,
         displaystyle=False,
         dtd=None,
         dtd_validation=False,
@@ -314,7 +303,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         """Translates an ASCIIMath string to MathML
 
         Args:
-            s (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             displaystyle (bool, optional): Add displaystyle attribute.
                 Defaults to False.
@@ -344,7 +333,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             str: MathML translated expression
         """
         return super(ASCIIMath2MathML, self).translate(
-            s,
+            exp,
             displaystyle=displaystyle,
             dtd=dtd,
             dtd_validation=dtd_validation,
@@ -372,18 +361,18 @@ class MathML2Tex(Translator):  # pragma: no cover
         )
         self.transformer = lxml.etree.XSLT(transformer)
 
-    def _translate(self, s, network=False, **kwargs):
+    def _translate(self, exp, network=False, **kwargs):
         if network:
             if not check_connection():
                 network = False
-                logging.warn("No connection available...")
-        mml_version = MathMLParser.get_doctype_version(s)
+                logging.warning("No connection available...")
+        mml_version = MathMLParser.get_doctype_version(exp)
         if mml_version == "1":
             raise NotImplementedError(
                 "Translation from MathML1 is not supported"
             )
         parsed = MathMLParser.parse(
-            s,
+            exp,
             dtd_validation=True,
             network=network,
             resolve_entities=True,
@@ -392,12 +381,12 @@ class MathML2Tex(Translator):  # pragma: no cover
         return str(self.transformer(parsed))
 
     def translate(
-        self, s, from_file=False, network=False, to_file=None, **kwargs
+        self, exp, from_file=False, network=False, to_file=None, **kwargs
     ):
         """Translates a MathML string to LaTeX
 
         Args:
-            s (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             from_file (bool, optional): If `True`, load the string to translate
                 from the file specified by s. Defaults to False.
@@ -412,5 +401,9 @@ class MathML2Tex(Translator):  # pragma: no cover
             str: LaTeX translated expression
         """
         return super(MathML2Tex, self).translate(
-            s, from_file=from_file, network=network, to_file=to_file, **kwargs
+            exp,
+            from_file=from_file,
+            network=network,
+            to_file=to_file,
+            **kwargs
         )
