@@ -1,5 +1,5 @@
 import unittest
-from py_asciimath.parser.parser import ASCIIMath2Tex
+from py_asciimath.translator.translator import ASCIIMath2Tex
 
 
 class TestASCIIMath2Tex(unittest.TestCase):

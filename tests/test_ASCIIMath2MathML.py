@@ -1,7 +1,7 @@
 import unittest
 
 from py_asciimath import PROJECT_ROOT
-from py_asciimath.parser.parser import ASCIIMath2MathML
+from py_asciimath.translator.translator import ASCIIMath2MathML
 
 
 class TestASCIIMath2MathML(unittest.TestCase):

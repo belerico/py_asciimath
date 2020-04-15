@@ -1,5 +1,5 @@
 from py_asciimath import PROJECT_ROOT
-from py_asciimath.parser.parser import (
+from py_asciimath.translator.translator import (
     ASCIIMath2MathML,
     ASCIIMath2Tex,
     MathML2Tex,

@@ -15,7 +15,7 @@ To install the package run `pip install -U --user py-asciimath` or `pip3 install
 
 ### As python module
 ```python
-from py_asciimath.parser.parser import (
+from py_asciimath.translator.translator import (
     ASCIIMath2MathML,
     ASCIIMath2Tex,
     MathML2Tex,
