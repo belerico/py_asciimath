@@ -1,0 +1,20 @@
+[run]
+branch = True
+command_line = 
+    -m unittest discover tests
+omit = 
+    py_asciimath/const.py
+    py_asciimath/__main__.py
+    py_asciimath/py_asciimath.py
+    py_asciimath/parser/parse_lists.py
+    py_asciimath/utils/log.py
+    py_asciimath/grammar/*
+    py_asciimath/parser/*
+    py_asciimath/translation/*
+    */__init__.py
+source =
+    py_asciimath
+
+[report]
+fail_under = 0.8
+show_missing = True
