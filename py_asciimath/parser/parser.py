@@ -280,7 +280,7 @@ class MathMLParser(object):
             dtd_validation=dtd_validation,
             network=network,
             ns_clean=ns_clean,
-            resolve_entities=False,
+            resolve_entities=resolve_entities,
             **kwargs
         )
         return lxml.etree.fromstring(xml, mathml_parser)

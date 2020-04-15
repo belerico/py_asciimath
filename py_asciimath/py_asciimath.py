@@ -31,10 +31,12 @@ Options:
                                 Supported output language: latex, mathml
   --pprint                      Works only with OLANG=mathml. Pretty print
   --to-file=OPATH               Save translation to OPATH file
-  --validate-xml=MathMLDTD      Works only with OLANG=mathml
+  --version                     Show version
+  --xml-declaration             Works only with OLANG=mathml.Add the XML
+                                declaration at the top of the XML document
+  --xml-validate=MathMLDTD      Works only with OLANG=mathml
                                 Validate against a MathML DTD
                                 MathMLDTD can be: mathml1, mathml2 or mathml3
-  --version                     Show version
 """
 from __future__ import (
     absolute_import,
@@ -49,14 +51,15 @@ import sys
 
 from docopt import docopt
 
-from .parser.parser import ASCIIMath2MathML, ASCIIMath2Tex, MathML2Tex
+from . import __version__
+from .translator.translator import ASCIIMath2MathML, ASCIIMath2Tex, MathML2Tex
 
 _supported_ilang = ["asciimath", "mathml"]
 _supported_olang = ["latex", "mathml"]
 
 
 def main():
-    arguments = docopt(__doc__)
+    arguments = docopt(__doc__, version=__version__)
     ilang = (
         arguments["<ILANG>"].lower()
         if arguments["from"]
@@ -96,16 +99,17 @@ def main():
         elif olang == "mathml":
             parser = ASCIIMath2MathML(log=arguments["--log"], inplace=True)
             validate = (
-                True if arguments["--validate-xml"] is not None else False
+                True if arguments["--xml-validate"] is not None else False
             )
             print(
                 parser.translate(
                     exp,
                     displaystyle=arguments["--dstyle"],
-                    dtd=arguments["--validate-xml"],
+                    dtd=arguments["--xml-validate"],
                     dtd_validation=validate,
                     network=arguments["--network"],
                     pprint=False,
+                    xml_declaration=arguments["--xml-declaration"],
                     xml_pprint=arguments["--pprint"],
                     from_file=arguments["from-file"],
                     to_file=arguments["--to-file"],

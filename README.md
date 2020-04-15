@@ -130,10 +130,12 @@ Options:
                                 Supported output language: latex, mathml
   --pprint                      Works only with OLANG=mathml. Pretty print
   --to-file=OPATH               Save translation to OPATH file
-  --validate-xml=MathMLDTD      Works only with OLANG=mathml
+  --version                     Show version
+  --xml-declaration             Works only with OLANG=mathml.Add the XML
+                                declaration at the top of the XML document
+  --xml-validate=MathMLDTD      Works only with OLANG=mathml
                                 Validate against a MathML DTD
                                 MathMLDTD can be: mathml1, mathml2 or mathml3
-  --version                     Show version
 ```
 
 For example, `py_asciimath "sum_(i=1)^n i^3=((n(n+1))/2)^2" from asciimath to latex` prints:

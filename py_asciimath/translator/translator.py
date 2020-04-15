@@ -366,7 +366,6 @@ class MathML2Tex(Translator):  # pragma: no cover
             resolve_entities=True,
             **kwargs
         )
-        logging.info("Translating...")
         return str(self.transformer(parsed))
 
     def translate(
