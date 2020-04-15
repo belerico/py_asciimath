@@ -8,6 +8,8 @@ python:
   - "3.8"
 os:
   - linux
-install: pip install tox-travis
+install: pip install tox-travis coveralls
 script:
   - tox
+after_success:
+  - coveralls
