@@ -80,8 +80,6 @@ class ASCIIMathTranslator(Translator):
             parsed input. See `~lark.Transformer`
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
-        log (bool, optional): If True log the parsing process.
-            Defaults to False.
         inplace (bool, optional): If True, parse the input inplace.
             See `~lark.Lark`. Defaults to True.
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
@@ -94,7 +92,6 @@ class ASCIIMathTranslator(Translator):
         grammar,
         transformer,
         lexer="contextual",
-        log=False,
         inplace=True,
         parser="lalr",
         **kwargs
