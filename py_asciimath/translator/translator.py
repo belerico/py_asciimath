@@ -141,8 +141,6 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
     """Class that handle the translation from ASCIIMath to LaTeX
 
     Args:
-        transformer (lark.Transformer): A transformer instance to transform
-            parsed input. See `~lark.Transformer`
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
@@ -154,10 +152,10 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, log=False, **kwargs):
         super(ASCIIMath2Tex, self).__init__(
             asciimath_grammar,
-            LatexTransformer(log=kwargs.pop("log", False)),
+            LatexTransformer(log=log),
             **kwargs
         )
 
@@ -213,8 +211,6 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
     """Class that handle the translation from ASCIIMath to MathML
 
     Args:
-        transformer (lark.Transformer): A transformer instance to transform
-            parsed input. See `~lark.Transformer`
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
@@ -226,10 +222,10 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, log=False, **kwargs):
         super(ASCIIMath2MathML, self).__init__(
             asciimath_grammar,
-            MathMLTransformer(log=kwargs.pop("log", False)),
+            MathMLTransformer(log=log),
             **kwargs
         )
 
