@@ -46,13 +46,13 @@ class Translator(object):  # pragma: no cover
         raise NotImplementedError
 
     def translate(self, s, from_file=False, to_file=None, *args, **kwargs):
-        """Translates an input expression `s`
+        """Translates an input expression s
 
         Args:
-            s (str): String to translate. If from_file is `True`, then `s`
+            s (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             from_file (bool, optional): If `True`, load the string to translate
-                from the file specified by `s`. Defaults to False.
+                from the file specified by s. Defaults to False.
             to_file (str, optional): If specified, save the translation to
                 `to_file`. Defaults to None.
 
@@ -76,8 +76,8 @@ class ASCIIMathTranslator(Translator):
 
     Args:
         grammar (str): ASCIIMath grammar
-        transformer (lark.Transformer): A transformer to transform parsed
-            input. See `~lark.Transformer`
+        transformer (lark.Transformer): A transformer instance to transform
+            parsed input. See `~lark.Transformer`
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
@@ -121,13 +121,36 @@ class ASCIIMathTranslator(Translator):
         else:
             return self.parser.parse(s)
 
+    def translate(
+        self, s, from_file=False, to_file=None, pprint=False, *args, **kwargs
+    ):
+        """Translates an input expression s applying the transformation
+        specified by `self.transformer`
+
+        Args:
+            s (str): String to translate. If from_file is `True`, then s
+                must represent the file's path
+            from_file (bool, optional): If `True`, load the string to translate
+                from the file specified by s. Defaults to False.
+            to_file (str, optional): If specified, save the translation to
+                `to_file`. Defaults to None.
+            pprint (bool, optional): Abstract Syntax Tree pretty print.
+                Defaults to False.
+
+        Returns:
+            str: Translated expression
+        """
+        return super(ASCIIMathTranslator, self).translate(
+            s, from_file=from_file, to_file=to_file, *args, **kwargs
+        )
+
 
 class ASCIIMath2Tex(ASCIIMathTranslator):
     """Class that handle the translation from ASCIIMath to LaTeX
 
     Args:
-        transformer (lark.Transformer): A transformer to transform parsed
-            input. See `~lark.Transformer`
+        transformer (lark.Transformer): A transformer instance to transform
+            parsed input. See `~lark.Transformer`
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
@@ -174,12 +197,12 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         """Translates an ASCIIMath string to LaTeX
 
         Args:
-            s (str): String to translate. If from_file is `True`, then `s`
+            s (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             displaystyle (bool, optional): Add displaystyle attribute.
                 Defaults to False.
             from_file (bool, optional): If `True`, load the string to translate
-                from the file specified by `s`. Defaults to False.
+                from the file specified by s. Defaults to False.
             pprint (bool, optional): Abstract Syntax Tree pretty print.
                 Defaults to False.
             to_file (str, optional): If specified, save the translation to
@@ -201,8 +224,8 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
     """Class that handle the translation from ASCIIMath to MathML
 
     Args:
-        transformer (lark.Transformer): A transformer to transform parsed
-            input. See `~lark.Transformer`
+        transformer (lark.Transformer): A transformer instance to transform
+            parsed input. See `~lark.Transformer`
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
@@ -291,7 +314,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         """Translates an ASCIIMath string to MathML
 
         Args:
-            s (str): String to translate. If from_file is `True`, then `s`
+            s (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             displaystyle (bool, optional): Add displaystyle attribute.
                 Defaults to False.
@@ -302,7 +325,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 the DTD version specified by `dtd`.
                 Defaults to False.
             from_file (bool, optional): If `True`, load the string to translate
-                from the file specified by `s`. Defaults to False.
+                from the file specified by s. Defaults to False.
             network (bool, optional): If `True` validate the output against
                 a remote DTD.
                 Defaults to False.
@@ -374,10 +397,10 @@ class MathML2Tex(Translator):  # pragma: no cover
         """Translates a MathML string to LaTeX
 
         Args:
-            s (str): String to translate. If from_file is `True`, then `s`
+            s (str): String to translate. If from_file is `True`, then s
                 must represent the file's path
             from_file (bool, optional): If `True`, load the string to translate
-                from the file specified by `s`. Defaults to False.
+                from the file specified by s. Defaults to False.
             network (bool, optional): If `True` validate the output against
                 a remote DTD.
                 Defaults to False.
