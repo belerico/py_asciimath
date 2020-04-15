@@ -57,7 +57,7 @@ class MathMLParser(object):
             logging.info("Encoding from XML declaration: " + encoding)
         else:
             encoding = None
-            logging.warn(
+            logging.warning(
                 "No XML declaration with 'encoding' attribute set: "
                 "default encoding to None"
             )
@@ -93,23 +93,33 @@ class MathMLParser(object):
             raise Exception("Multiple DOCTYPE declarations found")
         if doctype_match != []:
             doctype_match = doctype_match[0]
-            if doctype_match.group(2) == "PUBLIC" and not network:
-                logging.warn(
+            if (
+                doctype_match.group(2) == "PUBLIC"
+                and not network
+                or doctype_match.group(2) == "SYSTEM"
+                and "http" in doctype_match.group(1)
+            ):
+                logging.warning(
                     "Remote DTD found and network is False: "
                     "replacing with local DTD"
                 )
+                mml_version = doctype_match.group(3)
                 s = (
                     s[: doctype_match.span(1)[0]]
-                    + cls.get_doctype("mathml" + doctype_match.group(3), False)
+                    + cls.get_doctype(
+                        "mathml"
+                        + (mml_version if mml_version is not None else "1"),
+                        False,
+                    )
                     + s[doctype_match.span(1)[1] :]
                 )
             elif "http" not in doctype_match.group(1) and network:
-                logging.warn(
+                logging.warning(
                     "Local DTD found and network is True: "
                     "no need to bother your ISP"
                 )
         else:
-            logging.warn(
+            logging.warning(
                 "No DTD declaration found: "
                 "set to local {} DTD".format(
                     dtd if dtd is not None else "mathml3"
@@ -268,7 +278,8 @@ class MathMLParser(object):
         if encoding is None:
             logging.warning("The XML encoding is None: default to UTF-8")
             encoding = "UTF-8"
-        xml = MathMLParser.set_doctype(xml, network, dtd=dtd)
+        if dtd_validation:
+            xml = MathMLParser.set_doctype(xml, network, dtd=dtd)
         xml = xml.encode(encoding)
         if dtd_validation:
             if network:
