@@ -9,10 +9,6 @@ import logging
 import re
 import socket
 
-import lxml.etree
-
-from .. import PROJECT_ROOT
-
 # # from future import standard_library
 
 # # standard_library.install_aliases()
@@ -73,57 +69,6 @@ def check_connection(url="www.google.com", timeout=10):  # pragma: no cover
     except (httplib.HTTPException, socket.error):
         conn.close()
         return False
-
-
-def get_dtd(dtd, network):
-    dtd_head = "<!DOCTYPE math {}>"
-    if dtd is None or dtd.lower() == "mathml3":
-        dtd_head = dtd_head.format(
-            'PUBLIC "-//W3C//DTD MathML 3.0//EN" '
-            + '"http://www.w3.org/Math/DTD/mathml3/mathml3.dtd"'
-            if network
-            else "SYSTEM " + '"' + PROJECT_ROOT + '/dtd/mathml3/mathml3.dtd"'
-        )
-    elif dtd.lower() == "mathml1":
-        dtd_head = dtd_head.format(
-            "SYSTEM "
-            + (
-                '"http://www.w3.org/Math/DTD/mathml1/mathml.dtd"'
-                if network
-                else '"' + PROJECT_ROOT + '/dtd/mathml1/mathml1.dtd"'
-            )
-        )
-    elif dtd.lower() == "mathml2":
-        dtd_head = dtd_head.format(
-            'PUBLIC "-//W3C//DTD MathML 2.0//EN" '
-            + '"http://www.w3.org/Math/DTD/mathml2/mathml2.dtd"'
-            if network
-            else "SYSTEM " + '"' + PROJECT_ROOT + '/dtd/mathml2/mathml2.dtd"'
-        )
-    else:
-        raise NotImplementedError(
-            "DTD validation only against MathML DTD 1, 2 or 3"
-        )
-    return dtd_head
-
-
-def validate_dtd(
-    xml, dtd_validation, network, resolve_entities=False
-):  # pragma: no cover
-    if dtd_validation:
-        if network:
-            logging.info("Validating against remote dtd...")
-        else:
-            logging.info("Validating against local dtd...")
-        logging.info("Loading dtd and validating...")
-    mathml_parser = lxml.etree.XMLParser(
-        dtd_validation=dtd_validation,
-        no_network=(not network),
-        load_dtd=True,
-        ns_clean=True,
-        resolve_entities=resolve_entities,
-    )
-    return lxml.etree.fromstring(xml, mathml_parser)
 
 
 def encapsulate_mrow(s):
