@@ -5,7 +5,7 @@ py_asciimath is a simple yet powerful Python module that:
 * converts an ASCIIMath string to LaTeX or MathML
 * converts a MathML string to LaTeX (the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/). Please report any unexpected behavior)
 * exposes a single translation method `translate(exp, **kwargs)`, which semantic depends on the py_asciimath translator one wish to use. See the [`translator` module](./py_asciimath/translator/translator.py) or the [examples](./examples/example2.py) for more info
-* exposes a [MathML parser](py_asciimath/parser/parser.py)
+* exposes a [MathML parser](./py_asciimath/parser/parser.py)
 
 ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/. MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html. LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.
 
