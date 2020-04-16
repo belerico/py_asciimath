@@ -255,7 +255,7 @@ that is:
 Since `L` and `R` can be any left or right parenthesis, and every matrices must have the same number of columns, to render a system of equation one can write something like `{[(root n x)/(x) <= 4], [x^2=e^x]:}`.  
 On the other hand a matrix can be somenthing like `[[(root n x)/(x) <= 4, int x dx], [x^2=e^x, lim_(x to infty) 1 / (x^2)]]`.
 
-## Rendering (LaTeX semantics)
+## Rendering (LaTeX)
 
 A parsed ASCIIMath string is rendered as follows:
 
@@ -277,7 +277,7 @@ Useless delimiters are automatically removed in expressions like:
   
 If you want them to be rendered, you have to double them, for example: `((x+y))/2` or `{: (x+y) :}/2`.
 
-## Rendering (MathML semantics)
+## Rendering (MathML)
 
 The translation follows the MathML specification at https://www.w3.org/TR/MathML3/.
 

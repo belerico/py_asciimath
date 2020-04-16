@@ -14,6 +14,13 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
 class Translator(metaclass=ABCMeta):
+    """Abstract Translator class
+
+    Abstract class of type Translator. Every subclass must implement
+    the `_translate(self, exp, **kwargs)` method in order to
+    correctly expose the `translate(exp, **kwargs)` method
+    """
+
     def _from_file(self, from_file):
         if os.path.exists(from_file):
             logging.info("Loading file '" + from_file + "'...")
