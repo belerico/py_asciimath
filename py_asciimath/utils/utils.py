@@ -137,7 +137,7 @@ class UtilsMat(object):
             s (str): Input string to be matrix-checked
 
         Returns:
-            bool, list: `True`, [left_par, right_par] if the string s
+            bool, list: True, [left_par, right_par] if the string s
                 has a matrix-like structure; False, [] otherwise
         """
 

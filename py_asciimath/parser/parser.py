@@ -258,6 +258,8 @@ class MathMLParser(object):
 
         Args:
             xml (str): String representing a MathML XML.
+            dtd (str): MathML DTD type. Must be on of the following:
+                `mathml1`, `mathml2` or `mathml3`
             dtd_validation (bool, optional): Validate XML against DTD during
                 parsing. Defaults to True.
             network (bool, optional): Validate against remote DTD.

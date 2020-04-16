@@ -54,12 +54,12 @@ def main():
     ilang = (
         arguments["<ILANG>"].lower()
         if arguments["from"]
-        else arguments["--input"]
+        else arguments["--input"].lower()
     )
     olang = (
         arguments["<OLANG>"].lower()
         if arguments["to"]
-        else arguments["--output"]
+        else arguments["--output"].lower()
     )
     if ilang == olang:
         print("Same input and output language. Nothing to do")

@@ -45,9 +45,9 @@ class Translator(metaclass=ABCMeta):
         """Translates an input expression s
 
         Args:
-            exp (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is True, then s
                 must represent the file's path
-            from_file (bool, optional): If `True`, load the string to translate
+            from_file (bool, optional): If True, load the string to translate
                 from the file specified by s. Defaults to False.
             to_file (str, optional): If specified, save the translation to
                 `to_file`. Defaults to None.
@@ -116,9 +116,9 @@ class ASCIIMathTranslator(Translator):
         specified by `self.transformer`
 
         Args:
-            exp (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is True, then s
                 must represent the file's path
-            from_file (bool, optional): If `True`, load the string to translate
+            from_file (bool, optional): If True, load the string to translate
                 from the file specified by s. Defaults to False.
             to_file (str, optional): If specified, save the translation to
                 `to_file`. Defaults to None.
@@ -178,11 +178,11 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         """Translates an ASCIIMath string to LaTeX
 
         Args:
-            exp (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is True, then s
                 must represent the file's path
             displaystyle (bool, optional): Add displaystyle attribute.
                 Defaults to False.
-            from_file (bool, optional): If `True`, load the string to translate
+            from_file (bool, optional): If True, load the string to translate
                 from the file specified by s. Defaults to False.
             pprint (bool, optional): Abstract Syntax Tree pretty print.
                 Defaults to False.
@@ -295,19 +295,19 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         """Translates an ASCIIMath string to MathML
 
         Args:
-            exp (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is True, then s
                 must represent the file's path
             displaystyle (bool, optional): Add displaystyle attribute.
                 Defaults to False.
             dtd (str, optional): MathML DTD version to validate the output
                 against. It can be: `mathml1`, `mathml2` or `mathml3`.
                 Defaults to None.
-            dtd_validation (bool, optional): If `True` validate output against
+            dtd_validation (bool, optional): If True validate output against
                 the DTD version specified by `dtd`.
                 Defaults to False.
-            from_file (bool, optional): If `True`, load the string to translate
+            from_file (bool, optional): If True, load the string to translate
                 from the file specified by s. Defaults to False.
-            network (bool, optional): If `True` validate the output against
+            network (bool, optional): If True validate the output against
                 a remote DTD.
                 Defaults to False.
             output (str, optional): Output mode: `string` to return the string
@@ -382,11 +382,11 @@ class MathML2Tex(Translator):  # pragma: no cover
         """Translates a MathML string to LaTeX
 
         Args:
-            exp (str): String to translate. If from_file is `True`, then s
+            exp (str): String to translate. If from_file is True, then s
                 must represent the file's path
-            from_file (bool, optional): If `True`, load the string to translate
+            from_file (bool, optional): If True, load the string to translate
                 from the file specified by s. Defaults to False.
-            network (bool, optional): If `True` validate the output against
+            network (bool, optional): If True validate the output against
                 a remote DTD.
                 Defaults to False.
             to_file (str, optional): If specified, save the translation to
