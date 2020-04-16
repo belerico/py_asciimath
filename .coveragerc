@@ -9,7 +9,6 @@ omit =
     py_asciimath/parser/parse_lists.py
     py_asciimath/utils/log.py
     py_asciimath/grammar/*
-    py_asciimath/parser/*
     py_asciimath/translation/*
     */__init__.py
 source =

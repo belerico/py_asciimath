@@ -243,15 +243,9 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
         else:
             dstyle = "{}"
-        if network:  # pragma: no cover
-            if check_connection():
-                doctype = MathMLParser.get_doctype(dtd, True)
-            else:
-                network = False
-                doctype = MathMLParser.get_doctype(dtd, False)
-                logging.warning("No connection available...")
-        else:
-            doctype = MathMLParser.get_doctype(dtd, False)
+        if network and not check_connection():
+            network = False
+            logging.warning("No connection available...")
         parsed = (
             (
                 '<math xmlns="http://www.w3.org/1998/Math/MathML">'
@@ -273,11 +267,11 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
                 parsed, dtd, dtd_validation, network, **kwargs
             )
             if output == "string":
-                encoding = parsed.getroottree().docinfo.encoding
+                parsed = parsed.getroottree()
+                encoding = parsed.docinfo.encoding
                 parsed = lxml.etree.tostring(
                     parsed,
                     pretty_print=xml_pprint,
-                    doctype=(doctype if dtd_validation else None),
                     xml_declaration=xml_declaration,
                     encoding=encoding,
                 ).decode(encoding)
@@ -365,10 +359,9 @@ class MathML2Tex(Translator):  # pragma: no cover
         self.transformer = lxml.etree.XSLT(transformer)
 
     def _translate(self, exp, network=False, **kwargs):
-        if network:
-            if not check_connection():
-                network = False
-                logging.warning("No connection available...")
+        if network and not check_connection():
+            network = False
+            logging.warning("No connection available...")
         mml_version = MathMLParser.get_doctype_version(exp)
         if mml_version == "1":
             raise NotImplementedError(

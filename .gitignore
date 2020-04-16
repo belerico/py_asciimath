@@ -1,6 +1,9 @@
 # Exclude docs
 docs/*
 
+# Exclude all generated .xml files
+*.xml
+
 # Exclude main.py
 main.py
 

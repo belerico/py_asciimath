@@ -11,13 +11,13 @@ logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 class MathMLParser(object):
 
     xml_decl_pattern = re.compile(
-        r"(<\?xml.*?(encoding=(?:'|\")(.*?)(?:'|\"))?\?>)"
+        r"(\s*)(<\?xml.*?(encoding=(?:'|\")(.*?)(?:'|\"))?\?>)"
     )
     doctype_pattern = re.compile(
         r"(<!DOCTYPE math ([A-Z]+).*?mathml(\d)?\.dtd\">)", re.MULTILINE
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pragma: no cover
         super(MathMLParser, self).__init__()
 
     @classmethod
@@ -38,13 +38,16 @@ class MathMLParser(object):
         Returns:
             str: Encoding of the XML document
         """
-        xml_decl_match = re.match(cls.xml_decl_pattern, s)
-        if xml_decl_match is not None:
-            if xml_decl_match.span(1)[0] != 0:
+        xml_decl_match = list(re.finditer(cls.xml_decl_pattern, s))
+        if len(xml_decl_match) > 1:
+            raise Exception("Multiple XML declarations found")
+        elif len(xml_decl_match) == 1:
+            xml_decl_match = xml_decl_match[0]
+            if xml_decl_match.span()[0] != 0:
                 raise Exception(
                     "XML declaration must be at the beginning of the file"
                 )
-            encoding = xml_decl_match.group(3)
+            encoding = xml_decl_match.group(4)
             logging.info("Encoding from XML declaration: " + encoding)
         else:
             encoding = None
@@ -82,7 +85,7 @@ class MathMLParser(object):
         doctype_match = list(re.finditer(cls.doctype_pattern, s))
         if len(doctype_match) > 1:
             raise Exception("Multiple DOCTYPE declarations found")
-        if doctype_match != []:
+        elif doctype_match != []:
             doctype_match = doctype_match[0]
             if (
                 doctype_match.group(2) == "PUBLIC"
@@ -111,21 +114,26 @@ class MathMLParser(object):
                     "no need to bother your ISP"
                 )
         else:
+            dtd = dtd if dtd is not None else "mathml3"
             logging.warning(
                 "No DTD declaration found: "
-                "set to local {} DTD".format(
-                    dtd if dtd is not None else "mathml3"
+                "set to {} {} DTD".format(
+                    "remote" if network else "local", dtd
                 )
             )
-            xml_decl_match = re.match(cls.xml_decl_pattern, s)
-            if xml_decl_match is None:
+            xml_decl_match = list(re.finditer(cls.xml_decl_pattern, s))
+            if len(xml_decl_match) > 1:
+                raise Exception("Multiple XML declarations found")
+            elif len(xml_decl_match) == 1:
+                xml_decl_match = xml_decl_match[0]
+                if xml_decl_match.span()[0] != 0:
+                    raise Exception(
+                        "XML declaration must be at the beginning of the file"
+                    )
+                start = xml_decl_match.span()[1]
+            else:
                 start = 0
-            else:
-                start = xml_decl_match.span(1)[1]
-            if dtd is not None:
-                doctype = cls.get_doctype(dtd, network)
-            else:
-                doctype = cls.get_doctype("mathml3", network)
+            doctype = cls.get_doctype(dtd, network)
             s = s[:start] + doctype + s[start:]
         return s
 
@@ -211,7 +219,7 @@ class MathMLParser(object):
         ns_clean=True,
         resolve_entities=False,
         **kwargs
-    ):
+    ):  # pragma: no cover
         """Create a MathML XML parser
 
         Args:
@@ -226,7 +234,7 @@ class MathMLParser(object):
             **kwargs: Additional ~lxml.extree.XMLParser options
 
         Returns:
-            str: Parsed and possibly validated MathML XML
+            lxml.etree.XMLParser: MathML parser following the specifications
         """
         return lxml.etree.XMLParser(
             dtd_validation=dtd_validation,
