@@ -64,7 +64,7 @@ ASCIIMath to MathML
 INFO:Translating...
 WARNING:No XML declaration with 'encoding' attribute set: default encoding to None
 WARNING:The XML encoding is None: default to UTF-8
-WARNING:No DTD declaration found: set to local mathml2 DTD
+WARNING:No DTD declaration found: set to remote mathml2 DTD
 INFO:Loading dtd and validating...
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
