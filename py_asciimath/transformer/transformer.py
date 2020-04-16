@@ -1,15 +1,7 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 import logging
 import re
 from functools import wraps
 
-# from future import standard_library
 from lark import Transformer
 
 from ..translation.latex import binary_functions as latex_bin
@@ -18,9 +10,9 @@ from ..translation.latex import right_parenthesis as latex_right
 from ..translation.latex import smb as latex_smb
 from ..translation.latex import unary_functions as latex_una
 from ..translation.mathml import binary_functions as mathml_bin
+from ..translation.mathml import colors
 from ..translation.mathml import left_parenthesis as mathml_left
 from ..translation.mathml import right_parenthesis as mathml_right
-from ..translation.mathml import colors
 from ..translation.mathml import smb as mathml_smb
 from ..translation.mathml import unary_functions as mathml_una
 from ..utils.log import Log
@@ -206,7 +198,7 @@ class LatexTransformer(ASCIIMathTransformer):
 
     @ASCIIMathTransformer.log
     def q_str(self, items):
-        return "\\text{" + items[0] + "}"
+        return "\\text{" + items[0].strip('"') + "}"
 
 
 class MathMLTransformer(ASCIIMathTransformer):
@@ -316,8 +308,8 @@ class MathMLTransformer(ASCIIMathTransformer):
         binary = mathml_bin[concat(items[0])]
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
-        if concat(items[1]) in colors:
-            s = binary.format(items[1], encapsulate_mrow(items[2]))
+        if concat(items[1][6:-7]) in colors:
+            s = binary.format(items[1][6:-7], encapsulate_mrow(items[2]))
         elif items[0] != "root":
             s = binary.format(
                 encapsulate_mrow(items[1]), encapsulate_mrow(items[2]),
@@ -346,4 +338,4 @@ class MathMLTransformer(ASCIIMathTransformer):
 
     @ASCIIMathTransformer.log
     def q_str(self, items):
-        return "<mtext>" + items[0] + "</mtext>"
+        return "<mtext>" + items[0].strip('"') + "</mtext>"

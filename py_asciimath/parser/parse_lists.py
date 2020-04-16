@@ -1,13 +1,8 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
+
 
 import logging
 
-# from future import standard_library
+
 from lark import Lark, Token, Transformer
 
 from ..utils.log import Log
@@ -56,7 +51,7 @@ class Transformer(Transformer):
     @log
     def mat(self, items):
         max_lvl = self.get_level(items, 0)
-        print("LEVEL", max_lvl)
+        print(("LEVEL", max_lvl))
         if max_lvl > 1:
             return ["["] + items + ["]"]
         else:

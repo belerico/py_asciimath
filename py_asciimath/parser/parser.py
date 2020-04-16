@@ -1,10 +1,3 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 import logging
 import re
 
@@ -13,8 +6,6 @@ import lxml.etree
 from .. import PROJECT_ROOT
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
-
-# standard_library.install_aliases()
 
 
 class MathMLParser(object):
@@ -132,9 +123,9 @@ class MathMLParser(object):
             else:
                 start = xml_decl_match.span(1)[1]
             if dtd is not None:
-                doctype = cls.get_doctype(dtd, False)
+                doctype = cls.get_doctype(dtd, network)
             else:
-                doctype = cls.get_doctype("mathml3", False)
+                doctype = cls.get_doctype("mathml3", network)
             s = s[:start] + doctype + s[start:]
         return s
 

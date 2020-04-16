@@ -1,18 +1,7 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 from itertools import islice
 
 from ..const import get_symbols_for
 from ..utils.utils import alias_string
-
-# # from future import standard_library
-
-# # standard_library.install_aliases()
 
 unary_functions = get_symbols_for("unary_functions", None)
 binary_functions = get_symbols_for("binary_functions", None)

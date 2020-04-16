@@ -1,17 +1,7 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 import logging
 import re
 import socket
 
-# # from future import standard_library
-
-# # standard_library.install_aliases()
 try:
     import http.client as httplib
 except ImportError:
@@ -348,6 +338,6 @@ class UtilsMat(object):
             return s
 
 
-if __name__ == "__main__":
-    s = "<mrow><mo>[</mo><mrow><mn>1</mn><mo>,</mo><mo>[</mo><mrow><mn>2</mn></mrow><mo>]</mo></mrow><mo>]</mo></mrow>"
+if __name__ == "__main__":  # pragma: no cover
+    s = "[1,2],[1,2,3]"
     print(UtilsMat.check_mat(s))

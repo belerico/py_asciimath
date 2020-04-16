@@ -1,18 +1,9 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 import logging
 import os
+from abc import ABCMeta, abstractmethod
 
 import lxml.etree
-
-# from future import standard_library
 from lark import Lark
-
 from .. import PROJECT_ROOT
 from ..grammar.asciimath_grammar import asciimath_grammar
 from ..parser.parser import MathMLParser
@@ -22,10 +13,7 @@ from ..utils.utils import check_connection
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
-class Translator(object):  # pragma: no cover
-    def __init__(self, **kwargs):
-        super(Translator, self).__init__()
-
+class Translator(metaclass=ABCMeta):
     def _from_file(self, from_file):
         if os.path.exists(from_file):
             logging.info("Loading file '" + from_file + "'...")
@@ -42,8 +30,9 @@ class Translator(object):  # pragma: no cover
             f.write(exp)
             f.close()
 
+    @abstractmethod
     def _translate(self, exp, **kwargs):
-        raise NotImplementedError
+        pass
 
     def translate(self, exp, from_file=False, to_file=None, **kwargs):
         """Translates an input expression s
@@ -241,7 +230,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
     ):
         if output not in self.__output:
             raise NotImplementedError(
-                "Possible output are: " + ",".join(self.__output)
+                "Possible output are: " + ", ".join(self.__output)
             )
         if displaystyle:
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'

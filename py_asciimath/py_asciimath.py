@@ -38,15 +38,6 @@ Options:
                                 Validate against a MathML DTD
                                 MathMLDTD can be: mathml1, mathml2 or mathml3
 """
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
-# from future import standard_library
-# standard_library.install_aliases()
 import sys
 
 from docopt import docopt
@@ -74,10 +65,10 @@ def main():
         print("Same input and output language. Nothing to do")
         sys.exit(0)
     elif ilang not in _supported_ilang:
-        print("Supported <ILANG>: 'asciimath', 'mathml'", file=sys.stderr)
+        print("Supported <ILANG>: 'asciimath', 'mathml'")
         sys.exit(1)
     elif olang not in _supported_olang:
-        print("Supported <OLANG>: 'latex', 'mathml'", file=sys.stderr)
+        print("Supported <OLANG>: 'latex', 'mathml'")
         sys.exit(1)
     exp = (
         "".join(arguments["<PATH>"])

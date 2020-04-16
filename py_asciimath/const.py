@@ -27,7 +27,7 @@ binary_functions = {
     '"underset"': {"latex": "\\underset", "mathml": "<munder>{}{}</munder>"},
     '"color"': {
         "latex": "\\textcolor",
-        "mathml": "<mstyle mathcolor='{}'><mrow><mi>{}</mi></mrow></mstyle>",
+        "mathml": "<mstyle mathcolor='{}'>{}</mstyle>",
     },
 }
 
@@ -136,7 +136,7 @@ operation_symbols = {
     '"***"': {"latex": "\\star", "mathml": "&Star;"},
     '"star"': {"latex": "\\star", "mathml": "&Star;"},
     '"//"': {"latex": "/", "mathml": "/"},
-    r'/\\/': {"latex": "\\setminus", "mathml": "&setminus;"},
+    r"/\\/": {"latex": "\\setminus", "mathml": "&setminus;"},
     '"setminus"': {"latex": "\\setminus", "mathml": "&setminus;"},
     '"xx"': {"latex": "\\times", "mathml": "&times;"},
     '"times"': {"latex": "\\times", "mathml": "&times;"},
@@ -381,7 +381,7 @@ arrows = {
 }
 
 colors = {
-    # '"red"': {"latex": "red", "mathml": "red"},
+    '"red"': {"latex": "red", "mathml": "red"},
 }
 
 misc_symbols = {
@@ -420,7 +420,7 @@ misc_symbols = {
     '"/_"': {"latex": "\\angle", "mathml": "&angle;"},
     '"angle"': {"latex": "\\angle", "mathml": "&angle;"},
     '"frown"': {"latex": "\\frown", "mathml": "&frown;"},
-    r'/_\\/': {"latex": "\\triangle", "mathml": "&bigtriangleup;"},
+    r"/_\\/": {"latex": "\\triangle", "mathml": "&bigtriangleup;"},
     '"triangle"': {"latex": "\\triangle", "mathml": "&bigtriangleup;"},
     '"diamond"': {"latex": "\\diamond", "mathml": "&diamond;"},
     '"square"': {"latex": "\\square", "mathml": "&square;"},

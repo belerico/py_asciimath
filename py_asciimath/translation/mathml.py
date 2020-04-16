@@ -1,15 +1,4 @@
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
-
 from ..const import get_symbols_for
-
-# # from future import standard_library
-
-# # standard_library.install_aliases()
 
 unary_functions = get_symbols_for("unary_functions", "mathml")
 binary_functions = get_symbols_for("binary_functions", "mathml")

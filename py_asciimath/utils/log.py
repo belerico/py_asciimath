@@ -5,19 +5,14 @@
 # function from the logging module. A second decorator '@logdebug' is
 # provided that uses 'logging.debug' as the logger.
 
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals,
-)
+
 
 from collections import OrderedDict
 from functools import wraps
 from inspect import getcallargs
 from itertools import chain
 
-# from future import standard_library
+
 
 from ..utils.utils import flatten
 

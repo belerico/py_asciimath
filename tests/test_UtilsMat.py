@@ -1,4 +1,5 @@
 import unittest
+
 from py_asciimath.utils.utils import UtilsMat
 
 
@@ -57,6 +58,10 @@ class TestUtilsMat(unittest.TestCase):
 
     def test_check_mat_fail_9(self):
         b, _ = UtilsMat.check_mat("[][]")
+        self.assertFalse(b)
+
+    def test_check_mat_fail_10(self):
+        b, _ = UtilsMat.check_mat("[]")
         self.assertFalse(b)
 
     def test_get_mat_ok_1(self):

@@ -1,4 +1,5 @@
 import unittest
+
 from py_asciimath.translator.translator import ASCIIMath2Tex
 
 
@@ -97,6 +98,20 @@ class TestASCIIMath2Tex(unittest.TestCase):
             r"&  \int \left[3 \left(x + 1\right)\right] "
             r"\mathrm{dx}\end{matrix}\right.$",
         )
+
+    def test_asciimath2tex_ok_8(self):
+        parser = ASCIIMath2Tex(log=False)
+        s = parser.translate("norm(x*y)<=norm(x)*norm(y)")
+        self.assertEqual(
+            s,
+            r"$\left\lVert x \cdot y \right\rVert \le "
+            r"\left\lVert x \right\rVert \cdot \left\lVert y \right\rVert$",
+        )
+
+    def test_asciimath2tex_ok_9(self):
+        parser = ASCIIMath2Tex(log=False)
+        s = parser.translate('A \\ B "setminus"')
+        self.assertEqual(s, r"$A \setminus B \text{setminus}$")
 
 
 if __name__ == "__main__":
