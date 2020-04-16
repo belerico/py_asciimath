@@ -10,13 +10,16 @@ if __name__ == "__main__":
     asciimath2mathml = ASCIIMath2MathML(log=False, inplace=True)
     parsed = asciimath2mathml.translate(
         r"e^x > 0 forall x in RR",
+        displaystyle=True,
         dtd="mathml2",
         dtd_validation=True,
-        network=True,
-        displaystyle=True,
-        pprint=False,
-        xml_pprint=True,
         from_file=False,
+        output="string",
+        network=True,
+        pprint=False,
+        to_file=None,
+        xml_declaration=True,
+        xml_pprint=True,
     )
 
     print(parsed, "\n\nMathML to LaTeX")
@@ -28,7 +31,7 @@ if __name__ == "__main__":
     parsed = asciimath2tex.translate(
         r"e^x > 0 forall x in RR",
         displaystyle=True,
-        pprint=False,
         from_file=False,
+        pprint=False,
     )
     print(parsed)

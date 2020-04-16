@@ -284,10 +284,6 @@ class MathMLParser(object):
             xml = MathMLParser.set_doctype(xml, network, dtd=dtd)
         xml = xml.encode(encoding)
         if dtd_validation:
-            if network:
-                logging.info("Validating against remote dtd...")
-            else:
-                logging.info("Validating against local dtd...")
             logging.info("Loading dtd and validating...")
         mathml_parser = MathMLParser.get_parser(
             dtd_validation=dtd_validation,

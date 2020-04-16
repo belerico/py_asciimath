@@ -1,9 +1,11 @@
 # py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![Coverage Status](https://coveralls.io/repos/github/belerico/py_asciimath/badge.svg?branch=master)](https://coveralls.io/github/belerico/py_asciimath?branch=master) [![PyPI](https://img.shields.io/pypi/v/py_asciimath?color=light%20green)](https://pypi.org/project/py-asciimath/0.2.2/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py_asciimath)](https://www.python.org/)
 
-py_asciimath is a simple yet powerful Python module that can:
+py_asciimath is a simple yet powerful Python module that:
 
-* convert an ASCIIMath string to LaTeX or MathML
-* convert a MathML string to LaTeX (the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/). Please report any unexpected behavior)
+* converts an ASCIIMath string to LaTeX or MathML
+* converts a MathML string to LaTeX (the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/). Please report any unexpected behavior)
+* exposes a single translation method `translate(exp, **kwargs)`, which semantic depends on the py_asciimath translator one wish to use. See the [`translator` module](./py_asciimath/translator/translator.py) or the [examples](./examples/example2.py) for more info
+* exposes a [MathML parser](py_asciimath/parser/parser.py)
 
 ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/. MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html. LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.
 
@@ -27,13 +29,16 @@ if __name__ == "__main__":
     asciimath2mathml = ASCIIMath2MathML(log=False, inplace=True)
     parsed = asciimath2mathml.translate(
         r"e^x > 0 forall x in RR",
+        displaystyle=True,
         dtd="mathml2",
         dtd_validation=True,
-        network=True,
-        displaystyle=True,
-        pprint=False,
-        xml_pprint=True,
         from_file=False,
+        output="string",
+        network=True,
+        pprint=False,
+        to_file=None,
+        xml_declaration=True,
+        xml_pprint=True,
     )
 
     print(parsed, "\n\nMathML to LaTeX")
@@ -45,8 +50,8 @@ if __name__ == "__main__":
     parsed = asciimath2tex.translate(
         r"e^x > 0 forall x in RR",
         displaystyle=True,
-        pprint=False,
         from_file=False,
+        pprint=False,
     )
     print(parsed)
 
@@ -57,8 +62,11 @@ results in:
 ```
 ASCIIMath to MathML
 INFO:Translating...
-INFO:Validating against remote dtd...
+WARNING:No XML declaration with 'encoding' attribute set: default encoding to None
+WARNING:The XML encoding is None: default to UTF-8
+WARNING:No DTD declaration found: set to local mathml2 DTD
 INFO:Loading dtd and validating...
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
 <math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
   <mstyle displaystyle="true">
@@ -84,10 +92,9 @@ INFO:Loading dtd and validating...
 
 MathML to LaTeX
 INFO:Translating...
+INFO:Encoding from XML declaration: UTF-8
 WARNING:Remote DTD found and network is False: replacing with local DTD
-INFO:Validating against local dtd...
 INFO:Loading dtd and validating...
-INFO:Translating...
 $ {\displaystyle {e}^{x}>0\forall x\in \mathbb{R} }$ 
 
 ASCIIMath to LaTeX
