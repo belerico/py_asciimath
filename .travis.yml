@@ -1,14 +1,21 @@
 dist: xenial
-language: python
-python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
-os:
-  - linux
+os: linux
 install: pip install tox-travis coveralls
-script:
-  - tox
+jobs:
+  include:
+    - language: python
+      python:
+        - "3.5"
+        - "3.6"
+        - "3.7"
+        - "3.8"
+      script:
+        - tox
+    allow_failures:
+    - language: python
+      python: "nightly"
+      script:
+        - coverage run
+        - coverage report --fail-under 80 -m
 after_success:
   - coveralls
