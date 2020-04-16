@@ -78,10 +78,10 @@ class ASCIIMathTranslator(Translator):
         grammar (str): ASCIIMath grammar
         transformer (lark.Transformer): A transformer instance to transform
             parsed input. See `~lark.Transformer`
-        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
-            Defaults to "contextual".
         inplace (bool, optional): If True, parse the input inplace.
             See `~lark.Lark`. Defaults to True.
+        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            Defaults to "contextual".
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
             Defaults to "lalr".
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
@@ -91,8 +91,8 @@ class ASCIIMathTranslator(Translator):
         self,
         grammar,
         transformer,
-        lexer="contextual",
         inplace=True,
+        lexer="contextual",
         parser="lalr",
         **kwargs
     ):
@@ -141,12 +141,12 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
     """Class that handle the translation from ASCIIMath to LaTeX
 
     Args:
+        inplace (bool, optional): If True, parse the input inplace.
+            See `~lark.Lark`. Defaults to True.
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
             Defaults to False.
-        inplace (bool, optional): If True, parse the input inplace.
-            See `~lark.Lark`. Defaults to True.
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
             Defaults to "lalr".
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
@@ -154,9 +154,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
 
     def __init__(self, log=False, **kwargs):
         super(ASCIIMath2Tex, self).__init__(
-            asciimath_grammar,
-            LatexTransformer(log=log),
-            **kwargs
+            asciimath_grammar, LatexTransformer(log=log), **kwargs
         )
 
     def _translate(self, exp, displaystyle=False, pprint=False):
@@ -211,12 +209,12 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
     """Class that handle the translation from ASCIIMath to MathML
 
     Args:
+        inplace (bool, optional): If True, parse the input inplace.
+            See `~lark.Lark`. Defaults to True.
         lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
             Defaults to False.
-        inplace (bool, optional): If True, parse the input inplace.
-            See `~lark.Lark`. Defaults to True.
         parser (str, optional): Parser algorithm. See `~lark.Lark`.
             Defaults to "lalr".
         **kwargs: Additional keyword arguments to the `~lark.Lark` class.
@@ -224,10 +222,9 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
 
     def __init__(self, log=False, **kwargs):
         super(ASCIIMath2MathML, self).__init__(
-            asciimath_grammar,
-            MathMLTransformer(log=log),
-            **kwargs
+            asciimath_grammar, MathMLTransformer(log=log), **kwargs
         )
+        self.__output = ["string", "etree"]
 
     def _translate(
         self,
@@ -235,12 +232,17 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         displaystyle=False,
         dtd=None,
         dtd_validation=False,
+        output="string",
         network=False,
         pprint=False,
         xml_declaration=False,
         xml_pprint=True,
         **kwargs
     ):
+        if output not in self.__output:
+            raise NotImplementedError(
+                "Possible output are: " + ",".join(self.__output)
+            )
         if displaystyle:
             dstyle = '<mstyle displaystyle="true">{}</mstyle>'
         else:
@@ -265,18 +267,24 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             )
             + "</math>"
         )
-        if dtd_validation or xml_pprint or xml_declaration:
+        if (
+            dtd_validation
+            or xml_pprint
+            or xml_declaration
+            or output == "etree"
+        ):
             parsed = MathMLParser.parse(
                 parsed, dtd, dtd_validation, network, **kwargs
             )
-            encoding = parsed.getroottree().docinfo.encoding
-            parsed = lxml.etree.tostring(
-                parsed,
-                pretty_print=xml_pprint,
-                doctype=(doctype if dtd_validation else None),
-                xml_declaration=xml_declaration,
-                encoding=encoding,
-            ).decode(encoding)
+            if output == "string":
+                encoding = parsed.getroottree().docinfo.encoding
+                parsed = lxml.etree.tostring(
+                    parsed,
+                    pretty_print=xml_pprint,
+                    doctype=(doctype if dtd_validation else None),
+                    xml_declaration=xml_declaration,
+                    encoding=encoding,
+                ).decode(encoding)
         return parsed
 
     def translate(
@@ -286,6 +294,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
         dtd=None,
         dtd_validation=False,
         from_file=False,
+        output="string",
         network=False,
         pprint=False,
         to_file=None,
@@ -311,6 +320,10 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             network (bool, optional): If `True` validate the output against
                 a remote DTD.
                 Defaults to False.
+            output (str, optional): Output mode: `string` to return the string
+                representation of the MathML-converted exxpression, `etree` to
+                return a `lxml.etree.ElementTree` object.
+                Defaults to False.
             pprint (bool, optional): Abstract Syntax Tree pretty print.
                 Defaults to False.
             to_file (str, optional): If specified, save the translation to
@@ -331,6 +344,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             dtd=dtd,
             dtd_validation=dtd_validation,
             from_file=from_file,
+            output=output,
             network=network,
             pprint=pprint,
             to_file=to_file,

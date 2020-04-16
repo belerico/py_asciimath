@@ -270,7 +270,8 @@ class MathMLParser(object):
             **kwargs: Additional ~lxml.extree.XMLParser options
 
         Returns:
-            str: Parsed and possibly validated MathML XML
+            lxml.etree._Element: Root of the parsed and possibly
+                validated MathML XML
 
         Todo:
             * Load xml from file
