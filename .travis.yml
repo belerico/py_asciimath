@@ -20,11 +20,13 @@ jobs:
       python: "3.8"
       script:
         - tox
+    - language: python
+      python: "nightly"
+      script:
+        - python setup.py develop
+        - coverage run
+        - coverage report --fail-under 80 -m
   allow_failures:
-  - language: python
     python: "nightly"
-    script:
-      - coverage run
-      - coverage report --fail-under 80 -m
 after_success:
   - coveralls
