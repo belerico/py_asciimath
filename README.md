@@ -1,4 +1,6 @@
-# py_asciimath [![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![Coverage Status](https://coveralls.io/repos/github/belerico/py_asciimath/badge.svg?branch=master)](https://coveralls.io/github/belerico/py_asciimath?branch=master) [![PyPI](https://img.shields.io/pypi/v/py_asciimath?color=light%20green)](https://pypi.org/project/py-asciimath/0.2.2/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py_asciimath)](https://www.python.org/)
+### py_asciimath 
+
+[![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![Coverage Status](https://coveralls.io/repos/github/belerico/py_asciimath/badge.svg?branch=master)](https://coveralls.io/github/belerico/py_asciimath?branch=master) [![PyPI](https://img.shields.io/pypi/v/py_asciimath?color=light%20green)](https://pypi.org/project/py-asciimath/0.2.2/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py_asciimath)](https://www.python.org/)
 
 py_asciimath is a simple yet powerful Python module that:
 
@@ -9,13 +11,13 @@ py_asciimath is a simple yet powerful Python module that:
 
 ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/. MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html. LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.
 
-## Install
+### Install
 
 To install the package run `pip install -U --user py-asciimath` or `pip3 install -U --user py-asciimath`
 
-## Usage
+### Usage
 
-### As python module
+#### As python module
 ```python
 from py_asciimath.translator.translator import (
     ASCIIMath2MathML,
@@ -102,7 +104,7 @@ INFO:Translating...
 \[e^{x} > 0 \forall x \in \mathbb{R}\]
 ```
 
-### From the command line
+#### From the command line
 ```
 py_asciimath: a simple ASCIIMath/MathML/LaTeX converter
 
@@ -204,7 +206,7 @@ INFO:   items = ['e^{x}', '> 0 \\forall x \\in \\mathbb{R}']
 $e^{x} > 0 \forall x \in \mathbb{R}$
 ```
 
-## ASCIIMath grammar
+### ASCIIMath grammar
 
 The grammar used to parse the input is:
 ```
@@ -232,7 +234,7 @@ QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 ```
 For the complete list of symbols, please refer to http://asciimath.org/#syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
 
-## Rendering (matrices and systems of equations)
+### Rendering (matrices and systems of equations)
 
 For a text to be rendered as a matrix must have a structure like 
 
@@ -255,7 +257,7 @@ that is:
 Since `L` and `R` can be any left or right parenthesis, and every matrices must have the same number of columns, to render a system of equation one can write something like `{[(root n x)/(x) <= 4], [x^2=e^x]:}`.  
 On the other hand a matrix can be somenthing like `[[(root n x)/(x) <= 4, int x dx], [x^2=e^x, lim_(x to infty) 1 / (x^2)]]`.
 
-## Rendering (LaTeX)
+### Rendering (LaTeX)
 
 A parsed ASCIIMath string is rendered as follows:
 
@@ -266,7 +268,7 @@ A parsed ASCIIMath string is rendered as follows:
 * Any text placed between a pair of `"` is rendered in the same font as normal text.
 * `/` stands for a fraction. The `_` and `^` tokens have the same behaviour as in LaTeX but the subscript must be placed before the superscript if they are both present
 
-### Delimiters
+#### Delimiters
 
 Left and right delimiters are preceded by the `\left` and `\right` commands to be well-sized. `(:` and `:)` are chevrons (angle parenthesis). `{:` and `:}` are invisible delimiters like LaTeX's {. `|:` is converted to `\lvert` , while `||:` is converted to `\lVert`. The other delimiters are rendered as expected.  
 Useless delimiters are automatically removed in expressions like: 
@@ -277,9 +279,9 @@ Useless delimiters are automatically removed in expressions like:
   
 If you want them to be rendered, you have to double them, for example: `((x+y))/2` or `{: (x+y) :}/2`.
 
-## Rendering (MathML)
+### Rendering (MathML)
 
 The translation follows the MathML specification at https://www.w3.org/TR/MathML3/.
 
-# Known issues
+### Known issues
 The MathML1 DTD validation will fail when one wish to apply a font style
