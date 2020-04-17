@@ -1,6 +1,7 @@
 # py_asciimath 
 
-[![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![Coverage Status](https://coveralls.io/repos/github/belerico/py_asciimath/badge.svg?branch=master)](https://coveralls.io/github/belerico/py_asciimath?branch=master) [![PyPI](https://img.shields.io/pypi/v/py_asciimath?color=light%20green)](https://pypi.org/project/py-asciimath/0.2.2/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py_asciimath)](https://www.python.org/)
+[![Build Status](https://travis-ci.com/belerico/py_asciimath.svg?branch=master)](https://travis-ci.com/belerico/py_asciimath) [![Documentation Status](https://readthedocs.org/projects/py-asciimath/badge/?version=latest)](https://py-asciimath.readthedocs.io/en/latest/?badge=latest) [![Coverage Status](https://coveralls.io/repos/github/belerico/py_asciimath/badge.svg?branch=master)](https://coveralls.io/github/belerico/py_asciimath?branch=master) [![PyPI](https://img.shields.io/pypi/v/py_asciimath?color=light%20green)](https://pypi.org/project/py-asciimath/0.2.2/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py_asciimath)](https://www.python.org/)
+
 
 py_asciimath is a simple yet powerful Python module that:
 
