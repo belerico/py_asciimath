@@ -1,6 +1,3 @@
-# Exclude docs
-docs/*
-
 # Exclude all generated .xml files
 *.xml
 
