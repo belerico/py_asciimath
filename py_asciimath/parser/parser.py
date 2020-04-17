@@ -24,16 +24,14 @@ class MathMLParser(object):
     def get_encoding(cls, s):
         r"""Get the encoding from the XML declaration
 
-        The XML declaration is supposed to match the following
-        pattern: (<\\?xml.*?(encoding=(?:'|\\")(.*?)(?:'|\\"))?\\?>).
+        The XML declaration is supposed to match the following pattern: `(<\\?xml.*?(encoding=(?:'|\\")(.*?)(?:'|\\"))?\\?>)`.
         If the XML declaration is not found, then `None` will be returned
 
         Args:
             s (str): XML string
 
         Raises:
-            Exception: If the XML declaration is not at the beginning
-                of the string
+            Exception: If the XML declaration is not at the beginning of the string
 
         Returns:
             str: Encoding of the XML document
@@ -62,7 +60,7 @@ class MathMLParser(object):
         r"""Set MathML DOCTYPE of the XML document
 
         The DOCTYPE field is supposed to match the following
-        pattern: (<!DOCTYPE math ([A-Z]+).*?mathml(\\d)?\\.dtd\\">).
+        pattern: `(<!DOCTYPE math ([A-Z]+).*?mathml(\\d)?\\.dtd\\">)`.
         If the MathML DOCTYPE is not found, then the MathML3 DTD
         will be returned
 
@@ -273,9 +271,6 @@ class MathMLParser(object):
         Returns:
             lxml.etree._Element: Root of the parsed and possibly
                 validated MathML XML
-
-        Todo:
-            * Load xml from file
         """
         encoding = MathMLParser.get_encoding(xml)
         if encoding is None:

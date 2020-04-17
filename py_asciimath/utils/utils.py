@@ -42,14 +42,15 @@ def alias_string(mapping, init=False, alias=True, prefix=""):
     return s
 
 
-def check_connection(url="www.google.com", timeout=10):  # pragma: no cover
+def check_connection(url="www.google.com", timeout=10.0):  # pragma: no cover
     """Check connection against url.
 
     Parameters:
-    - url: str
+        url (str, optional): URL to check connection against
+        timeout (float, optional): Connection timeout
 
-    Returnss:
-    - True, if there is a connection, False otherwise
+    Returns:
+        bool: True, if there is a connection, False otherwise
     """
     conn = httplib.HTTPSConnection(url, timeout=timeout)
     try:
@@ -84,6 +85,7 @@ class UtilsMat(object):
     LaTeX translation.
 
     It performs two opertions:
+
     1) Given a string, it checks if the string could be a rendered as LaTeX
        matrix. A correct matrix structure is:
        L [... (, ...)*], [... (, ...)*] (, [... (, ...)*])* R or
@@ -97,9 +99,9 @@ class UtilsMat(object):
        col (& col)* \\\\ col (& col)* (\\\\ col (& col)*)*
     """
 
-    left_par = ["(", "(:", "[", "{", "{:", "|:", "||:", "langle", "&langle;"]
-    right_par = [")", ":)", "]", "}", ":}", ":|", ":||", "rangle", "&rangle;"]
-    mathml_par_pattern = re.compile(
+    _left_par = ["(", "(:", "[", "{", "{:", "|:", "||:", "langle", "&langle;"]
+    _right_par = [")", ":)", "]", "}", ":}", ":|", ":||", "rangle", "&rangle;"]
+    _mathml_par_pattern = re.compile(
         r"<mo>"
         r"(\,|\(|\(:|\[|\{|\{:|\|:|\|\|:|&langle;|"
         r"\)|:\)|\]|\}|:\}|:\||:\|\||&rangle;)"
@@ -267,7 +269,7 @@ class UtilsMat(object):
             str: MathML well-formed matrix
         """
 
-        split = re.split(cls.mathml_par_pattern, s,)
+        split = re.split(cls._mathml_par_pattern, s,)
         stack_par = []
         mat = ""
         if row_par != []:
@@ -281,7 +283,7 @@ class UtilsMat(object):
                     elif len(stack_par) > 1:
                         mat = mat + "<mo>" + c + "</mo>"
                 # It's an internal par expression
-                elif c in cls.left_par:
+                elif c in cls._left_par:
                     stack_par.append(c)
                     mat = mat + "<mo>" + c + "</mo>"
                 # Row delimiting right par
@@ -297,7 +299,7 @@ class UtilsMat(object):
                             # If it's the last par, close also the table row
                             + ("</mtr>" if i == len(split) - 2 else "")
                         )
-                elif c in cls.right_par:
+                elif c in cls._right_par:
                     stack_par.pop()
                     mat = mat + "<mo>" + c + "</mo>"
                 elif c == ",":

@@ -1,17 +1,7 @@
-# This file defines a decorator '@log_to()' that logs every call to a
-# function, along with the arguments that function was called with. It
-# takes a logging function, which is any function that accepts a
-# string and does something with it. A good choice is the debug
-# function from the logging module. A second decorator '@logdebug' is
-# provided that uses 'logging.debug' as the logger.
-
-
-
 from collections import OrderedDict
 from functools import wraps
 from inspect import getcallargs
 from itertools import chain
-
 
 
 from ..utils.utils import flatten
@@ -24,8 +14,6 @@ except ImportError:
     from inspect import getargspec as get_args
 
     fullArg = False
-
-# standard_library.install_aliases()
 
 
 class Log(object):  # pragma: no cover

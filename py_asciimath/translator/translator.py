@@ -73,14 +73,14 @@ class ASCIIMathTranslator(Translator):
     Args:
         grammar (str): ASCIIMath grammar
         transformer (lark.Transformer): A transformer instance to transform
-            parsed input. See `~lark.Transformer`
+            parsed input. See :class:`~lark.Transformer`
         inplace (bool, optional): If True, parse the input inplace.
-            See `~lark.Lark`. Defaults to True.
-        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            See :class:`~lark.Lark`. Defaults to True.
+        lexer (str, optional): Lexer used during parsing. See :class:`~lark.Lark`.
             Defaults to "contextual".
-        parser (str, optional): Parser algorithm. See `~lark.Lark`.
+        parser (str, optional): Parser algorithm. See :class:`~lark.Lark`.
             Defaults to "lalr".
-        **kwargs: Additional keyword arguments to the `~lark.Lark` class.
+        **kwargs: Additional keyword arguments to the :class:`~lark.Lark` class.
     """
 
     def __init__(
@@ -138,14 +138,14 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
 
     Args:
         inplace (bool, optional): If True, parse the input inplace.
-            See `~lark.Lark`. Defaults to True.
-        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            See :class:`~lark.Lark`. Defaults to True.
+        lexer (str, optional): Lexer used during parsing. See :class:`~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
             Defaults to False.
-        parser (str, optional): Parser algorithm. See `~lark.Lark`.
+        parser (str, optional): Parser algorithm. See :class:`~lark.Lark`.
             Defaults to "lalr".
-        **kwargs: Additional keyword arguments to the `~lark.Lark` class.
+        **kwargs: Additional keyword arguments to the :class:`~lark.Lark` class.
     """
 
     def __init__(self, log=False, **kwargs):
@@ -206,14 +206,14 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
 
     Args:
         inplace (bool, optional): If True, parse the input inplace.
-            See `~lark.Lark`. Defaults to True.
-        lexer (str, optional): Lexer used during parsing. See `~lark.Lark`.
+            See :class:`~lark.Lark`. Defaults to True.
+        lexer (str, optional): Lexer used during parsing. See :class:`~lark.Lark`.
             Defaults to "contextual".
         log (bool, optional): If True log the parsing process.
             Defaults to False.
-        parser (str, optional): Parser algorithm. See `~lark.Lark`.
+        parser (str, optional): Parser algorithm. See :class:`~lark.Lark`.
             Defaults to "lalr".
-        **kwargs: Additional keyword arguments to the `~lark.Lark` class.
+        **kwargs: Additional keyword arguments to the :class:`~lark.Lark` class.
     """
 
     def __init__(self, log=False, **kwargs):
