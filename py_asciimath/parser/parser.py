@@ -247,6 +247,7 @@ class MathMLParser(object):
         xml,
         dtd=None,
         dtd_validation=True,
+        from_file=False,
         network=False,
         ns_clean=True,
         resolve_entities=False,
@@ -260,6 +261,9 @@ class MathMLParser(object):
                 `mathml1`, `mathml2` or `mathml3`
             dtd_validation (bool, optional): Validate XML against DTD during
                 parsing. Defaults to True.
+            from_file (bool, optional): If True, load the XML file from the
+                path specified by `xml`.
+                Defaults to False
             network (bool, optional): Validate against remote DTD.
                 Defaults to False.
             ns_clean (bool, optional): Clean up redundant namespace
@@ -272,13 +276,14 @@ class MathMLParser(object):
             lxml.etree._Element: Root of the parsed and possibly
                 validated MathML XML
         """
-        encoding = MathMLParser.get_encoding(xml)
-        if encoding is None:
-            logging.warning("The XML encoding is None: default to UTF-8")
-            encoding = "UTF-8"
-        if dtd_validation:
-            xml = MathMLParser.set_doctype(xml, network, dtd=dtd)
-        xml = xml.encode(encoding)
+        if not from_file:
+            encoding = MathMLParser.get_encoding(xml)
+            if encoding is None:
+                logging.warning("The XML encoding is None: default to UTF-8")
+                encoding = "UTF-8"
+            if dtd_validation:
+                xml = MathMLParser.set_doctype(xml, network, dtd=dtd)
+            xml = xml.encode(encoding)
         if dtd_validation:
             logging.info("Loading dtd and validating...")
         mathml_parser = MathMLParser.get_parser(
@@ -288,4 +293,7 @@ class MathMLParser(object):
             resolve_entities=resolve_entities,
             **kwargs
         )
-        return lxml.etree.fromstring(xml, mathml_parser)
+        if from_file:
+            return lxml.etree.parse(xml, mathml_parser)
+        else:
+            return lxml.etree.fromstring(xml, mathml_parser)
