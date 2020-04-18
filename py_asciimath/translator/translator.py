@@ -264,7 +264,11 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             or output == "etree"
         ):
             parsed = MathMLParser.parse(
-                parsed, dtd, dtd_validation, network, **kwargs
+                parsed,
+                dtd=dtd,
+                dtd_validation=dtd_validation,
+                network=network,
+                **kwargs
             )
             if output == "string":
                 parsed = parsed.getroottree()
