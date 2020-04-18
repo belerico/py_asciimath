@@ -9,8 +9,12 @@ py_asciimath is a simple yet powerful Python module that:
 * exposes a single translation method `translate(exp, **kwargs)`, which semantic depends on the py_asciimath translator one wish to use
 * exposes a MathML parser
 
+<!-- <div align="center">
+  <img src="https://drive.google.com/uc?export=view&id=10frWYpc-5ir0EfxsTOZJYbBGRyFaANkF">
+</div> -->
+
 <div align="center">
-  <img src="images/py_asciimath_translations.png">
+  <img src="docs/source/_static/images/py_asciimath_translations.png">
 </div>
 
 ASCIIMath is an easy-to-write markup language for mathematics: for more information check out the main website at http://asciimath.org/. MathML is a markup language for describing mathematical notation and capturing both its structure and content: for more information check out the main website at https://www.w3.org/TR/MathML3/Overview.html. LaTeX is a high-quality typesetting system: for more information check out the main website at https://www.latex-project.org/.

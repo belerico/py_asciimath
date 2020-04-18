@@ -8,5 +8,5 @@ py_asciimath is a simple yet powerful Python module that:
 * exposes a MathML parser
 
 <div align="center">
-  <img src="images/py_asciimath_translations.png">
+  <img src="_static/images/py_asciimath_translations.png">
 </div>
