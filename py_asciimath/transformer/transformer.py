@@ -21,7 +21,7 @@ from ..translation.latex2asciimath import right_parenthesis as l2mml_right
 from ..translation.latex2asciimath import smb as l2mml_smb
 from ..translation.latex2asciimath import unary_functions as l2mml_una
 from ..utils.log import Log
-from ..utils.utils import UtilsMat, concat, encapsulate_mrow
+from ..utils.utils import UtilsMat, encapsulate_mrow
 
 # standard_library.install_aliases()
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
@@ -335,7 +335,7 @@ class MathMLTransformer(ASCIIMathTransformer):
     def symbol(self, items):
         if items[0] in colors:
             return items[0]
-        elif items[0] == '\\':
+        elif items[0] == "\\":
             return "<mo>&setminus;</mo>"
         else:
             return "<mo>" + mathml_smb[items[0]] + "</mo>"
@@ -435,20 +435,18 @@ class TexTransformer(Transformer):  # pragma: no cover
     def q_str(self, items):
         return items
 
-    @log
-    def exp_mat(self, items):
+    def _get_row(self, items, sep="&"):
         s = ""
         for i in items:
-            if i == "\\\\":
+            if i == sep:
                 i = ","
             s = s + i
         return "[" + s + "]"
 
     @log
+    def exp_mat(self, items):
+        return self._get_row(items, sep="\\\\")
+
+    @log
     def row_mat(self, items):
-        s = ""
-        for i in items:
-            if i == "&":
-                i = ","
-            s = s + i
-        return "[" + s + "]"
+        return self._get_row(items, sep="&")
