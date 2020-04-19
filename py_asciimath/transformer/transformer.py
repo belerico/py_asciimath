@@ -357,13 +357,6 @@ class TexTransformer(Transformer):  # pragma: no cover
         self, log=True, start_end_par_pattern="{}{}", visit_tokens=False
     ):
         Transformer.__init__(self, visit_tokens=visit_tokens)
-        formatted_left_parenthesis = "|".join(["\\(", "\\(:", "\\[", "\\{:"])
-        formatted_right_parenthesis = "|".join(["\\)", ":\\)", "\\]", ":\\}"])
-        self.start_end_par_pattern = re.compile(
-            start_end_par_pattern.format(
-                formatted_left_parenthesis, formatted_right_parenthesis,
-            )
-        )
         self._logger_func = logging.info
         if not log:
             self._logger_func = lambda x: x
@@ -382,7 +375,7 @@ class TexTransformer(Transformer):  # pragma: no cover
 
     @log
     def exp(self, items):
-        return " ".join(items)
+        return "".join(items)
 
     @log
     def exp_interm(self, items):
@@ -406,16 +399,20 @@ class TexTransformer(Transformer):  # pragma: no cover
 
     @log
     def exp_par(self, items):
-        left = items[0]
-        right = items[-1]
+        left = items[0].value
+        right = items[-1].value
         if left == ".":
             left = "{:"
         elif left == "\\vert":
             left = "|:"
+        else:
+            left = l2mml_left[items[0].value]
         if right == ".":
             right = ":}"
         elif right == "\\vert":
             right = ":|"
+        else:
+            right = l2mml_right[items[-1].value]
         return left + " ".join(items[1:-1]) + right
 
     @log
