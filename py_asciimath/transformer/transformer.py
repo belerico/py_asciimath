@@ -186,8 +186,10 @@ class LatexTransformer(ASCIIMathTransformer):
 
     @ASCIIMathTransformer.log
     def symbol(self, items):
-        if concat(items[0]) == '"\\"':
+        if items[0] == '\\':
             return "\\setminus"
+        elif items[0] == '/_\\':
+            return "\\triangle"
         return latex_smb[concat(items[0])]
 
     @ASCIIMathTransformer.log
@@ -339,3 +341,84 @@ class MathMLTransformer(ASCIIMathTransformer):
     @ASCIIMathTransformer.log
     def q_str(self, items):
         return "<mtext>" + items[0].strip('"') + "</mtext>"
+
+
+class TexTransformer(Transformer):  # pragma: no cover
+    def __init__(
+        self, log=True, start_end_par_pattern="{}{}", visit_tokens=False
+    ):
+        Transformer.__init__(self, visit_tokens=visit_tokens)
+        formatted_left_parenthesis = "|".join(
+            ["\\(", "\\(:", "\\[", "\\{:"]
+        )
+        formatted_right_parenthesis = "|".join(
+            ["\\)", ":\\)", "\\]", ":\\}"]
+        )
+        self.start_end_par_pattern = re.compile(
+            start_end_par_pattern.format(
+                formatted_left_parenthesis, formatted_right_parenthesis,
+            )
+        )
+        self._logger_func = logging.info
+        if not log:
+            self._logger_func = lambda x: x
+        self._logger = Log(logger_func=self._logger_func)
+
+    def remove_parenthesis(self, s):
+        return re.sub(self.start_end_par_pattern, r"\2", s)
+
+    def log(f):
+        @wraps(f)
+        def decorator(*args, **kwargs):
+            self = args[0]
+            return self._logger.__call__(f)(*args, **kwargs)
+
+        return decorator
+
+    @log
+    def exp(self, items):
+        return items
+
+    @log
+    def exp_interm(self, items):
+        return items
+
+    @log
+    def exp_frac(self, items):
+        return items
+
+    @log
+    def exp_under(self, items):
+        return items
+
+    @log
+    def exp_super(self, items):
+        return items
+
+    @log
+    def exp_under_super(self, items):
+        return items
+
+    @log
+    def exp_par(self, items):
+        return items
+
+    @log
+    def exp_unary(self, items):
+        return items
+
+    @log
+    def exp_binary(self, items):
+        return items
+
+    @log
+    def symbol(self, items):
+        return items
+
+    @log
+    def const(self, items):
+        return items
+
+    @log
+    def q_str(self, items):
+        return items

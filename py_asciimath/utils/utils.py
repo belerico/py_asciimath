@@ -15,7 +15,7 @@ except ImportError:
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
-def alias_string(mapping, init=False, alias=True, prefix=""):
+def alias_string(mapping, init=False, alias=True, prefix="", lang_from=None):
     mapping = list(mapping.items())
     s = (
         "|"
