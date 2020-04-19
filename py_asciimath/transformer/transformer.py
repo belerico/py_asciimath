@@ -437,3 +437,21 @@ class TexTransformer(Transformer):  # pragma: no cover
     @log
     def q_str(self, items):
         return items
+
+    @log
+    def exp_mat(self, items):
+        s = ""
+        for i in items:
+            if i == "\\\\":
+                i = ","
+            s = s + i
+        return "[" + s + "]"
+
+    @log
+    def row_mat(self, items):
+        s = ""
+        for i in items:
+            if i == "&":
+                i = ","
+            s = s + i
+        return "[" + s + "]"

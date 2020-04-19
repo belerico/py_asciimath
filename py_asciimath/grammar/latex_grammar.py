@@ -22,6 +22,7 @@ latex_grammar = r"""
         | s "_" s "^" s -> exp_under_super
     s: _l start? _r -> exp_par
         | "\\left" (_l | /\./ | /\\vert/) start? "\\right" (_r | /\./ | /\\vert/) -> exp_par
+        | "\\begin{{matrix}}" row_mat (/\\\\/ row_mat?)* "\\end{{matrix}}" -> exp_mat
         | _u "{{" start "}}" -> exp_unary
         | _b "{{" start "}}" "{{" start "}}" -> exp_binary
         | _latex1 -> symbol
@@ -30,6 +31,7 @@ latex_grammar = r"""
     !_c: /d[A-Za-z]/
         | NUMBER
         | LETTER
+    !row_mat: start ("&" start?)* -> row_mat
     !_l: {} // left parenthesis
     !_r: {} // right parenthesis
     !_b: {} // binary functions
