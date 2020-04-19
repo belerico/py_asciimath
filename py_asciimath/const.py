@@ -5,7 +5,7 @@ def get_symbols_for(
     symbol_group, lang_to, lang_from="asciimath"
 ):  # pragma: no cover
     return {
-        '"' + i[lang_from] + '"': (i[lang_to] if lang_to is not None else None)
+        i[lang_from]: (i[lang_to] if lang_to is not None else None)
         for i in getattr(sys.modules[__name__], symbol_group)
     }
 
@@ -360,15 +360,15 @@ greek_letters = [
 ]
 
 left_parenthesis = [
-    {"asciimath": "(:", "latex": "\\langle ", "mathml": "&langle;"},
+    {"asciimath": "(:", "latex": "\\langle", "mathml": "&langle;"},
     {"asciimath": "(", "latex": "(", "mathml": "("},
     {"asciimath": "[", "latex": "[", "mathml": "["},
     {"asciimath": "{:", "latex": ".", "mathml": ""},
     {"asciimath": "{", "latex": "\\{", "mathml": "{"},
     {"asciimath": "|:", "latex": "\\vert", "mathml": "&VerticalBar;"},
     {"asciimath": "||:", "latex": "\\lVert", "mathml": "&DoubleVerticalBar;"},
-    {"asciimath": "langle", "latex": "\\langle ", "mathml": "&langle;"},
-    {"asciimath": "<<", "latex": "\\langle ", "mathml": "&langle;"},
+    {"asciimath": "langle", "latex": "\\langle", "mathml": "&langle;"},
+    {"asciimath": "<<", "latex": "\\langle", "mathml": "&langle;"},
 ]
 
 right_parenthesis = [

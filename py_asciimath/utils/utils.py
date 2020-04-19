@@ -21,7 +21,15 @@ def alias_string(mapping, init=False, alias=True, prefix="", lang_from=None):
         "|"
         if init
         else ""
-        + mapping[0][0]
+        + (
+            '"' + mapping[0][0] + '"'
+            if lang_from != "latex"
+            else (
+                '/' + mapping[0][0].encode("unicode-escape").decode() + '/'
+                if mapping[0][0].startswith("\\")
+                else '"' + mapping[0][0] + '"'
+            )
+        )
         + (
             " -> " + (prefix + "_" if prefix != "" else "") + mapping[0][1]
             if alias
@@ -32,7 +40,15 @@ def alias_string(mapping, init=False, alias=True, prefix="", lang_from=None):
         s = (
             s
             + "\n\t| "
-            + k
+            + (
+                '"' + k + '"'
+                if lang_from != "latex"
+                else (
+                    '/' + k.encode("unicode-escape").decode() + '/'
+                    if k.startswith("\\")
+                    else '"' + k + '"'
+                )
+            )
             + (
                 " -> " + (prefix + "_" if prefix != "" else "") + v
                 if alias
