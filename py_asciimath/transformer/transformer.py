@@ -405,13 +405,13 @@ class TexTransformer(Transformer):  # pragma: no cover
             left = "{:"
         elif left in ["\\vert", "\\mid"]:
             left = "|:"
-        else:
+        elif left != "[":
             left = l2mml_left[items[0].value]
         if right == ".":
             right = ":}"
         elif right in ["\\vert", "\\mid"]:
             right = ":|"
-        else:
+        elif right != "]":
             right = l2mml_right[items[-1].value]
         return left + " ".join(items[1:-1]) + right
 
@@ -421,7 +421,7 @@ class TexTransformer(Transformer):  # pragma: no cover
 
     @log
     def exp_binary(self, items):
-        if items[0] == "\\sqrt":
+        if items[0].startswith("\\sqrt"):
             return "root(" + items[1] + ")(" + items[2] + ")"
         return l2mml_bin[items[0]] + "(" + items[1] + ")(" + items[2] + ")"
 
