@@ -54,7 +54,7 @@ class TestASCIIMath2Tex(unittest.TestCase):
         self.assertEqual(
             s,
             r"$\bigcup_{2 \left(x + 1\right) = 1}^{n} "
-            r"\min \left\{2 x | x^{y + 2} \in \mathbb{N} \wedge "
+            r"\min \left\{2 x \mid x^{y + 2} \in \mathbb{N} \wedge "
             r"\arccos \sqrt[3]{\frac{1}{3 x}} < i \rightarrow "
             r"\Omega < b , 5 = x\right\}$",
         )
@@ -72,7 +72,7 @@ class TestASCIIMath2Tex(unittest.TestCase):
         self.assertEqual(
             s,
             r"$\bigcup_{2 \left(x + 1\right) = 1}^{n} "
-            r"\min \left\{2 x | x^{y + 2} \in \mathbb{N} \wedge "
+            r"\min \left\{2 x \mid x^{y + 2} \in \mathbb{N} \wedge "
             r"\arccos \sqrt[3]{\frac{1}{3 x}} < i \rightarrow "
             r"\Omega < b , 5 = x\right\}$",
         )

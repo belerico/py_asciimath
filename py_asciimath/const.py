@@ -459,6 +459,7 @@ misc_symbols = [
     {"asciimath": "'", "latex": "'", "mathml": "'"},
     {"asciimath": "/", "latex": "/", "mathml": "/"},
     {"asciimath": "|", "latex": "|", "mathml": "|"},
+    {"asciimath": "|", "latex": "\\mid", "mathml": "|"},
     {"asciimath": ":", "latex": ":", "mathml": ":"},
     {"asciimath": "int", "latex": "\\int", "mathml": "&Integral;"},
     {"asciimath": "integral", "latex": "\\int", "mathml": "&Integral;"},
