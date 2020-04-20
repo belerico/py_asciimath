@@ -22,7 +22,7 @@ latex_grammar = r"""
         | s "_" s "^" s -> exp_under_super
     s: "\\left" (_l | /\./ | /\\vert/ | /\\mid/ | /\[/) start? "\\right" (_r | /\./ | /\\vert/ | /\\mid/ | /\]/) -> exp_par
         | "\\begin{{matrix}}" row_mat (/\\\\/ row_mat?)* "\\end{{matrix}}" -> exp_mat
-        | /\\sqrt/ "[" i "]" "{{" start "}}" -> exp_binary
+        | /\\sqrt/ "[" i+ "]" "{{" start "}}" -> exp_binary
         | _u "{{" start "}}" -> exp_unary
         | _b "{{" start "}}" "{{" start "}}" -> exp_binary
         | _latex1 -> symbol

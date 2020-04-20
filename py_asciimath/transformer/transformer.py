@@ -422,7 +422,7 @@ class TexTransformer(Transformer):  # pragma: no cover
     @log
     def exp_binary(self, items):
         if items[0].startswith("\\sqrt"):
-            return "root(" + items[1] + ")(" + items[2] + ")"
+            return "root(" + "".join(items[1:-1]) + ")(" + items[-1] + ")"
         return l2mml_bin[items[0]] + "(" + items[1] + ")(" + items[2] + ")"
 
     @log
