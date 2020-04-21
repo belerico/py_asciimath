@@ -262,7 +262,7 @@ asciimath: {} // asciimath symbols
 QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 ```
 
-For the complete list of symbols, please refer to http://asciimath.org/##syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
+For the complete list of symbols, please refer to http://asciimath.org/#syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
 
 ## LaTeX grammar
 
