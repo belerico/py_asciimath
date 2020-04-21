@@ -447,17 +447,20 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
     def q_str(self, items):
         return items
 
-    def _get_row(self, items, sep="&"):
+    def _get_row(self, items, sep="&", mat=False):
         s = ""
         for i in items:
             if i == sep:
                 i = ","
             s = s + i
-        return "[" + s + "]"
+        if mat:
+            return "{:" + s + ":}"
+        else:
+            return "[" + s + "]"
 
     @log
     def exp_mat(self, items):
-        return self._get_row(items, sep="\\\\")
+        return self._get_row(items, sep="\\\\", mat=True)
 
     @log
     def row_mat(self, items):

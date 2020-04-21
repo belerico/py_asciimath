@@ -123,7 +123,7 @@ $ {\displaystyle {e}^{x}>0\forall x\in \mathbb{R} }$
 
 ASCIIMath to LaTeX
 INFO:Translating...
-\[e^{x} > 0 \forall x \in \mathbb{R}\] 
+\[{e}^{x} > 0 \forall x \in \mathbb{R}\] 
 
 LaTeX to ASCIIMath
 INFO:Translating...

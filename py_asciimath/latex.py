@@ -35,6 +35,7 @@ unary_functions = {
     "\\sqrt": {"asciimath": "sqrt", "mathml": "<msqrt>{}</msqrt>"},
     "\\text": {"asciimath": "text", "mathml": "<mtext>{}</mtext>"},
     "\\textrm": {"asciimath": "text", "mathml": "<mtext>{}</mtext>"},
+    "\\mathrm": {"asciimath": "text", "mathml": "<mtext>{}</mtext>"},
     "\\underbrace": {
         "asciimath": ["ubrace", "underbrace"],
         "mathml": "<munder>{}<mo>&#x23DF;</mo></munder>",
