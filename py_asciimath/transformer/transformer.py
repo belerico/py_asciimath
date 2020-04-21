@@ -103,7 +103,7 @@ class ASCIIMathTransformer(Transformer):  # pragma: no cover
         raise NotImplementedError
 
 
-class LatexTransformer(ASCIIMathTransformer):
+class ASCIIMath2TexTransformer(ASCIIMathTransformer):
     """Trasformer class, read `lark.Transformer`."""
 
     def __init__(self, log=True, visit_tokens=False):
@@ -212,7 +212,7 @@ class LatexTransformer(ASCIIMathTransformer):
         return "\\text{" + items[0].strip('"') + "}"
 
 
-class MathMLTransformer(ASCIIMathTransformer):
+class ASCIIMath2MathMLTransformer(ASCIIMathTransformer):
     """Trasformer class, read `lark.Transformer`."""
 
     def __init__(self, log=True, visit_tokens=False):
@@ -352,7 +352,7 @@ class MathMLTransformer(ASCIIMathTransformer):
         return "<mtext>" + items[0].strip('"') + "</mtext>"
 
 
-class TexTransformer(Transformer):  # pragma: no cover
+class Tex2ASCIIMathTransformer(Transformer):  # pragma: no cover
     def __init__(
         self, log=True, start_end_par_pattern="{}{}", visit_tokens=False
     ):
