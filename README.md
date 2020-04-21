@@ -4,7 +4,8 @@
 
 py_asciimath is a simple yet powerful Python module that:
 
-* converts an ASCIIMath string to LaTeX or MathML
+* converts an ASCIIMath ex to LaTeX or MathML
+* converts a LaTeX mathematical expression to ASCIIMath (soon also to MathML)
 * converts a MathML string to LaTeX (the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/). Please report any unexpected behavior)
 * exposes a single translation method `translate(exp, **kwargs)`, which semantic depends on the py_asciimath translator one wish to use
 * exposes a MathML parser
@@ -36,6 +37,7 @@ from py_asciimath.translator.translator import (
     ASCIIMath2MathML,
     ASCIIMath2Tex,
     MathML2Tex,
+    Tex2ASCIIMath
 )
 
 
@@ -65,6 +67,14 @@ if __name__ == "__main__":
     parsed = asciimath2tex.translate(
         r"e^x > 0 forall x in RR",
         displaystyle=True,
+        from_file=False,
+        pprint=False,
+    )
+
+    print(parsed, "\n\nLaTeX to ASCIIMath")
+    tex2asciimath = Tex2ASCIIMath(log=False, inplace=True)
+    parsed = tex2asciimath.translate(
+        parsed,
         from_file=False,
         pprint=False,
     )
@@ -113,7 +123,11 @@ $ {\displaystyle {e}^{x}>0\forall x\in \mathbb{R} }$
 
 ASCIIMath to LaTeX
 INFO:Translating...
-\[e^{x} > 0 \forall x \in \mathbb{R}\]
+\[{e}^{x} > 0 \forall x \in \mathbb{R}\] 
+
+LaTeX to ASCIIMath
+INFO:Translating...
+(e)^(x) > 0 AA x in RR
 ```
 
 #### From the command line
@@ -144,12 +158,12 @@ Usage:
 Options:
   --dstyle                      Add display style
   -i <ILANG> --input=ILANG      Input language
-                                Supported input language: asciimath, mathml
+                                Supported input language: asciimath, latex, mathml
   --log                         Log the transformation process
   --network                     Works only with ILANG=mathnml or OLANG=mathml
                                 Use network to validate XML against DTD
   -o <OLANG> --output=OLANG     Output language
-                                Supported output language: latex, mathml
+                                Supported output language: asciimath, latex, mathml
   --pprint                      Works only with OLANG=mathml. Pretty print
   --to-file=OPATH               Save translation to OPATH file
   --version                     Show version
@@ -222,7 +236,7 @@ $e^{x} > 0 \forall x \in \mathbb{R}$
 
 ## ASCIIMath grammar
 
-The grammar used to parse the input is:
+The grammar used to parse an ASCIIMath input is:
 
 ```
 start: i start* -> exp
@@ -248,7 +262,42 @@ asciimath: {} // asciimath symbols
 QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 ```
 
-For the complete list of symbols, please refer to http://asciimath.org/##syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
+For the complete list of symbols, please refer to http://asciimath.org/#syntax. The only symbol that I've added is `dstyle`, that stands for `displaystyle` as a unary function.
+
+## LaTeX grammar
+
+The grammar used to parse a LaTeX input is:
+
+```
+start: "\[" exp "\]" -> exp
+    | "$$" exp "$$" -> exp
+    | "$" exp "$" -> exp
+    | exp -> exp
+exp: i exp* -> exp
+i: s -> exp_interm
+    | s "_" s -> exp_under
+    | s "^" s -> exp_super
+    | s "_" s "^" s -> exp_under_super
+s: l exp? r -> exp_par
+    | "\left" (l | "." | "\vert" | "\mid") start? "\right" (r | "." | "\vert" | "\mid") -> exp_par
+    | "\begin{matrix}" row_mat ("\\" row_mat?)* "\end{matrix}" -> exp_mat
+    | "{" i+ "}" -> exp
+    | u "{" exp "}" -> exp_unary
+    | b "{" exp "}" "{" exp "}" -> exp_binary
+    | "\sqrt" "[" i+ "]" "{{" exp "}}" -> exp_binary
+    | latex -> symbol
+    | c -> const
+c: NUMBER
+    | LETTER
+row_mat: exp ("&" exp?)* -> row_mat
+l: "(" | "[" | "\{" | "\langle" | "\lVert" // left parenthesis
+r: ")" | "]" | "\}" | "\rangle" | "\rVert" // right parenthesis
+b: {} // binary functions
+u: {} // unary functions
+latex: {} // LaTeX symbols
+```
+
+Be careful that not all the LaTeX symbols are included in the grammar: please fill in an issue if you find that some symbols are missing 
 
 ## Rendering (matrices and systems of equations)
 

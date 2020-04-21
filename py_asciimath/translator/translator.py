@@ -6,8 +6,13 @@ import lxml.etree
 from lark import Lark
 from .. import PROJECT_ROOT
 from ..grammar.asciimath_grammar import asciimath_grammar
+from ..grammar.latex_grammar import latex_grammar
 from ..parser.parser import MathMLParser
-from ..transformer.transformer import LatexTransformer, MathMLTransformer
+from ..transformer.transformer import (
+    ASCIIMath2TexTransformer,
+    ASCIIMath2MathMLTransformer,
+    Tex2ASCIIMathTransformer,
+)
 from ..utils.utils import check_connection
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
@@ -64,14 +69,15 @@ class Translator(metaclass=ABCMeta):
         return exp
 
 
-class ASCIIMathTranslator(Translator):
-    """Class that handle the translation from ASCIIMath.
+class LarkTranslator(Translator):
+    """Class that handle the translation from a Lark parsed
+    language to the one specified by a Transformer.
 
-    An ASCIIMathTranslator translates an ASCIIMath string into another
+    A LarkTranslator translates a string, parsed with Lark, into another
     language, specified by the `transformer` parameter
 
     Args:
-        grammar (str): ASCIIMath grammar
+        grammar (str): BNF grammar to parse the input
         transformer (lark.Transformer): A transformer instance to transform
             parsed input. See :class:`~lark.Transformer`
         inplace (bool, optional): If True, parse the input inplace.
@@ -92,7 +98,7 @@ class ASCIIMathTranslator(Translator):
         parser="lalr",
         **kwargs
     ):
-        super(ASCIIMathTranslator, self).__init__()
+        super(LarkTranslator, self).__init__()
         self.inplace = inplace
         self.grammar = grammar
         self.transformer = transformer
@@ -128,12 +134,12 @@ class ASCIIMathTranslator(Translator):
         Returns:
             str: Translated expression
         """
-        return super(ASCIIMathTranslator, self).translate(
+        return super(LarkTranslator, self).translate(
             exp, from_file=from_file, to_file=to_file, pprint=pprint, **kwargs
         )
 
 
-class ASCIIMath2Tex(ASCIIMathTranslator):
+class ASCIIMath2Tex(LarkTranslator):
     """Class that handle the translation from ASCIIMath to LaTeX
 
     Args:
@@ -150,7 +156,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
 
     def __init__(self, log=False, **kwargs):
         super(ASCIIMath2Tex, self).__init__(
-            asciimath_grammar, LatexTransformer(log=log), **kwargs
+            asciimath_grammar, ASCIIMath2TexTransformer(log=log), **kwargs
         )
 
     def _translate(self, exp, displaystyle=False, pprint=False):
@@ -201,7 +207,7 @@ class ASCIIMath2Tex(ASCIIMathTranslator):
         )
 
 
-class ASCIIMath2MathML(ASCIIMathTranslator):
+class ASCIIMath2MathML(LarkTranslator):
     """Class that handle the translation from ASCIIMath to MathML
 
     Args:
@@ -218,7 +224,7 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
 
     def __init__(self, log=False, **kwargs):
         super(ASCIIMath2MathML, self).__init__(
-            asciimath_grammar, MathMLTransformer(log=log), **kwargs
+            asciimath_grammar, ASCIIMath2MathMLTransformer(log=log), **kwargs
         )
         self.__output = ["string", "etree"]
 
@@ -345,6 +351,52 @@ class ASCIIMath2MathML(ASCIIMathTranslator):
             xml_declaration=xml_declaration,
             xml_pprint=xml_pprint,
             **kwargs
+        )
+
+
+class Tex2ASCIIMath(LarkTranslator):
+    """Class that handle the translation from LaTeX to ASCIIMath
+
+    Args:
+        inplace (bool, optional): If True, parse the input inplace.
+            See :class:`~lark.Lark`. Defaults to True.
+        lexer (str, optional): Lexer used during parsing. See :class:`~lark.Lark`.
+            Defaults to "contextual".
+        log (bool, optional): If True log the parsing process.
+            Defaults to False.
+        parser (str, optional): Parser algorithm. See :class:`~lark.Lark`.
+            Defaults to "lalr".
+        **kwargs: Additional keyword arguments to the :class:`~lark.Lark` class.
+    """
+
+    def __init__(self, log=False, **kwargs):
+        super(Tex2ASCIIMath, self).__init__(
+            latex_grammar, Tex2ASCIIMathTransformer(log=log), **kwargs
+        )
+
+    def _translate(self, exp, pprint=False):
+        return super(Tex2ASCIIMath, self)._translate(exp, pprint=pprint)
+
+    def translate(
+        self, exp, from_file=False, pprint=False, to_file=None,
+    ):
+        """Translates an ASCIIMath string to LaTeX
+
+        Args:
+            exp (str): String to translate. If from_file is True, then s
+                must represent the file's path
+            from_file (bool, optional): If True, load the string to translate
+                from the file specified by s. Defaults to False.
+            pprint (bool, optional): Abstract Syntax Tree pretty print.
+                Defaults to False.
+            to_file (str, optional): If specified, save the translation to
+                `to_file`. Defaults to None.
+
+        Returns:
+            str: LaTeX translated expression
+        """
+        return super(Tex2ASCIIMath, self).translate(
+            exp, from_file=from_file, pprint=pprint, to_file=to_file,
         )
 
 

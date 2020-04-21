@@ -5,10 +5,10 @@ import lxml.etree
 
 from py_asciimath import PROJECT_ROOT
 from py_asciimath.grammar.asciimath_grammar import asciimath_grammar
-from py_asciimath.transformer.transformer import MathMLTransformer
+from py_asciimath.transformer.transformer import ASCIIMath2MathMLTransformer
 from py_asciimath.translator.translator import (
     ASCIIMath2MathML,
-    ASCIIMathTranslator,
+    LarkTranslator,
     MathML2Tex,
 )
 
@@ -226,11 +226,11 @@ class TestASCIIMath2MathML(unittest.TestCase):
             FileNotFoundError, MathML2Tex().translate, "$a+b$", from_file=True,
         )
 
-    def test_asciimath2mathml_as_asciimathtranslator_1(self):
+    def test_asciimath2mathml_as_LarkTranslator_1(self):
         self.assertEqual(
             "<mi>a</mi><mo>+</mo><mi>b</mi>",
-            ASCIIMathTranslator(
-                asciimath_grammar, MathMLTransformer(log=False)
+            LarkTranslator(
+                asciimath_grammar, ASCIIMath2MathMLTransformer(log=False)
             ).translate("a + b"),
         )
 

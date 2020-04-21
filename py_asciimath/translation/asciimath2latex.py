@@ -1,4 +1,4 @@
-from ..const import get_symbols_for
+from ..asciimath import get_symbols_for
 
 unary_functions = get_symbols_for("unary_functions", "latex")
 binary_functions = get_symbols_for("binary_functions", "latex")

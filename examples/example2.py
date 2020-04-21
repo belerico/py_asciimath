@@ -2,6 +2,7 @@ from py_asciimath.translator.translator import (
     ASCIIMath2MathML,
     ASCIIMath2Tex,
     MathML2Tex,
+    Tex2ASCIIMath
 )
 
 
@@ -31,6 +32,14 @@ if __name__ == "__main__":
     parsed = asciimath2tex.translate(
         r"e^x > 0 forall x in RR",
         displaystyle=True,
+        from_file=False,
+        pprint=False,
+    )
+
+    print(parsed, "\n\nLaTeX to ASCIIMath")
+    tex2asciimath = Tex2ASCIIMath(log=False, inplace=True)
+    parsed = tex2asciimath.translate(
+        parsed,
         from_file=False,
         pprint=False,
     )

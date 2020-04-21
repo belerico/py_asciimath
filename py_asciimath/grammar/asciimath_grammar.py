@@ -1,6 +1,6 @@
 from itertools import islice
 
-from ..const import get_symbols_for
+from ..asciimath import get_symbols_for
 from ..utils.utils import alias_string
 
 unary_functions = get_symbols_for("unary_functions", None)
