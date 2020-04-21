@@ -4,7 +4,8 @@
 
 py_asciimath is a simple yet powerful Python module that:
 
-* converts an ASCIIMath string to LaTeX or MathML
+* converts an ASCIIMath ex to LaTeX or MathML
+* converts a LaTeX mathematical expression to ASCIIMath (soon also to MathML)
 * converts a MathML string to LaTeX (the conversion is done thank to the [XSLT MathML Library](https://sourceforge.net/projects/xsltml/). Please report any unexpected behavior)
 * exposes a single translation method `translate(exp, **kwargs)`, which semantic depends on the py_asciimath translator one wish to use
 * exposes a MathML parser
@@ -235,7 +236,7 @@ $e^{x} > 0 \forall x \in \mathbb{R}$
 
 ## ASCIIMath grammar
 
-The grammar used to parse the input is:
+The grammar used to parse an ASCIIMath input is:
 
 ```
 start: i start* -> exp
@@ -265,6 +266,8 @@ For the complete list of symbols, please refer to http://asciimath.org/##syntax.
 
 ## LaTeX grammar
 
+The grammar used to parse a LaTeX input is:
+
 ```
 start: "\[" exp "\]" -> exp
     | "$$" exp "$$" -> exp
@@ -293,6 +296,8 @@ b: {} // binary functions
 u: {} // unary functions
 latex: {} // LaTeX symbols
 ```
+
+Be careful that not all the LaTeX symbols are included in the grammar: please fill in an issue if you find that some symbols are missing 
 
 ## Rendering (matrices and systems of equations)
 

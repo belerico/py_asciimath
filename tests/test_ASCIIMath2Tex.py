@@ -28,7 +28,7 @@ class TestASCIIMath2Tex(unittest.TestCase):
         self.assertEqual(
             s,
             r"\[\left(\left(1 , 2\right)\right) \int \sin "
-            r"\frac{x^{2}}{4} \pi \mathrm{dx} \sqrt[5]{x_{1}^{2} + x_{2}^{2}}\]",
+            r"\frac{{x}^{2}}{4} \pi \mathrm{dx} \sqrt[5]{{x}_{1}^{2} + {x}_{2}^{2}}\]",
         )
 
     def test_asciimath2tex_ok_3(self):
@@ -37,8 +37,8 @@ class TestASCIIMath2Tex(unittest.TestCase):
         ).translate("lim_(N->oo) sum_(i=0)^N int_0^1 f(x)dx 3.14")
         self.assertEqual(
             s,
-            r"$\lim_{N \to \infty} \sum_{i = 0}^{N} "
-            r"\int_{0}^{1} f \left(x\right) \mathrm{dx} 3.14$",
+            r"${\lim}_{N \to \infty} {\sum}_{i = 0}^{N} "
+            r"{\int}_{0}^{1} f \left(x\right) \mathrm{dx} 3.14$",
         )
 
     def test_asciimath2tex_ok_4(self):
@@ -53,8 +53,8 @@ class TestASCIIMath2Tex(unittest.TestCase):
         )
         self.assertEqual(
             s,
-            r"$\bigcup_{2 \left(x + 1\right) = 1}^{n} "
-            r"\min \left\{2 x | x^{y + 2} \in \mathbb{N} \wedge "
+            r"${\bigcup}_{2 \left(x + 1\right) = 1}^{n} "
+            r"\min \left\{2 x | {x}^{y + 2} \in \mathbb{N} \wedge "
             r"\arccos \sqrt[3]{\frac{1}{3 x}} < i \rightarrow "
             r"\Omega < b , 5 = x\right\}$",
         )
@@ -71,8 +71,8 @@ class TestASCIIMath2Tex(unittest.TestCase):
         )
         self.assertEqual(
             s,
-            r"$\bigcup_{2 \left(x + 1\right) = 1}^{n} "
-            r"\min \left\{2 x | x^{y + 2} \in \mathbb{N} \wedge "
+            r"${\bigcup}_{2 \left(x + 1\right) = 1}^{n} "
+            r"\min \left\{2 x | {x}^{y + 2} \in \mathbb{N} \wedge "
             r"\arccos \sqrt[3]{\frac{1}{3 x}} < i \rightarrow "
             r"\Omega < b , 5 = x\right\}$",
         )
@@ -84,8 +84,8 @@ class TestASCIIMath2Tex(unittest.TestCase):
         )
         self.assertEqual(
             s,
-            r"$\left[\begin{matrix}1  &  2  \\  2^{\left\vert3\right\vert}  "
-            r"&  \left(\displaystyle{\int} x^{2 \left(x - n\right)}\right)  "
+            r"$\left[\begin{matrix}1  &  2  \\  {2}^{\left\vert3\right\vert}  "
+            r"&  \left(\displaystyle{\int} {x}^{2 \left(x - n\right)}\right)  "
             r"\\  2  &  4\end{matrix}\right]$",
         )
 

@@ -34,8 +34,7 @@ latex_grammar = r"""
         | _latex1 -> symbol
         | _latex2 -> symbol
         | _c -> const
-    !_c: /d[A-Za-z]/
-        | NUMBER
+    !_c: NUMBER
         | LETTER
     !row_mat: exp ("&" exp?)* -> row_mat
     !_l: {} // left parenthesis
@@ -44,7 +43,6 @@ latex_grammar = r"""
     !_u: {} // unary functions
     !_latex1: {}
     !_latex2: {}
-    QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
 """.format(
     alias_string(left_parenthesis, alias=False, lang_from="latex"),
     alias_string(right_parenthesis, alias=False, lang_from="latex"),

@@ -137,18 +137,18 @@ class ASCIIMath2TexTransformer(MathTransformer):
     @MathTransformer.log
     def exp_under(self, items):
         items[1] = self.remove_parenthesis(items[1])
-        return items[0] + "_{" + items[1] + "}"
+        return "{" + items[0] + "}_{" + items[1] + "}"
 
     @MathTransformer.log
     def exp_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
-        return items[0] + "^{" + items[1] + "}"
+        return "{" + items[0] + "}^{" + items[1] + "}"
 
     @MathTransformer.log
     def exp_under_super(self, items):
         items[1] = self.remove_parenthesis(items[1])
         items[2] = self.remove_parenthesis(items[2])
-        return items[0] + "_{" + items[1] + "}^{" + items[2] + "}"
+        return "{" + items[0] + "}_{" + items[1] + "}^{" + items[2] + "}"
 
     @MathTransformer.log
     def exp_par(self, items):
