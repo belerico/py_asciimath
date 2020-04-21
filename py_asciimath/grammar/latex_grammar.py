@@ -24,7 +24,7 @@ latex_grammar = r"""
         | s "_" s -> exp_under
         | s "^" s -> exp_super
         | s "_" s "^" s -> exp_under_super
-    s: _l exp _r -> exp_par
+    s: _l exp? _r -> exp_par
         | "\\left" (_l | /\./ | /\\vert/ | /\\mid/) start? "\\right" (_r | /\./ | /\\vert/ | /\\mid/) -> exp_par
         | "\\begin{{matrix}}" row_mat (/\\\\/ row_mat?)* "\\end{{matrix}}" -> exp_mat
         | /\\sqrt/ "[" i+ "]" "{{" exp "}}" -> exp_binary

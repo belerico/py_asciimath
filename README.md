@@ -278,7 +278,7 @@ i: s -> exp_interm
     | s "_" s -> exp_under
     | s "^" s -> exp_super
     | s "_" s "^" s -> exp_under_super
-s: l exp r -> exp_par
+s: l exp? r -> exp_par
     | "\left" (l | "." | "\vert" | "\mid") start? "\right" (r | "." | "\vert" | "\mid") -> exp_par
     | "\begin{{matrix}}" row_mat ("\\" row_mat?)* "\end{{matrix}}" -> exp_mat
     | "{" i+ "}" -> exp
