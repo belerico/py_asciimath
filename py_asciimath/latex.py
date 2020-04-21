@@ -34,19 +34,6 @@ binary_functions = {
 unary_functions = {
     "\\sqrt": {"asciimath": "sqrt", "mathml": "<msqrt>{}</msqrt>"},
     "\\textrm": {"asciimath": "text", "mathml": "<mtext>{}</mtext>"},
-    "abs": {"asciimath": "abs", "mathml": "<mo>|</mo>{}<mo>|</mo>"},
-    "floor": {
-        "asciimath": "floor",
-        "mathml": "<mo>&lfloor;</mo>{}<mo>&rfloor;</mo>",
-    },
-    "ceil": {
-        "asciimath": "ceil",
-        "mathml": "<mo>&lceil;</mo>{}<mo>&rceil;</mo>",
-    },
-    "norm": {
-        "asciimath": "norm",
-        "mathml": "<mo>&DoubleVerticalBar;</mo>{}<mo>&DoubleVerticalBar;</mo>",
-    },
     "\\underbrace": {
         "asciimath": ["ubrace", "underbrace"],
         "mathml": "<munder>{}<mo>&#x23DF;</mo></munder>",
@@ -114,6 +101,7 @@ operation_symbols = {
     "+": {"asciimath": "+", "mathml": "+"},
     "\\cdot": {"asciimath": ["*", "cdot"], "mathml": "&sdot;"},
     "-": {"asciimath": "-", "mathml": "-"},
+    "*": {"asciimath": ["**", "ast"], "mathml": "&ast;"},
     "\\ast": {"asciimath": ["**", "ast"], "mathml": "&ast;"},
     "\\star": {"asciimath": ["***", "star"], "mathml": "&Star;"},
     "/": {"asciimath": "//", "mathml": "/"},

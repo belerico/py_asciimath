@@ -15,23 +15,29 @@ latex_grammar = r"""
     %import common.LETTER
     %import common.NUMBER
     %ignore WS
-    start: i start* -> exp
+    start: "\\[" exp "\\]" -> exp
+        | "$$" exp "$$" -> exp
+        | "$" exp "$" -> exp
+        | exp -> exp
+    exp: i exp* -> exp
     i: s -> exp_interm
         | s "_" s -> exp_under
         | s "^" s -> exp_super
         | s "_" s "^" s -> exp_under_super
-    s: "\\left" (_l | /\./ | /\\vert/ | /\\mid/) start? "\\right" (_r | /\./ | /\\vert/ | /\\mid/) -> exp_par
+    s: _l exp _r -> exp_par
+        | "\\left" (_l | /\./ | /\\vert/ | /\\mid/) start? "\\right" (_r | /\./ | /\\vert/ | /\\mid/) -> exp_par
         | "\\begin{{matrix}}" row_mat (/\\\\/ row_mat?)* "\\end{{matrix}}" -> exp_mat
-        | /\\sqrt/ "[" i+ "]" "{{" start "}}" -> exp_binary
-        | _u "{{" start "}}" -> exp_unary
-        | _b "{{" start "}}" "{{" start "}}" -> exp_binary
+        | /\\sqrt/ "[" i+ "]" "{{" exp "}}" -> exp_binary
+        | "{{" i+ "}}" -> exp
+        | _u "{{" exp "}}" -> exp_unary
+        | _b "{{" exp "}}" "{{" exp "}}" -> exp_binary
         | _latex1 -> symbol
         | _latex2 -> symbol
         | _c -> const
     !_c: /d[A-Za-z]/
         | NUMBER
         | LETTER
-    !row_mat: start ("&" start?)* -> row_mat
+    !row_mat: exp ("&" exp?)* -> row_mat
     !_l: {} // left parenthesis
     !_r: {} // right parenthesis
     !_b: {} // binary functions
