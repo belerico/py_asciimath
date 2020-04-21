@@ -280,7 +280,7 @@ i: s -> exp_interm
     | s "_" s "^" s -> exp_under_super
 s: l exp? r -> exp_par
     | "\left" (l | "." | "\vert" | "\mid") start? "\right" (r | "." | "\vert" | "\mid") -> exp_par
-    | "\begin{{matrix}}" row_mat ("\\" row_mat?)* "\end{{matrix}}" -> exp_mat
+    | "\begin{matrix}" row_mat ("\\" row_mat?)* "\end{matrix}" -> exp_mat
     | "{" i+ "}" -> exp
     | u "{" exp "}" -> exp_unary
     | b "{" exp "}" "{" exp "}" -> exp_binary
