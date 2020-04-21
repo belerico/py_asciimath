@@ -308,7 +308,6 @@ misc_symbols = {
     ".": {"asciimath": ".", "mathml": "."},
     "_": {"asciimath": "_", "mathml": "_"},
     "'": {"asciimath": "'", "mathml": "'"},
-    "/": {"asciimath": "/", "mathml": "/"},
     "|": {"asciimath": "|", "mathml": "|"},
     "\\vert": {"asciimath": "|", "mathml": "|"},
     "\\mid": {"asciimath": "|", "mathml": "|"},
