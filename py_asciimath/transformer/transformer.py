@@ -405,7 +405,7 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
     def exp_under_super(self, items):
         items[0] = self.remove_parenthesis(items[0])
         items[1] = self.remove_parenthesis(items[1])
-        items[1] = self.remove_parenthesis(items[2])
+        items[2] = self.remove_parenthesis(items[2])
         return "(" + items[0] + ")_(" + items[1] + ")^(" + items[2] + ")"
 
     @log
