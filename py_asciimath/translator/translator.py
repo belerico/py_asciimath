@@ -272,7 +272,7 @@ class ASCIIMath2MathML(LarkTranslator):
             parsed = MathMLParser.parse(
                 parsed,
                 dtd=dtd,
-                dtd_validation=dtd_validation,
+                dtd_validation=True,
                 network=network,
                 **kwargs
             )
@@ -313,7 +313,12 @@ class ASCIIMath2MathML(LarkTranslator):
                 against. It can be: `mathml1`, `mathml2` or `mathml3`.
                 Defaults to None.
             dtd_validation (bool, optional): If True validate output against
-                the DTD version specified by `dtd`.
+                the DTD version specified by `dtd`. By default, if one of
+                `dtd`, `dtd_validation`, `xml_declaration` or `xml_pprint` is
+                True or is not None, then `dtd_validation` will be set to True.
+                This is because if either one of them set to True, then
+                py_asciimath must parse the input XML, but in order to do that
+                it needs to know how to intepret the entities from the DTD.
                 Defaults to False.
             from_file (bool, optional): If True, load the string to translate
                 from the file specified by s. Defaults to False.

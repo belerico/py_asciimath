@@ -80,7 +80,7 @@ class TestASCIIMath2MathML(unittest.TestCase):
             s,
             '<!DOCTYPE math SYSTEM "'
             + PROJECT_ROOT
-            + '/dtd/mathml1/mathml1.dtd">\n<math><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mo>&Integral;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo/></mrow></mstyle></math>',
+            + '/dtd/mathml1/mathml1.dtd">\n<math><mstyle displaystyle="true"><mrow><mo>&langle;</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mo>&int;</mo><mrow><mo>[</mo><mrow><mn>3</mn><mrow><mo>(</mo><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mi>dx</mi></mtd></mtr></mtable><mo/></mrow></mstyle></math>',
         )
 
     def test_asciimath2mathml_ok_5(self):
@@ -113,7 +113,7 @@ class TestASCIIMath2MathML(unittest.TestCase):
         )
         self.assertEqual(
             s,
-            "<?xml version='1.0' encoding='UTF-8'?>\n<math><mn>1</mn></math>",
+            "<?xml version='1.0' encoding='UTF-8'?>\n<!DOCTYPE math SYSTEM \"http://www.w3.org/Math/DTD/mathml1/mathml.dtd\">\n<math><mn>1</mn></math>",
         )
 
     def test_asciimath2mathml_xml_fields_ok_2(self):

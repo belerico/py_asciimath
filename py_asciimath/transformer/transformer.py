@@ -312,6 +312,10 @@ class ASCIIMath2MathMLTransformer(MathTransformer):
     def exp_unary(self, items):
         unary = mathml_una[items[0]]
         items[1] = self.remove_parenthesis(items[1])
+        if items[0] == "text":
+            return encapsulate_mrow(
+                unary.format(re.sub(r"<.*?>", "", items[1]))
+            )
         return encapsulate_mrow(unary.format(encapsulate_mrow(items[1])))
 
     @MathTransformer.log
@@ -401,8 +405,8 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
     def exp_under_super(self, items):
         items[0] = self.remove_parenthesis(items[0])
         items[1] = self.remove_parenthesis(items[1])
-        items[1] = self.remove_parenthesis(items[2])
-        return "(" + items[0] + ")^(" + items[1] + ")_(" + items[2] + ")"
+        items[2] = self.remove_parenthesis(items[2])
+        return "(" + items[0] + ")_(" + items[1] + ")^(" + items[2] + ")"
 
     @log
     def exp_par(self, items):
@@ -424,13 +428,10 @@ class Tex2ASCIIMathTransformer(MathTransformer):  # pragma: no cover
 
     @log
     def exp_unary(self, items):
-        items[1] = self.remove_parenthesis(items[1])
         return l2mml_una[items[0]] + "(" + items[1] + ")"
 
     @log
     def exp_binary(self, items):
-        items[1] = self.remove_parenthesis(items[1])
-        items[2] = self.remove_parenthesis(items[2])
         if items[0].startswith("\\sqrt"):
             return "root(" + "".join(items[1:-1]) + ")(" + items[-1] + ")"
         return l2mml_bin[items[0]] + "(" + items[1] + ")(" + items[2] + ")"

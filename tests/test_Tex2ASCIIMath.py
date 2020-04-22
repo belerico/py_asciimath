@@ -17,17 +17,17 @@ class TestTex2ASCIIMath(unittest.TestCase):
         )
         self.assertEqual(s, "[{:[int x text(d x)],[log (x + 1)]:}]")
 
-    # def test_tex2asciimath_ok_2(self):
-    #     s = Tex2ASCIIMath(
-    #         inplace=True, parser="lalr", lexer="contextual",
-    #     ).translate(
-    #         "((1,2))int sin{x^2}/4pidxroot(5)(x_1^2+x_2^2)", displaystyle=True
-    #     )
-    #     self.assertEqual(
-    #         s,
-    #         r"\[\left(\left(1 , 2\right)\right) \int \sin "
-    #         r"\frac{{x}^{2}}{4} \pi \mathrm{dx} \sqrt[5]{{x}_{1}^{2} + {x}_{2}^{2}}\]",
-    #     )
+    def test_tex2asciimath_ok_2(self):
+        s = Tex2ASCIIMath(
+            inplace=True, parser="lalr", lexer="contextual",
+        ).translate(
+            r"\[\left(\left(1 , 2\right)\right) \int \sin "
+            r"\frac{{x}^{2}}{4} \pi \mathrm{dx} \sqrt[5]{{x}_{1}^{2} + {x}_{2}^{2}}\]",
+        )
+        self.assertEqual(
+            s,
+            "((1 , 2)) int sin frac((x)^(2))(4) pi text(d x) root(5)((x)_(1)^(2) + (x)_(2)^(2))",
+        )
 
     # def test_tex2asciimath_ok_3(self):
     #     s = Tex2ASCIIMath(
