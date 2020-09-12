@@ -9,7 +9,6 @@ from ..utils.log import Log
 
 # standard_library.install_aliases()
 
-logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
 
 
 class Transformer(Transformer):

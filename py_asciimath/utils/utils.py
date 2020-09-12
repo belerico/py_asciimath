@@ -12,8 +12,6 @@ try:
 except ImportError:
     import collections
 
-logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
-
 
 def alias_string(mapping, init=False, alias=True, prefix="", lang_from=None):
     mapping = list(mapping.items())
@@ -25,7 +23,7 @@ def alias_string(mapping, init=False, alias=True, prefix="", lang_from=None):
             '"' + mapping[0][0] + '"'
             if lang_from != "latex"
             else (
-                '/' + mapping[0][0].encode("unicode-escape").decode() + '/'
+                "/" + mapping[0][0].encode("unicode-escape").decode() + "/"
                 if mapping[0][0].startswith("\\")
                 else '"' + mapping[0][0] + '"'
             )
@@ -44,7 +42,7 @@ def alias_string(mapping, init=False, alias=True, prefix="", lang_from=None):
                 '"' + k + '"'
                 if lang_from != "latex"
                 else (
-                    '/' + k.encode("unicode-escape").decode() + '/'
+                    "/" + k.encode("unicode-escape").decode() + "/"
                     if k.startswith("\\")
                     else '"' + k + '"'
                 )
@@ -196,9 +194,7 @@ class UtilsMat(object):
                         # count another row
                         rows = rows + 1
                         if transitions - rows != 0:
-                            logging.info(
-                                "No open-close par between two commas"
-                            )
+                            logging.info("No open-close par between two commas")
                             return False, []
             if len(par_stack) != 0:
                 logging.info("Unmatched pars")

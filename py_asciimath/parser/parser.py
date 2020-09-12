@@ -5,8 +5,6 @@ import lxml.etree
 
 from .. import PROJECT_ROOT
 
-logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
-
 
 class MathMLParser(object):
 

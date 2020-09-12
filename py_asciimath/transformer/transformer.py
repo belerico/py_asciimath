@@ -23,10 +23,6 @@ from ..translation.latex2asciimath import unary_functions as l2mml_una
 from ..utils.log import Log
 from ..utils.utils import UtilsMat, encapsulate_mrow
 
-# standard_library.install_aliases()
-logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
-
-
 # TODO: MathematicaTransformer
 """ class MathematicaTransformer(Transformer):
     def __init__(self):
