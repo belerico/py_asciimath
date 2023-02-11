@@ -45,7 +45,7 @@ asciimath_grammar = r"""
     !_u: {} // unary functions
     !_asciimath1: {}
     !_asciimath2: {}
-    QS: "\"" /(?<=").+(?=")/ "\"" // Quoted String
+    QS: "\"" /(?<=").+?(?=")/ "\"" // Quoted String
 """.format(
     alias_string(left_parenthesis, alias=False),
     alias_string(right_parenthesis, alias=False),
