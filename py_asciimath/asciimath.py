@@ -69,6 +69,10 @@ unary_functions = {
         "latex": "\\mathbb",
         "mathml": "<mstyle mathvariant='double-struck'>{}</mstyle>",
     },
+    "mathbf":{
+        "latex": "\\mathbf",
+        "mathml": "<mstyle mathvariant='bold'>{}</mstyle>",
+    },
     "cc": {
         "latex": "\\mathcal",
         "mathml": "<mstyle mathvariant='script'>{}</mstyle>",
@@ -168,6 +172,8 @@ operation_symbols = {
     "cup": {"latex": "\\cup", "mathml": "&cup;"},
     "uuu": {"latex": "\\bigcup", "mathml": "&bigcup;"},
     "bigcup": {"latex": "\\bigcup", "mathml": "&bigcup;"},
+    "prime":{"latex": "\\prime", "mathml": "'",},
+    "!":{"latex": "!", "mathml":"!",},
 }
 
 logical_symbols = {
